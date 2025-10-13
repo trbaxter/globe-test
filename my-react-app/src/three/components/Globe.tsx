@@ -22,7 +22,7 @@ const LINE_LIFT = isSmoothMode ? 0.005 : 0.003;
 const STROKE_PX = isSmoothMode ? 1.1 : 0.6;
 const ROTATE_SPEED = isSmoothMode ? 0.25 : 0.5;
 
-const asset = (p: string) => new URL(`/images/${p}`, import.meta.env.BASE_URL).href;
+const asset = (p: string) => `${import.meta.env.BASE_URL}images/${p}`;
 
 // Densify to reduce aliasing shimmer
 function densify(line: Position[], maxStepDeg = DENSIFY_STEP): Position[] {
@@ -132,8 +132,8 @@ export default function GlobeComponent({
       ref={globeRef}
       width={w}
       height={h}
-      globeImageUrl={asset('/images/earth-blue-marble.jpg')} // Remove asset() for local use
-      bumpImageUrl={asset('/images/earth-topology.png')} // Remove asset() for local use
+      globeImageUrl={asset('earth-blue-marble.jpg')}
+      bumpImageUrl={asset('earth-topology.png')}
       backgroundColor={backgroundColor}
       showAtmosphere
       atmosphereColor="lightskyblue"
