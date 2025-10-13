@@ -1,4 +1,3 @@
-// src/three/components/Globe.tsx
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Globe, { type GlobeMethods } from 'react-globe.gl';
 import countries from '@/data/low_res.geo.json';
@@ -11,9 +10,12 @@ type Props = {
   autoRotateSpeed?: number;
   backgroundColor?: string;
   rendererConfig?: WebGLRendererParameters;
+  highlightByRegion?: { americas?: string[]; apac?: string[]; emea?: string[] };
 };
 
 type Path = { path: { lat: number; lng: number }[]; kind: 'country' | 'state' };
+
+const iso3 = (p: any) => p?.iso_a3 ?? p?.adm0_a3 ?? p?.gu_a3 ?? p?.adm0_a3_us;
 
 /** Smooth-mode for 60 Hz displays. */
 const isSmoothMode = true;
@@ -23,6 +25,9 @@ const STROKE_PX = isSmoothMode ? 1.1 : 0.6;
 const ROTATE_SPEED = isSmoothMode ? 0.25 : 0.5;
 
 const asset = (p: string) => `${import.meta.env.BASE_URL}images/${p}`;
+
+// Skip list (ADM0 ISO-3)
+const SKIP_ADM0 = new Set(['GUF']); // French Guiana
 
 // Densify to reduce aliasing shimmer
 function densify(line: Position[], maxStepDeg = DENSIFY_STEP): Position[] {
@@ -81,10 +86,23 @@ export default function GlobeComponent({
   autoRotate = true,
   autoRotateSpeed = 0.5,
   backgroundColor = '#000',
-  rendererConfig = { antialias: true, alpha: false, powerPreference: 'high-performance' }
+  rendererConfig = { antialias: true, alpha: false, powerPreference: 'high-performance' },
+  highlightByRegion = {}
 }: Props) {
   const globeRef = useRef<GlobeMethods | undefined>(undefined);
   const [{ w, h }, setSize] = useState({ w: window.innerWidth, h: window.innerHeight });
+
+  // Filter countries once using skip list
+  const countriesFC = countries as FeatureCollection;
+  const countriesFiltered: FeatureCollection = useMemo(
+    () => ({
+      ...countriesFC,
+      features: countriesFC.features.filter(
+        (f) => !SKIP_ADM0.has((f.properties as any)?.adm0_a3 as string)
+      )
+    }),
+    []
+  );
 
   useEffect(() => {
     const onResize = () => setSize({ w: window.innerWidth, h: window.innerHeight });
@@ -121,11 +139,35 @@ export default function GlobeComponent({
 
   const paths = useMemo(
     () => [
-      ...toPaths(countries as FeatureCollection, 'country'),
+      ...toPaths(countriesFiltered, 'country'),
       ...toPaths(states as FeatureCollection, 'state')
     ],
-    []
+    [countriesFiltered]
   );
+
+  const regionSets = useMemo(() => {
+    const { americas = [], apac = [], emea = [] } = highlightByRegion ?? {};
+    return { americas: new Set(americas), apac: new Set(apac), emea: new Set(emea) };
+  }, [highlightByRegion]);
+
+  const polys = useMemo(() => {
+    return countriesFiltered.features.filter((f) => {
+      const code = iso3(f.properties as any);
+      return (
+        regionSets.americas.has(code) || regionSets.apac.has(code) || regionSets.emea.has(code)
+      );
+    });
+  }, [countriesFiltered, regionSets]);
+
+  const capColor = (d: any) => {
+    const code = iso3(d.properties);
+    if (regionSets.americas.has(code)) return 'rgba(255,215,0,0.18)';
+    if (regionSets.apac.has(code)) return 'rgba(0,200,255,0.18)';
+    if (regionSets.emea.has(code)) return 'rgba(255,0,180,0.18)';
+    return 'rgba(0,0,0,0)';
+  };
+
+  const sideColor = (d: any) => capColor(d).replace(/0\.18\)$/, '0.06)');
 
   return (
     <Globe
@@ -138,6 +180,7 @@ export default function GlobeComponent({
       showAtmosphere
       atmosphereColor="lightskyblue"
       atmosphereAltitude={0.15}
+      /* borders */
       pathsData={paths}
       pathPoints="path"
       pathPointLat="lat"
@@ -145,6 +188,12 @@ export default function GlobeComponent({
       pathColor={() => '#EEEEEE'}
       pathStroke={() => STROKE_PX}
       pathTransitionDuration={0}
+      /* fills */
+      polygonsData={polys}
+      polygonCapColor={capColor}
+      polygonSideColor={sideColor}
+      polygonAltitude={LINE_LIFT}
+      /* renderer */
       rendererConfig={{ ...rendererConfig, logarithmicDepthBuffer: true }}
     />
   );
