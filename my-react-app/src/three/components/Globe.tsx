@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, useCallback } from 'react';
 import Globe, { type GlobeMethods } from 'react-globe.gl';
 import countries from '@/data/low_res.geo.json';
 import states from '@/data/gz_2010_us_040_00_500k.json';
@@ -78,6 +78,40 @@ function toPaths(fc: FeatureCollection, kind: 'country' | 'state'): Path[] {
   return out;
 }
 
+function useRegionHighlight(
+  countriesFiltered: FeatureCollection,
+  highlightByRegion: Props['highlightByRegion']
+) {
+  const regionSets = useMemo(() => {
+    const { americas = [], apac = [], emea = [] } = highlightByRegion ?? {};
+    return { americas: new Set(americas), apac: new Set(apac), emea: new Set(emea) };
+  }, [highlightByRegion]);
+
+  const polys = useMemo(() => {
+    return countriesFiltered.features.filter((f) => {
+      const code = iso3(f.properties as any);
+      return (
+        regionSets.americas.has(code) || regionSets.apac.has(code) || regionSets.emea.has(code)
+      );
+    });
+  }, [countriesFiltered, regionSets]);
+
+  const capColor = useCallback(
+    (d: any) => {
+      const code = iso3(d.properties);
+      if (regionSets.americas.has(code)) return 'rgba(255, 215, 0, 0.25)';
+      if (regionSets.apac.has(code)) return 'rgba(0, 200, 255, 0.25)';
+      if (regionSets.emea.has(code)) return 'rgba(255, 0, 180, 0.25)';
+      return 'rgba(0, 0, 0, 0)';
+    },
+    [regionSets]
+  );
+
+  const sideColor = useCallback((d: any) => capColor(d).replace(/0\.18\)$/, '0.06)'), [capColor]);
+
+  return { polys, capColor, sideColor };
+}
+
 export default function GlobeComponent({
   backgroundColor = '#000',
   rendererConfig = { antialias: true, alpha: false, powerPreference: 'high-performance' },
@@ -138,29 +172,7 @@ export default function GlobeComponent({
     [countriesFiltered]
   );
 
-  const regionSets = useMemo(() => {
-    const { americas = [], apac = [], emea = [] } = highlightByRegion ?? {};
-    return { americas: new Set(americas), apac: new Set(apac), emea: new Set(emea) };
-  }, [highlightByRegion]);
-
-  const polys = useMemo(() => {
-    return countriesFiltered.features.filter((f) => {
-      const code = iso3(f.properties as any);
-      return (
-        regionSets.americas.has(code) || regionSets.apac.has(code) || regionSets.emea.has(code)
-      );
-    });
-  }, [countriesFiltered, regionSets]);
-
-  const capColor = (d: any) => {
-    const code = iso3(d.properties);
-    if (regionSets.americas.has(code)) return 'rgba(255, 215, 0, 0.25)';
-    if (regionSets.apac.has(code)) return 'rgba(0, 200, 255, 0.25)';
-    if (regionSets.emea.has(code)) return 'rgba(255, 0, 180, 0.25)';
-    return 'rgba(0, 0, 0, 0)';
-  };
-
-  const sideColor = (d: any) => capColor(d).replace(/0\.18\)$/, '0.06)');
+  const { polys, capColor, sideColor } = useRegionHighlight(countriesFiltered, highlightByRegion);
 
   return (
     <Globe
