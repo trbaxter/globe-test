@@ -15,8 +15,6 @@ type Props = {
 
 type Path = { path: { lat: number; lng: number }[]; kind: 'country' | 'state' };
 
-const iso3 = (p: any) => p?.iso_a3 ?? p?.adm0_a3 ?? p?.gu_a3 ?? p?.adm0_a3_us;
-
 /** Smooth-mode for 60 Hz displays. */
 const isSmoothMode = true;
 const DENSIFY_STEP = isSmoothMode ? 0.25 : 0.5;
@@ -27,6 +25,7 @@ const ROTATE_SPEED = isSmoothMode ? 0.25 : 0.5;
 const asset = (p: string) => `${import.meta.env.BASE_URL}images/${p}`;
 
 // Skip list (ADM0 ISO-3)
+const iso3 = (p: any) => p?.iso_a3 ?? p?.adm0_a3 ?? p?.gu_a3 ?? p?.adm0_a3_us;
 const SKIP_ADM0 = new Set(['GUF']); // French Guiana
 
 // Densify to reduce aliasing shimmer
@@ -83,7 +82,7 @@ function toPaths(fc: FeatureCollection, kind: 'country' | 'state'): Path[] {
 }
 
 export default function GlobeComponent({
-  autoRotate = true,
+  autoRotate = false,
   autoRotateSpeed = 0.5,
   backgroundColor = '#000',
   rendererConfig = { antialias: true, alpha: false, powerPreference: 'high-performance' },
