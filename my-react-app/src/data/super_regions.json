@@ -1,0 +1,21 @@
+{
+  "americas": {
+    "North America": ["CAN", "MEX", "USA"],
+    "Central America": ["CRI", "PAN"],
+    "South America": ["CHL", "COL"]
+  },
+  "apac": {
+    "Southern Oceania": ["AUS", "NZL"],
+    "Northeast Asia": ["CHN", "HKG", "JPN", "KOR", "TWN"],
+    "Southeast Asia": ["IDN", "MYS", "PHL", "SGP", "THA", "VNM"]
+  },
+  "emea": {
+    "Northern Europe": ["DNK", "FIN", "IRL", "NOR", "SWE", "GBR"],
+    "Middle East": ["ISR", "SAU", "TUR", "ARE"],
+    "Eastern Europe": ["RUS", "UKR"],
+    "South Africa": ["ZAF"],
+    "Central Europe": ["AUT", "BEL", "CZE", "EST", "DEU", "HUN", "LVA", "LTU", "NLD", "POL", "SVK", "CHE"],
+    "Western Europe": ["FRA"],
+    "Southern Europe": ["ITA", "PRT", "ESP"]
+  }
+}
