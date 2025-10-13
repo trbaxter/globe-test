@@ -137,7 +137,7 @@ export default function GlobeComponent({
       backgroundColor={backgroundColor}
       showAtmosphere
       atmosphereColor="lightskyblue"
-      atmosphereAltitude={0.175}
+      atmosphereAltitude={0.15}
       pathsData={paths}
       pathPoints="path"
       pathPointLat="lat"
