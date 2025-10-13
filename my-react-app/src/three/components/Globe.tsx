@@ -6,8 +6,6 @@ import type { FeatureCollection, Position } from 'geojson';
 import type { WebGLRendererParameters } from 'three';
 
 type Props = {
-  autoRotate?: boolean;
-  autoRotateSpeed?: number;
   backgroundColor?: string;
   rendererConfig?: WebGLRendererParameters;
   highlightByRegion?: { americas?: string[]; apac?: string[]; emea?: string[] };
@@ -20,7 +18,6 @@ const isSmoothMode = true;
 const DENSIFY_STEP = isSmoothMode ? 0.25 : 0.5;
 const LINE_LIFT = isSmoothMode ? 0.005 : 0.003;
 const STROKE_PX = isSmoothMode ? 1.1 : 0.6;
-const ROTATE_SPEED = isSmoothMode ? 0.25 : 0.5;
 
 const asset = (p: string) => `${import.meta.env.BASE_URL}images/${p}`;
 
@@ -82,8 +79,6 @@ function toPaths(fc: FeatureCollection, kind: 'country' | 'state'): Path[] {
 }
 
 export default function GlobeComponent({
-  autoRotate = false,
-  autoRotateSpeed = 0.5,
   backgroundColor = '#000',
   rendererConfig = { antialias: true, alpha: false, powerPreference: 'high-performance' },
   highlightByRegion = {}
@@ -117,8 +112,6 @@ export default function GlobeComponent({
     if (controls) {
       controls.enableDamping = true;
       controls.dampingFactor = 0.05;
-      controls.autoRotate = autoRotate;
-      controls.autoRotateSpeed = isSmoothMode ? ROTATE_SPEED : autoRotateSpeed;
     }
 
     globe.pointOfView({ lat: 20, lng: 0, altitude: 2 }, 0);
@@ -134,7 +127,7 @@ export default function GlobeComponent({
 
     globe.renderer?.().setPixelRatio?.(Math.min(window.devicePixelRatio || 1, 2));
     globe.pathAltitude?.(LINE_LIFT);
-  }, [autoRotate, autoRotateSpeed, w, h]);
+  }, [w, h]);
 
   const paths = useMemo(
     () => [
