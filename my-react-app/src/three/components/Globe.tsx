@@ -149,8 +149,6 @@ export default function GlobeComponent({
       const R = globe.getGlobeRadius?.() ?? 100;
       controls.minDistance = R * 2;
       controls.maxDistance = R * 3.0;
-      controls.enableDamping = true;
-      controls.dampingFactor = 0.05;
       controls.update?.();
     }
 
