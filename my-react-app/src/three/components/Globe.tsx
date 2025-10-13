@@ -92,9 +92,9 @@ function useRegionHighlight(countriesFiltered: FeatureCollection, highlightByReg
   const capColor = useCallback(
     (d: any) => {
       const code = iso3(d.properties);
-      if (regionSets.americas.has(code)) return 'rgba(255, 215, 0, 0.25)';
-      if (regionSets.apac.has(code)) return 'rgba(0, 200, 255, 0.25)';
-      if (regionSets.emea.has(code)) return 'rgba(255, 0, 180, 0.25)';
+      if (regionSets.americas.has(code)) return 'rgba(255, 215, 0, 0.35)';
+      if (regionSets.apac.has(code)) return 'rgba(0, 200, 255, 0.35)';
+      if (regionSets.emea.has(code)) return 'rgba(255, 0, 180, 0.35)';
       return 'rgba(0, 0, 0, 0)';
     },
     [regionSets]
@@ -148,12 +148,12 @@ export default function GlobeComponent({
     const controls = globe.controls?.();
     if (controls) {
       const R = globe.getGlobeRadius?.() ?? 100;
-      controls.minDistance = R * 2;
-      controls.maxDistance = R * 3.0;
+      controls.minDistance = R * 1.5;
+      controls.maxDistance = R * 2.1;
       controls.update?.();
     }
 
-    globe.pointOfView({ lat: 35, lng: -95, altitude: 1 }, 0);
+    globe.pointOfView({ lat: 38, lng: -95, altitude: 0.75 }, 0);
 
     const mat = globe.globeMaterial?.();
     if (mat) {
@@ -164,7 +164,7 @@ export default function GlobeComponent({
       mat.needsUpdate = true;
     }
 
-    globe.renderer?.().setPixelRatio?.(Math.min(window.devicePixelRatio || 1, 2));
+    globe.renderer?.().setPixelRatio?.(Math.min(window.devicePixelRatio || 1, 3));
     globe.pathAltitude?.(LINE_LIFT);
   }, [w, h]);
 
