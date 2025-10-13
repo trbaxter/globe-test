@@ -112,6 +112,7 @@ export default function GlobeComponent({
     if (controls) {
       controls.enableDamping = true;
       controls.dampingFactor = 0.05;
+      // rotation removed
     }
 
     globe.pointOfView({ lat: 20, lng: 0, altitude: 2 }, 0);
