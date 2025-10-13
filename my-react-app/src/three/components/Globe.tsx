@@ -5,12 +5,7 @@ import states from '@/data/gz_2010_us_040_00_500k.json';
 import type { FeatureCollection, Position } from 'geojson';
 import type { WebGLRendererParameters } from 'three';
 
-type Props = {
-  backgroundColor?: string;
-  rendererConfig?: WebGLRendererParameters;
-  highlightByRegion?: { americas?: string[]; apac?: string[]; emea?: string[] };
-};
-
+type RegionMap = { americas?: string[]; apac?: string[]; emea?: string[] };
 type Path = { path: { lat: number; lng: number }[]; kind: 'country' | 'state' };
 
 /** Smooth-mode for 60 Hz displays. */
@@ -78,10 +73,7 @@ function toPaths(fc: FeatureCollection, kind: 'country' | 'state'): Path[] {
   return out;
 }
 
-function useRegionHighlight(
-  countriesFiltered: FeatureCollection,
-  highlightByRegion: Props['highlightByRegion']
-) {
+function useRegionHighlight(countriesFiltered: FeatureCollection, highlightByRegion?: RegionMap) {
   const regionSets = useMemo(() => {
     const { americas = [], apac = [], emea = [] } = highlightByRegion ?? {};
     return { americas: new Set(americas), apac: new Set(apac), emea: new Set(emea) };
@@ -107,6 +99,7 @@ function useRegionHighlight(
     [regionSets]
   );
 
+  // Keep sides invisible
   const sideColor = useCallback(
     (d: any) => capColor(d).replace(/,\s*[\d.]+\)$/, ', 0)'),
     [capColor]
@@ -116,14 +109,21 @@ function useRegionHighlight(
 }
 
 export default function GlobeComponent({
-  backgroundColor = '#000',
-  rendererConfig = { antialias: true, alpha: false, powerPreference: 'high-performance' },
   highlightByRegion = {}
-}: Props) {
+}: {
+  highlightByRegion?: RegionMap;
+}) {
+  const backgroundColor = '#000';
+  const rendererConfig: WebGLRendererParameters = {
+    antialias: true,
+    alpha: false,
+    powerPreference: 'high-performance',
+    logarithmicDepthBuffer: true
+  };
+
   const globeRef = useRef<GlobeMethods | undefined>(undefined);
   const [{ w, h }, setSize] = useState({ w: window.innerWidth, h: window.innerHeight });
 
-  // Filter countries once using skip list
   const countriesFiltered: FeatureCollection = useMemo(
     () => ({
       ...(countries as FeatureCollection),
@@ -203,7 +203,7 @@ export default function GlobeComponent({
       polygonSideColor={sideColor}
       polygonAltitude={LINE_LIFT}
       /* renderer */
-      rendererConfig={{ ...rendererConfig, logarithmicDepthBuffer: true }}
+      rendererConfig={rendererConfig}
     />
   );
 }
