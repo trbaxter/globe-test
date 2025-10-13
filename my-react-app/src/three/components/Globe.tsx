@@ -107,7 +107,10 @@ function useRegionHighlight(
     [regionSets]
   );
 
-  const sideColor = useCallback((d: any) => capColor(d).replace(/0\.18\)$/, '0.06)'), [capColor]);
+  const sideColor = useCallback(
+    (d: any) => capColor(d).replace(/,\s*[\d.]+\)$/, ', 0.06)'),
+    [capColor]
+  );
 
   return { polys, capColor, sideColor };
 }
@@ -121,11 +124,10 @@ export default function GlobeComponent({
   const [{ w, h }, setSize] = useState({ w: window.innerWidth, h: window.innerHeight });
 
   // Filter countries once using skip list
-  const countriesFC = countries as FeatureCollection;
   const countriesFiltered: FeatureCollection = useMemo(
     () => ({
-      ...countriesFC,
-      features: countriesFC.features.filter(
+      ...(countries as FeatureCollection),
+      features: (countries as FeatureCollection).features.filter(
         (f) => !SKIP_ADM0.has((f.properties as any)?.adm0_a3 as string)
       )
     }),
