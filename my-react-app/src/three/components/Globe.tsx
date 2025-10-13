@@ -161,10 +161,10 @@ export default function GlobeComponent({
 
   const capColor = (d: any) => {
     const code = iso3(d.properties);
-    if (regionSets.americas.has(code)) return 'rgba(255,215,0,0.18)';
-    if (regionSets.apac.has(code)) return 'rgba(0,200,255,0.18)';
-    if (regionSets.emea.has(code)) return 'rgba(255,0,180,0.18)';
-    return 'rgba(0,0,0,0)';
+    if (regionSets.americas.has(code)) return 'rgba(255, 215, 0, 0.25)';
+    if (regionSets.apac.has(code)) return 'rgba(0, 200, 255, 0.25)';
+    if (regionSets.emea.has(code)) return 'rgba(255, 0, 180, 0.25)';
+    return 'rgba(0, 0, 0, 0)';
   };
 
   const sideColor = (d: any) => capColor(d).replace(/0\.18\)$/, '0.06)');
