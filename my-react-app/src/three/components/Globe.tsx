@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState, useCallback } from 'react';
 import Globe, { type GlobeMethods } from 'react-globe.gl';
 import countries from '@/data/low_res.geo.json';
 import states from '@/data/gz_2010_us_040_00_500k.json';
+import canadaProvinces from '@/data/canada_provinces.json';
 import type { FeatureCollection, Position } from 'geojson';
 import type { WebGLRendererParameters } from 'three';
 
@@ -152,7 +153,7 @@ export default function GlobeComponent({
       controls.update?.();
     }
 
-    globe.pointOfView({ lat: 20, lng: 0, altitude: 2 }, 0);
+    globe.pointOfView({ lat: 35, lng: -95, altitude: 1 }, 0);
 
     const mat = globe.globeMaterial?.();
     if (mat) {
@@ -170,7 +171,8 @@ export default function GlobeComponent({
   const paths = useMemo(
     () => [
       ...toPaths(countriesFiltered, 'country'),
-      ...toPaths(states as FeatureCollection, 'state')
+      ...toPaths(states as FeatureCollection, 'state'),
+      ...toPaths(canadaProvinces as FeatureCollection, 'state')
     ],
     [countriesFiltered]
   );
