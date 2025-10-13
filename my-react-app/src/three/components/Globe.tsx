@@ -108,7 +108,7 @@ function useRegionHighlight(
   );
 
   const sideColor = useCallback(
-    (d: any) => capColor(d).replace(/,\s*[\d.]+\)$/, ', 0.06)'),
+    (d: any) => capColor(d).replace(/,\s*[\d.]+\)$/, ', 0)'),
     [capColor]
   );
 
@@ -146,8 +146,12 @@ export default function GlobeComponent({
 
     const controls = globe.controls?.();
     if (controls) {
+      const R = globe.getGlobeRadius?.() ?? 100;
+      controls.minDistance = R * 2;
+      controls.maxDistance = R * 3.0;
       controls.enableDamping = true;
       controls.dampingFactor = 0.05;
+      controls.update?.();
     }
 
     globe.pointOfView({ lat: 20, lng: 0, altitude: 2 }, 0);
@@ -178,6 +182,7 @@ export default function GlobeComponent({
   return (
     <Globe
       ref={globeRef}
+      animateIn={false}
       width={w}
       height={h}
       globeImageUrl={asset('earth-blue-marble.jpg')}
