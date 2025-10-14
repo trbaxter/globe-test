@@ -4,7 +4,7 @@ export default function LoadingScreen() {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    const id = requestAnimationFrame(() => setVisible(true)); // start after first paint
+    const id = requestAnimationFrame(() => setVisible(true));
     return () => cancelAnimationFrame(id);
   }, []);
 

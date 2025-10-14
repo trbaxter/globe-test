@@ -9,13 +9,6 @@ export default function App() {
   const [minDone, setMinDone] = useState(false);
 
   useEffect(() => {
-    const onLoad = () => setReady(true);
-    if (document.readyState === 'complete') onLoad();
-    else window.addEventListener('load', onLoad);
-    return () => window.removeEventListener('load', onLoad);
-  }, []);
-
-  useEffect(() => {
     const t = setTimeout(() => setMinDone(true), MIN_LOADER_MS);
     return () => clearTimeout(t);
   }, []);
@@ -25,7 +18,7 @@ export default function App() {
   return (
     <>
       {showLoader && <LoadingScreen />}
-      <Globe />
+      <Globe onReady={() => setReady(true)} />
     </>
   );
 }

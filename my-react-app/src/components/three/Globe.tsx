@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
-import Globe, { type GlobeMethods } from 'react-globe.gl';
+import RGGlobe, { type GlobeMethods } from 'react-globe.gl';
 import earthImg from '@/assets/img/earth-blue-marble.jpg';
 
-export default function GlobeComponent() {
+export type GlobeProps = { onReady?: () => void };
+
+export default function GlobeComponent({ onReady }: GlobeProps) {
   const globeRef = useRef<GlobeMethods | undefined>(undefined);
 
   const [{ w, h }, setSize] = useState({
@@ -15,6 +17,33 @@ export default function GlobeComponent() {
     window.addEventListener('resize', onResize);
     return () => window.removeEventListener('resize', onResize);
   }, []);
+
+  // signal ready after texture is decoded and a frame has painted
+  useEffect(() => {
+    let cancelled = false;
+    let raf = 0;
+    const img = new Image();
+    img.src = earthImg;
+
+    const done = () => {
+      if (cancelled) return;
+      raf = requestAnimationFrame(() => onReady?.());
+    };
+
+    // cached or fresh, both paths handled
+    const anyImg = img as HTMLImageElement & { decode?: () => Promise<void> };
+    if (anyImg.decode) anyImg.decode().then(done).catch(done);
+    else if (img.complete) done();
+    else {
+      img.onload = done;
+      img.onerror = done;
+    }
+
+    return () => {
+      cancelled = true;
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, [onReady]);
 
   useEffect(() => {
     const globe = globeRef.current;
@@ -32,7 +61,7 @@ export default function GlobeComponent() {
   }, []);
 
   return (
-    <Globe
+    <RGGlobe
       ref={globeRef}
       width={w}
       height={h}
