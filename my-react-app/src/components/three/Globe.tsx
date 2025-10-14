@@ -3,9 +3,12 @@ import Globe, { type GlobeMethods } from 'react-globe.gl';
 import earthImg from '@/assets/img/earth-blue-marble.jpg';
 
 export default function GlobeComponent() {
-  // Mutable reference object. Object's .current value type either GlobeMethods or undefined. Undefined initial value on first render.
+  // Mutable reference object. Object's .current value type either GlobeMethods or undefined.
+  // Undefined initial value on first render.
   const globeRef = useRef<GlobeMethods | undefined>(undefined);
 
+  // Creates a state object initialized to current window size (if exists), otherwise (0,0).
+  // Deconstructs state to w & h variables. Uses setSize to update state and re-render.
   const [{ w, h }, setSize] = useState({
     w: typeof window !== 'undefined' ? window.innerWidth : 0,
     h: typeof window !== 'undefined' ? window.innerHeight : 0
