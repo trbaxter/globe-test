@@ -1,16 +1,22 @@
-import Globe from '@/three/components/Globe';
-import SuperAreaFilter from '@/ui/SuperAreaFilter.tsx';
-import { useState } from 'react';
+import Globe from '@/components/three/Globe.tsx';
+import LoadingScreen from '@/components/ui/LoadingScreen.tsx';
+import { useEffect, useState } from 'react';
 
 export default function App() {
-  const [filter, setFilter] = useState({ americas: false, apac: false, emea: false });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Hide loading screen once page is ready for display
+    const onLoad = () => setLoading(false);
+    if (document.readyState === 'complete') onLoad();
+    else window.addEventListener('load', onLoad);
+    return () => window.removeEventListener('load', onLoad);
+  }, []);
 
   return (
-    <div style={{ position: 'fixed', inset: 0 }}>
+    <>
+      {loading && <LoadingScreen />}
       <Globe />
-      <div style={{ position: 'fixed', top: 12, left: 12, zIndex: 10 }}>
-        <SuperAreaFilter values={filter} onChange={setFilter} />
-      </div>
-    </div>
+    </>
   );
 }
