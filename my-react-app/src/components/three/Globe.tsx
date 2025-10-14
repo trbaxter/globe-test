@@ -1,18 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
 import Globe, { type GlobeMethods } from 'react-globe.gl';
-import type { WebGLRendererParameters } from 'three';
-import earthImg from '@/img/earth-blue-marble.jpg';
+import earthImg from '@/assets/img/earth-blue-marble.jpg';
 
 export default function GlobeComponent() {
-  const backgroundColor = '#000'; // Black background for space
-  const rendererConfig: WebGLRendererParameters = {
-    antialias: true,
-    alpha: false,
-    powerPreference: 'high-performance'
-  };
-
   const globeRef = useRef<GlobeMethods | undefined>(undefined);
-  const [{ w, h }, setSize] = useState({ w: window.innerWidth, h: window.innerHeight });
+
+  const [{ w, h }, setSize] = useState({
+    w: typeof window !== 'undefined' ? window.innerWidth : 0,
+    h: typeof window !== 'undefined' ? window.innerHeight : 0
+  });
 
   useEffect(() => {
     const onResize = () => setSize({ w: window.innerWidth, h: window.innerHeight });
@@ -20,11 +16,12 @@ export default function GlobeComponent() {
     return () => window.removeEventListener('resize', onResize);
   }, []);
 
+  // mount-only setup
   useEffect(() => {
-    const globe = globeRef.current as any;
+    const globe = globeRef.current;
     if (!globe) return;
-
     const controls = globe.controls?.();
+    controls?.saveState();
     if (controls) {
       const R = globe.getGlobeRadius?.() ?? 100;
       controls.minDistance = R * 1.2;
@@ -32,11 +29,10 @@ export default function GlobeComponent() {
       controls.update?.();
     }
 
-    globe.pointOfView({ lat: 38, lng: -95, altitude: 0.75 }, 0);
+    globe.pointOfView?.({ lat: 38, lng: -95, altitude: 0.75 }, 0);
 
     const mat = globe.globeMaterial?.();
     if (mat) {
-      mat.bumpScale = 10;
       mat.polygonOffset = true;
       mat.polygonOffsetFactor = 1;
       mat.polygonOffsetUnits = 1;
@@ -44,20 +40,19 @@ export default function GlobeComponent() {
     }
 
     globe.renderer?.().setPixelRatio?.(Math.min(window.devicePixelRatio || 1, 3));
-  }, [w, h]);
+  }, []);
 
   return (
     <Globe
       ref={globeRef}
-      animateIn={true}
       width={w}
       height={h}
       globeImageUrl={earthImg}
-      backgroundColor={backgroundColor}
+      backgroundColor={'#000'}
       showAtmosphere
       atmosphereColor="lightskyblue"
       atmosphereAltitude={0.15}
-      rendererConfig={rendererConfig}
+      rendererConfig={{ antialias: true, alpha: false, powerPreference: 'high-performance' }}
     />
   );
 }
