@@ -27,8 +27,8 @@ export default function GlobeComponent() {
     const controls = globe.controls?.();
     if (controls) {
       const R = globe.getGlobeRadius?.() ?? 100;
-      controls.minDistance = R * 1.4;
-      controls.maxDistance = R * 2.2;
+      controls.minDistance = R * 1.3;
+      controls.maxDistance = R * 2.3;
       controls.update?.();
     }
 
