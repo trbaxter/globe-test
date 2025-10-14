@@ -3,6 +3,7 @@ import Globe, { type GlobeMethods } from 'react-globe.gl';
 import earthImg from '@/assets/img/earth-blue-marble.jpg';
 
 export default function GlobeComponent() {
+  // Mutable reference object. Object's .current value type either GlobeMethods or undefined. Undefined initial value on first render.
   const globeRef = useRef<GlobeMethods | undefined>(undefined);
 
   const [{ w, h }, setSize] = useState({
@@ -49,7 +50,7 @@ export default function GlobeComponent() {
       height={h}
       globeImageUrl={earthImg}
       backgroundColor={'#000'}
-      showAtmosphere
+      showAtmosphere={true}
       atmosphereColor="lightskyblue"
       atmosphereAltitude={0.15}
       rendererConfig={{ antialias: true, alpha: false, powerPreference: 'high-performance' }}
