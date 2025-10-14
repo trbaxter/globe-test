@@ -4,7 +4,7 @@ import type { WebGLRendererParameters } from 'three';
 import earthImg from '@/img/earth-blue-marble.jpg';
 
 export default function GlobeComponent() {
-  const backgroundColor = '#000';
+  const backgroundColor = '#000'; // Black background for space
   const rendererConfig: WebGLRendererParameters = {
     antialias: true,
     alpha: false,
