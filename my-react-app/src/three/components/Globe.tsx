@@ -9,36 +9,11 @@ import type { WebGLRendererParameters } from 'three';
 type RegionMap = { americas?: string[]; apac?: string[]; emea?: string[] };
 type Path = { path: { lat: number; lng: number }[]; kind: 'country' | 'state' };
 
-/** Smooth-mode for 60 Hz displays. */
-const isSmoothMode = true;
-const DENSIFY_STEP = isSmoothMode ? 0.25 : 0.5;
-const LINE_LIFT = isSmoothMode ? 0.005 : 0.003;
-const STROKE_PX = isSmoothMode ? 1.1 : 0.6;
-
 const asset = (p: string) => `${import.meta.env.BASE_URL}images/${p}`;
 
 // Skip list (ADM0 ISO-3)
 const iso3 = (p: any) => p?.iso_a3 ?? p?.adm0_a3 ?? p?.gu_a3 ?? p?.adm0_a3_us;
 const SKIP_ADM0 = new Set(['GUF']); // French Guiana
-
-// Densify to reduce aliasing shimmer
-function densify(line: Position[], maxStepDeg = DENSIFY_STEP): Position[] {
-  const out: Position[] = [];
-  for (let i = 0; i < line.length - 1; i++) {
-    const [lon1, lat1] = line[i] as [number, number];
-    const [lon2, lat2] = line[i + 1] as [number, number];
-    const steps = Math.max(
-      1,
-      Math.ceil(Math.max(Math.abs(lon2 - lon1), Math.abs(lat2 - lat1)) / maxStepDeg)
-    );
-    for (let k = 0; k < steps; k++) {
-      const t = k / steps;
-      out.push([lon1 + (lon2 - lon1) * t, lat1 + (lat2 - lat1) * t]);
-    }
-  }
-  out.push(line[line.length - 1]);
-  return out;
-}
 
 function toPaths(fc: FeatureCollection, kind: 'country' | 'state'): Path[] {
   const out: Path[] = [];
@@ -48,7 +23,7 @@ function toPaths(fc: FeatureCollection, kind: 'country' | 'state'): Path[] {
 
     const pushRing = (ring: Position[]) =>
       out.push({
-        path: densify(ring).map(([lon, lat]) => ({ lat: lat as number, lng: lon as number })),
+        path: ring.map(([lon, lat]) => ({ lat: lat as number, lng: lon as number })),
         kind
       });
 
@@ -57,7 +32,7 @@ function toPaths(fc: FeatureCollection, kind: 'country' | 'state'): Path[] {
       g.coordinates.forEach((poly: Position[][]) => poly.forEach(pushRing));
     else if (g.type === 'LineString')
       out.push({
-        path: densify(g.coordinates as Position[]).map(([lon, lat]) => ({
+        path: (g.coordinates as Position[]).map(([lon, lat]) => ({
           lat: lat as number,
           lng: lon as number
         })),
@@ -66,7 +41,7 @@ function toPaths(fc: FeatureCollection, kind: 'country' | 'state'): Path[] {
     else if (g.type === 'MultiLineString')
       g.coordinates.forEach((line: Position[]) =>
         out.push({
-          path: densify(line).map(([lon, lat]) => ({ lat: lat as number, lng: lon as number })),
+          path: line.map(([lon, lat]) => ({ lat: lat as number, lng: lon as number })),
           kind
         })
       );
@@ -118,8 +93,7 @@ export default function GlobeComponent({
   const rendererConfig: WebGLRendererParameters = {
     antialias: true,
     alpha: false,
-    powerPreference: 'high-performance',
-    logarithmicDepthBuffer: true
+    powerPreference: 'high-performance'
   };
 
   const globeRef = useRef<GlobeMethods | undefined>(undefined);
@@ -165,7 +139,7 @@ export default function GlobeComponent({
     }
 
     globe.renderer?.().setPixelRatio?.(Math.min(window.devicePixelRatio || 1, 3));
-    globe.pathAltitude?.(LINE_LIFT);
+    globe.pathAltitude?.(0.003);
   }, [w, h]);
 
   const paths = useMemo(
@@ -197,13 +171,13 @@ export default function GlobeComponent({
       pathPointLat="lat"
       pathPointLng="lng"
       pathColor={() => '#EEEEEE'}
-      pathStroke={() => STROKE_PX}
+      pathStroke={() => 1}
       pathTransitionDuration={0}
       /* fills */
       polygonsData={polys}
       polygonCapColor={capColor}
       polygonSideColor={sideColor}
-      polygonAltitude={LINE_LIFT}
+      polygonAltitude={0.003}
       /* renderer */
       rendererConfig={rendererConfig}
     />
