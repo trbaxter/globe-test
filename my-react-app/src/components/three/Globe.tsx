@@ -40,7 +40,7 @@ export default function GlobeComponent() {
       backgroundColor={'#000'}
       showAtmosphere={true}
       atmosphereColor="lightskyblue"
-      atmosphereAltitude={0.15}
+      atmosphereAltitude={0.13}
       rendererConfig={{ antialias: true, alpha: false, powerPreference: 'high-performance' }}
     />
   );
