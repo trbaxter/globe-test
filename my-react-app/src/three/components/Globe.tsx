@@ -1,94 +1,9 @@
-import { useEffect, useMemo, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Globe, { type GlobeMethods } from 'react-globe.gl';
-import countries from '@/data/low_res.geo.json';
-import states from '@/data/gz_2010_us_040_00_500k.json';
-import canadaProvinces from '@/data/canada_provinces.json';
-import type { FeatureCollection, Position } from 'geojson';
 import type { WebGLRendererParameters } from 'three';
+import earthImg from '@/img/earth-blue-marble.jpg';
 
-type RegionMap = { americas?: string[]; apac?: string[]; emea?: string[] };
-type Path = { path: { lat: number; lng: number }[]; kind: 'country' | 'state' };
-
-const asset = (p: string) => `${import.meta.env.BASE_URL}images/${p}`;
-
-// Skip list (ADM0 ISO-3)
-const iso3 = (p: any) => p?.iso_a3 ?? p?.adm0_a3 ?? p?.gu_a3 ?? p?.adm0_a3_us;
-const SKIP_ADM0 = new Set(['GUF']); // French Guiana
-
-function toPaths(fc: FeatureCollection, kind: 'country' | 'state'): Path[] {
-  const out: Path[] = [];
-  for (const f of fc.features) {
-    const g: any = f.geometry;
-    if (!g) continue;
-
-    const pushRing = (ring: Position[]) =>
-      out.push({
-        path: ring.map(([lon, lat]) => ({ lat: lat as number, lng: lon as number })),
-        kind
-      });
-
-    if (g.type === 'Polygon') g.coordinates.forEach(pushRing);
-    else if (g.type === 'MultiPolygon')
-      g.coordinates.forEach((poly: Position[][]) => poly.forEach(pushRing));
-    else if (g.type === 'LineString')
-      out.push({
-        path: (g.coordinates as Position[]).map(([lon, lat]) => ({
-          lat: lat as number,
-          lng: lon as number
-        })),
-        kind
-      });
-    else if (g.type === 'MultiLineString')
-      g.coordinates.forEach((line: Position[]) =>
-        out.push({
-          path: line.map(([lon, lat]) => ({ lat: lat as number, lng: lon as number })),
-          kind
-        })
-      );
-  }
-  return out;
-}
-
-function useRegionHighlight(countriesFiltered: FeatureCollection, highlightByRegion?: RegionMap) {
-  const regionSets = useMemo(() => {
-    const { americas = [], apac = [], emea = [] } = highlightByRegion ?? {};
-    return { americas: new Set(americas), apac: new Set(apac), emea: new Set(emea) };
-  }, [highlightByRegion]);
-
-  const polys = useMemo(() => {
-    return countriesFiltered.features.filter((f) => {
-      const code = iso3(f.properties as any);
-      return (
-        regionSets.americas.has(code) || regionSets.apac.has(code) || regionSets.emea.has(code)
-      );
-    });
-  }, [countriesFiltered, regionSets]);
-
-  const capColor = useCallback(
-    (d: any) => {
-      const code = iso3(d.properties);
-      if (regionSets.americas.has(code)) return 'rgba(255, 215, 0, 0.35)';
-      if (regionSets.apac.has(code)) return 'rgba(0, 200, 255, 0.35)';
-      if (regionSets.emea.has(code)) return 'rgba(255, 0, 180, 0.35)';
-      return 'rgba(0, 0, 0, 0)';
-    },
-    [regionSets]
-  );
-
-  // Keep sides invisible
-  const sideColor = useCallback(
-    (d: any) => capColor(d).replace(/,\s*[\d.]+\)$/, ', 0)'),
-    [capColor]
-  );
-
-  return { polys, capColor, sideColor };
-}
-
-export default function GlobeComponent({
-  highlightByRegion = {}
-}: {
-  highlightByRegion?: RegionMap;
-}) {
+export default function GlobeComponent() {
   const backgroundColor = '#000';
   const rendererConfig: WebGLRendererParameters = {
     antialias: true,
@@ -98,16 +13,6 @@ export default function GlobeComponent({
 
   const globeRef = useRef<GlobeMethods | undefined>(undefined);
   const [{ w, h }, setSize] = useState({ w: window.innerWidth, h: window.innerHeight });
-
-  const countriesFiltered: FeatureCollection = useMemo(
-    () => ({
-      ...(countries as FeatureCollection),
-      features: (countries as FeatureCollection).features.filter(
-        (f) => !SKIP_ADM0.has((f.properties as any)?.adm0_a3 as string)
-      )
-    }),
-    []
-  );
 
   useEffect(() => {
     const onResize = () => setSize({ w: window.innerWidth, h: window.innerHeight });
@@ -122,8 +27,8 @@ export default function GlobeComponent({
     const controls = globe.controls?.();
     if (controls) {
       const R = globe.getGlobeRadius?.() ?? 100;
-      controls.minDistance = R * 1.5;
-      controls.maxDistance = R * 2.1;
+      controls.minDistance = R * 1.4;
+      controls.maxDistance = R * 2.2;
       controls.update?.();
     }
 
@@ -139,46 +44,19 @@ export default function GlobeComponent({
     }
 
     globe.renderer?.().setPixelRatio?.(Math.min(window.devicePixelRatio || 1, 3));
-    globe.pathAltitude?.(0.003);
   }, [w, h]);
-
-  const paths = useMemo(
-    () => [
-      ...toPaths(countriesFiltered, 'country'),
-      ...toPaths(states as FeatureCollection, 'state'),
-      ...toPaths(canadaProvinces as FeatureCollection, 'state')
-    ],
-    [countriesFiltered]
-  );
-
-  const { polys, capColor, sideColor } = useRegionHighlight(countriesFiltered, highlightByRegion);
 
   return (
     <Globe
       ref={globeRef}
-      animateIn={false}
+      animateIn={true}
       width={w}
       height={h}
-      globeImageUrl={asset('earth-blue-marble.jpg')}
-      bumpImageUrl={asset('earth-topology.png')}
+      globeImageUrl={earthImg}
       backgroundColor={backgroundColor}
       showAtmosphere
       atmosphereColor="lightskyblue"
       atmosphereAltitude={0.15}
-      /* borders */
-      pathsData={paths}
-      pathPoints="path"
-      pathPointLat="lat"
-      pathPointLng="lng"
-      pathColor={() => '#EEEEEE'}
-      pathStroke={() => 1}
-      pathTransitionDuration={0}
-      /* fills */
-      polygonsData={polys}
-      polygonCapColor={capColor}
-      polygonSideColor={sideColor}
-      polygonAltitude={0.003}
-      /* renderer */
       rendererConfig={rendererConfig}
     />
   );
