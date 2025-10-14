@@ -17,7 +17,7 @@ export default function App() {
 
   return (
     <>
-      {showLoader && <LoadingScreen />}
+      {<LoadingScreen show={showLoader} />}
       <Globe onReady={() => setReady(true)} />
     </>
   );
