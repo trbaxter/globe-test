@@ -6,7 +6,6 @@ export default function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Hide loading screen once page is ready for display
     const onLoad = () => setLoading(false);
     if (document.readyState === 'complete') onLoad();
     else window.addEventListener('load', onLoad);
