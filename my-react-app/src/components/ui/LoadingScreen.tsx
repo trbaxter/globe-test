@@ -12,7 +12,7 @@ export default function LoadingScreen() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          fontSize: '24',
+          fontSize: '34',
           zIndex: 9999
         }}
       >
