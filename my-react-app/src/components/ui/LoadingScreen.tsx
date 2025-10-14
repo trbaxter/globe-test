@@ -1,23 +1,44 @@
 import { useEffect, useState } from 'react';
 
-export default function LoadingScreen() {
+type Props = { show: boolean };
+
+const FADE_MS = 700;
+const DELAY_MS = 150;
+
+export default function LoadingScreen({ show }: Props) {
+  const [present, setPresent] = useState(show);
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    const id = requestAnimationFrame(() => setVisible(true));
-    return () => cancelAnimationFrame(id);
-  }, []);
+    let raf = 0,
+      t: ReturnType<typeof setTimeout> | undefined;
+
+    if (show) {
+      setPresent(true);
+      raf = requestAnimationFrame(() => setVisible(true));
+    } else {
+      raf = requestAnimationFrame(() => setVisible(false));
+      t = setTimeout(() => setPresent(false), FADE_MS + DELAY_MS);
+    }
+    return () => {
+      cancelAnimationFrame(raf);
+      if (t) clearTimeout(t);
+    };
+  }, [show]);
+
+  if (!present) return null;
 
   return (
     <>
       <style>{`
         @media (prefers-reduced-motion: reduce) {
-          .fade { transition: none !important; opacity: 1 !important; }
+          .fade { transition: none !important; }
         }
       `}</style>
       <div
         role="status"
         aria-live="polite"
+        className="fade"
         style={{
           position: 'fixed',
           inset: 0,
@@ -27,18 +48,13 @@ export default function LoadingScreen() {
           alignItems: 'center',
           justifyContent: 'center',
           fontSize: 34,
-          zIndex: 9999
+          zIndex: 9999,
+          opacity: visible ? 1 : 0,
+          transition: `opacity ${FADE_MS}ms ease-out ${DELAY_MS}ms`,
+          pointerEvents: visible ? 'auto' : 'none'
         }}
       >
-        <span
-          className="fade"
-          style={{
-            opacity: visible ? 1 : 0,
-            transition: 'opacity 700ms ease-out 150ms'
-          }}
-        >
-          Loading ...
-        </span>
+        <span>Loading ...</span>
       </div>
     </>
   );
