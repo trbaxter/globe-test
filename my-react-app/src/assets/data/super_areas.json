@@ -1,13 +1,5 @@
 {
-  "americas": [
-    "CRI",
-    "COL",
-    "PAN",
-    "MEX",
-    "USA",
-    "CHL",
-    "CAN"
-  ],
+  "americas": ["CRI", "COL", "PAN", "MEX", "USA", "CHL", "CAN"],
   "apac": [
     "CHN",
     "VNM",
