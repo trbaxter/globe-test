@@ -1,12 +1,8 @@
 {
-  "type": "FeatureCollection",
-  "features": [
+  "states": [
     {
-      "type": "Feature",
-      "properties": {
-        "name": "Maine",
-        "abbreviation": "ME"
-      },
+      "name": "Maine",
+      "abbreviation": "ME",
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -2509,11 +2505,8 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "name": "Massachusetts",
-        "abbreviation": "MA"
-      },
+      "name": "Massachusetts",
+      "abbreviation": "MA",
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -3352,11 +3345,8 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "name": "Michigan",
-        "abbreviation": "MI"
-      },
+      "name": "Michigan",
+      "abbreviation": "MI",
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -6699,11 +6689,8 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "name": "Montana",
-        "abbreviation": "MT"
-      },
+      "name": "Montana",
+      "abbreviation": "MT",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
