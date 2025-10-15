@@ -2,15 +2,19 @@ import { useEffect, useRef, useState } from 'react';
 import RGGlobe, { type GlobeMethods } from 'react-globe.gl';
 import earthImg from '@/assets/img/earth-blue-marble.jpg';
 
-export type GlobeProps = { onReady?: () => void };
+export type GlobeProps = {
+  onReady?: () => void;
+  onProgress?: (loaded: number, total: number) => void;
+};
 
-export default function GlobeComponent({ onReady }: GlobeProps) {
+export default function GlobeComponent({ onReady, onProgress }: GlobeProps) {
   const globeRef = useRef<GlobeMethods | undefined>(undefined);
 
   const [{ w, h }, setSize] = useState({
     w: typeof window !== 'undefined' ? window.innerWidth : 0,
     h: typeof window !== 'undefined' ? window.innerHeight : 0
   });
+  const [imgUrl, setImgUrl] = useState<string | null>(null);
 
   useEffect(() => {
     const onResize = () => setSize({ w: window.innerWidth, h: window.innerHeight });
@@ -18,54 +22,87 @@ export default function GlobeComponent({ onReady }: GlobeProps) {
     return () => window.removeEventListener('resize', onResize);
   }, []);
 
-  // signal ready after texture is decoded and a frame has painted
   useEffect(() => {
     let cancelled = false;
-    let raf = 0;
-    const img = new Image();
-    img.src = earthImg;
+    let objUrl: string | null = null;
 
-    const done = () => {
-      if (cancelled) return;
-      raf = requestAnimationFrame(() => onReady?.());
-    };
+    async function run() {
+      try {
+        const res = await fetch(earthImg);
+        const total = Number(res.headers.get('content-length')) || 0;
 
-    // cached or fresh, both paths handled
-    const anyImg = img as HTMLImageElement & { decode?: () => Promise<void> };
-    if (anyImg.decode) anyImg.decode().then(done).catch(done);
-    else if (img.complete) done();
-    else {
-      img.onload = done;
-      img.onerror = done;
+        if (!res.ok || !res.body) {
+          setImgUrl(earthImg);
+          requestAnimationFrame(() => onReady?.());
+          return;
+        }
+
+        const reader = res.body.getReader();
+        const parts: BlobPart[] = [];
+        let loaded = 0;
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          if (value) {
+            parts.push(value.buffer.slice(value.byteOffset, value.byteOffset + value.byteLength));
+            loaded += value.byteLength;
+            onProgress?.(loaded, total);
+          }
+          if (cancelled) return;
+        }
+
+        const contentType = res.headers.get('content-type') || 'image/jpeg';
+        const blob = new Blob(parts, { type: contentType });
+        objUrl = URL.createObjectURL(blob);
+        setImgUrl(objUrl);
+
+        const img = new Image();
+        img.src = objUrl;
+        const anyImg = img as HTMLImageElement & { decode?: () => Promise<void> };
+        if (anyImg.decode) {
+          try {
+            await anyImg.decode();
+          } catch {}
+        }
+        if (!cancelled) requestAnimationFrame(() => onReady?.());
+      } catch {
+        setImgUrl(earthImg);
+        requestAnimationFrame(() => onReady?.());
+      }
     }
+
+    void run();
 
     return () => {
       cancelled = true;
-      if (raf) cancelAnimationFrame(raf);
+      if (objUrl) URL.revokeObjectURL(objUrl);
     };
-  }, [onReady]);
+  }, [onReady, onProgress]);
 
   useEffect(() => {
     const globe = globeRef.current;
     if (!globe) return;
-    globe?.renderer?.().setPixelRatio(2); // Sets the pixel ratio to 2x the default
+    globe?.renderer?.().setPixelRatio(2);
 
     const c = globe.controls?.();
     if (!c) return;
 
     const R = globe.getGlobeRadius?.() ?? 100;
-    c.minDistance = R * 1.2; // Min zoom level
-    c.maxDistance = R * 3; // Max zoom level
+    c.minDistance = R * 1.2;
+    c.maxDistance = R * 3;
 
-    globe.pointOfView?.({ lat: 38, lng: -95, altitude: 1.6 }, 0); // Initial globe perspective
-  }, []);
+    globe.pointOfView?.({ lat: 38, lng: -95, altitude: 1.6 }, 0);
+  }, [imgUrl]);
+
+  if (!imgUrl) return null;
 
   return (
     <RGGlobe
       ref={globeRef}
       width={w}
       height={h}
-      globeImageUrl={earthImg}
+      globeImageUrl={imgUrl}
       backgroundColor={'#000'}
       showAtmosphere={true}
       atmosphereColor="lightskyblue"
