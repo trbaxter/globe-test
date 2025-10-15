@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import RGGlobe, { type GlobeMethods } from 'react-globe.gl';
-import earthImg from '@/assets/img/earth-blue-marble.jpg';
+import earthImg from '@/assets/img/earth.jpg';
 
 export type GlobeProps = {
   onReady?: () => void;
