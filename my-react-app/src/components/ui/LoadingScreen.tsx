@@ -1,4 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+
+const FADE_MS = 700;
+const FADE_DELAY_MS = 150;
 
 export default function LoadingScreen({
   show,
@@ -9,18 +12,43 @@ export default function LoadingScreen({
 }) {
   const [present, setPresent] = useState(show);
   const [visible, setVisible] = useState(false);
+  const rootRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    let raf = 0;
+    let raf1 = 0;
+    let raf2 = 0;
+
     if (show) {
       setPresent(true);
-      raf = requestAnimationFrame(() => setVisible(true));
+      raf1 = requestAnimationFrame(() => {
+        raf2 = requestAnimationFrame(() => setVisible(true));
+      });
       document.body.style.overflow = 'hidden';
     } else {
-      raf = requestAnimationFrame(() => setVisible(false));
+      // Ensure the browser has committed current styles, then toggle opacity
+      raf1 = requestAnimationFrame(() => {
+        // force a layout flush on the element we transition
+        void rootRef.current?.offsetHeight;
+        raf2 = requestAnimationFrame(() => setVisible(false));
+      });
     }
-    return () => cancelAnimationFrame(raf);
+    return () => {
+      if (raf1) cancelAnimationFrame(raf1);
+      if (raf2) cancelAnimationFrame(raf2);
+    };
   }, [show]);
+
+  // Fallback: if transitionend doesn't fire, unmount after the expected duration
+  useEffect(() => {
+    if (show) return;
+    const t = window.setTimeout(
+      () => {
+        if (!visible) setPresent(false);
+      },
+      FADE_DELAY_MS + FADE_MS + 50
+    );
+    return () => clearTimeout(t);
+  }, [show, visible]);
 
   useEffect(() => {
     if (!visible) document.body.style.overflow = '';
@@ -32,10 +60,12 @@ export default function LoadingScreen({
 
   return (
     <div
+      ref={rootRef}
       role="status"
       aria-live="polite"
       className="fade"
-      onTransitionEnd={() => {
+      onTransitionEnd={(e) => {
+        if (e.target !== rootRef.current) return; // ignore bubbled events
         if (!visible) setPresent(false);
       }}
       style={{
@@ -51,7 +81,7 @@ export default function LoadingScreen({
         fontSize: 34,
         zIndex: 9999,
         opacity: visible ? 1 : 0,
-        transition: 'opacity 700ms ease-out 150ms',
+        transition: `opacity ${FADE_MS}ms ease-out ${FADE_DELAY_MS}ms`,
         willChange: 'opacity',
         pointerEvents: visible ? 'auto' : 'none'
       }}
