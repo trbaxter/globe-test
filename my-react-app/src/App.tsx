@@ -7,8 +7,8 @@ const MIN_LOADER_MS = 4000;
 export default function App() {
   const [ready, setReady] = useState(false);
   const [minDone, setMinDone] = useState(false);
-  const [pct, setPct] = useState(0);
-  const targetRef = useRef(0);
+  const [pct, setPct] = useState(0); // displayed progress (0..1)
+  const targetRef = useRef(0); // real progress (0..1)
 
   useEffect(() => {
     const t = setTimeout(() => setMinDone(true), MIN_LOADER_MS);
@@ -20,7 +20,7 @@ export default function App() {
     const tick = () => {
       setPct((v) => {
         const t = targetRef.current;
-        const next = v + (t - v) * 0.18; // easing factor
+        const next = v + (t - v) * 0.18;
         return Math.abs(next - v) < 0.001 ? t : next;
       });
       raf = requestAnimationFrame(tick);
@@ -35,11 +35,12 @@ export default function App() {
   }, []);
 
   const handleReady = useCallback(() => {
-    targetRef.current = 1;
+    targetRef.current = 1; // ensure bar fills
     setReady(true);
   }, []);
 
-  const showLoader = !(ready && minDone);
+  const barFull = pct >= 0.999; // threshold avoids asymptote
+  const showLoader = !(ready && minDone && barFull);
 
   return (
     <>
