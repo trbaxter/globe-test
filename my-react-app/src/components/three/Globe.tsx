@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import RGGlobe, { type GlobeMethods } from 'react-globe.gl';
 import earthImg from '@/assets/img/earth.jpg';
 import { getUSStatePaths } from '@/components/three/StateBordersPaths.ts';
+import { getCanadaProvincePaths } from '@/components/three/ProvincesBordersPaths';
 
 export type GlobeProps = {
   onReady?: () => void;
@@ -12,6 +13,8 @@ export default function GlobeComponent({ onReady, onProgress }: GlobeProps) {
   const globeRef = useRef<GlobeMethods | undefined>(undefined);
 
   const statePaths = useMemo(() => getUSStatePaths(), []);
+  const provincePaths = useMemo(() => getCanadaProvincePaths(), []);
+  const borderPaths = useMemo(() => statePaths.concat(provincePaths), [statePaths, provincePaths]);
 
   const [{ w, h }, setSize] = useState({
     w: typeof window !== 'undefined' ? window.innerWidth : 0,
@@ -113,7 +116,7 @@ export default function GlobeComponent({ onReady, onProgress }: GlobeProps) {
       rendererConfig={{ antialias: true, alpha: false, powerPreference: 'high-performance' }}
       pathLabel={() => ''}
       polygonLabel={() => ''}
-      pathsData={statePaths}
+      pathsData={borderPaths}
       pathPoints="points"
       pathPointLat="lat"
       pathPointLng="lng"
