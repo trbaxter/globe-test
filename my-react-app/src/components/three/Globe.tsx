@@ -111,6 +111,8 @@ export default function GlobeComponent({ onReady, onProgress }: GlobeProps) {
       atmosphereColor="lightskyblue"
       atmosphereAltitude={0.12}
       rendererConfig={{ antialias: true, alpha: false, powerPreference: 'high-performance' }}
+      pathLabel={() => ''}
+      polygonLabel={() => ''}
       pathsData={statePaths}
       pathPoints="points"
       pathPointLat="lat"
