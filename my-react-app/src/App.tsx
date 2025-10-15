@@ -3,18 +3,21 @@ import LoadingScreen from '@/components/ui/LoadingScreen.tsx';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 const MIN_LOADER_MS = 4000;
+const POST_FULL_HOLD_MS = 1000;
 
 export default function App() {
   const [ready, setReady] = useState(false);
   const [minDone, setMinDone] = useState(false);
   const [pct, setPct] = useState(0); // displayed progress (0..1)
   const targetRef = useRef(0); // real progress (0..1)
+  const [postFullDone, setPostFullDone] = useState(false);
 
   useEffect(() => {
     const t = setTimeout(() => setMinDone(true), MIN_LOADER_MS);
     return () => clearTimeout(t);
   }, []);
 
+  // Smooth progress animation
   useEffect(() => {
     let raf = 0;
     const tick = () => {
@@ -39,8 +42,18 @@ export default function App() {
     setReady(true);
   }, []);
 
-  const barFull = pct >= 0.999; // threshold avoids asymptote
-  const showLoader = !(ready && minDone && barFull);
+  const barFull = pct >= 0.999;
+
+  // Hold for 1s after all hide conditions are met
+  useEffect(() => {
+    if (ready && minDone && barFull) {
+      const t = setTimeout(() => setPostFullDone(true), POST_FULL_HOLD_MS);
+      return () => clearTimeout(t);
+    }
+    setPostFullDone(false);
+  }, [ready, minDone, barFull]);
+
+  const showLoader = !(ready && minDone && barFull && postFullDone);
 
   return (
     <>
