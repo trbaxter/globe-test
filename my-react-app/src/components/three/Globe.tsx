@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import RGGlobe, { type GlobeMethods } from 'react-globe.gl';
 import earthImg from '@/assets/img/earth.jpg';
+import { getUSStatePaths } from '@/components/three/StateBordersPaths.ts';
 
 export type GlobeProps = {
   onReady?: () => void;
@@ -9,6 +10,8 @@ export type GlobeProps = {
 
 export default function GlobeComponent({ onReady, onProgress }: GlobeProps) {
   const globeRef = useRef<GlobeMethods | undefined>(undefined);
+
+  const statePaths = useMemo(() => getUSStatePaths(), []);
 
   const [{ w, h }, setSize] = useState({
     w: typeof window !== 'undefined' ? window.innerWidth : 0,
@@ -108,6 +111,16 @@ export default function GlobeComponent({ onReady, onProgress }: GlobeProps) {
       atmosphereColor="lightskyblue"
       atmosphereAltitude={0.12}
       rendererConfig={{ antialias: true, alpha: false, powerPreference: 'high-performance' }}
+      pathsData={statePaths}
+      pathPoints="points"
+      pathPointLat="lat"
+      pathPointLng="lng"
+      pathColor={() => '#ffffff'}
+      pathStroke={0.85}
+      pathPointAlt={0.0015}
+      pathDashLength={0}
+      pathDashGap={0}
+      pathTransitionDuration={0}
     />
   );
 }
