@@ -7704,11 +7704,8 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "name": "Nevada",
-        "abbreviation": "NV"
-      },
+      "name": "Nevada",
+      "abbreviation": "NV",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -8216,11 +8213,8 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "name": "New Jersey",
-        "abbreviation": "NJ"
-      },
+      "name": "New Jersey",
+      "abbreviation": "NJ",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -8985,11 +8979,8 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "name": "New York",
-        "abbreviation": "NY"
-      },
+      "name": "New York",
+      "abbreviation": "NY",
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -10733,11 +10724,8 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "name": "North Carolina",
-        "abbreviation": "NC"
-      },
+      "name": "North Carolina",
+      "abbreviation": "NC",
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -12728,11 +12716,8 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "name": "Ohio",
-        "abbreviation": "OH"
-      },
+      "name": "Ohio",
+      "abbreviation": "OH",
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -13993,11 +13978,8 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "name": "Pennsylvania",
-        "abbreviation": "PA"
-      },
+      "name": "Pennsylvania",
+      "abbreviation": "PA",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -15019,11 +15001,8 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "name": "Rhode Island",
-        "abbreviation": "RI"
-      },
+      "name": "Rhode Island",
+      "abbreviation": "RI",
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -15417,11 +15396,8 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "name": "Tennessee",
-        "abbreviation": "TN"
-      },
+      "name": "Tennessee",
+      "abbreviation": "TN",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -17023,11 +16999,8 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "name": "Texas",
-        "abbreviation": "TX"
-      },
+      "name": "Texas",
+      "abbreviation": "TX",
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -21317,11 +21290,8 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "name": "Utah",
-        "abbreviation": "UT"
-      },
+      "name": "Utah",
+      "abbreviation": "UT",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -21585,11 +21555,8 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "name": "Washington",
-        "abbreviation": "WA"
-      },
+      "name": "Washington",
+      "abbreviation": "WA",
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -23906,11 +23873,8 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "name": "Wisconsin",
-        "abbreviation": "WI"
-      },
+      "name": "Wisconsin",
+      "abbreviation": "WI",
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -26602,11 +26566,8 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "name": "Puerto Rico",
-        "abbreviation": "PR"
-      },
+      "name": "Puerto Rico",
+      "abbreviation": "PR",
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -27214,11 +27175,8 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "name": "Maryland",
-        "abbreviation": "MD"
-      },
+      "name": "Maryland",
+      "abbreviation": "MD",
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -28919,11 +28877,8 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "name": "Alabama",
-        "abbreviation": "AL"
-      },
+      "name": "Alabama",
+      "abbreviation": "AL",
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -30089,11 +30044,8 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "name": "Alaska",
-        "abbreviation": "AK"
-      },
+      "name": "Alaska",
+      "abbreviation": "AK",
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -45220,11 +45172,8 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "name": "Arizona",
-        "abbreviation": "AZ"
-      },
+      "name": "Arizona",
+      "abbreviation": "AZ",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -46200,11 +46149,8 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "name": "Arkansas",
-        "abbreviation": "AR"
-      },
+      "name": "Arkansas",
+      "abbreviation": "AR",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -48129,11 +48075,8 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "name": "California",
-        "abbreviation": "CA"
-      },
+      "name": "California",
+      "abbreviation": "CA",
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -50212,11 +50155,8 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "name": "Colorado",
-        "abbreviation": "CO"
-      },
+      "name": "Colorado",
+      "abbreviation": "CO",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -50583,11 +50523,8 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "name": "Connecticut",
-        "abbreviation": "CT"
-      },
+      "name": "Connecticut",
+      "abbreviation": "CT",
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -50892,11 +50829,8 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "name": "Delaware",
-        "abbreviation": "DE"
-      },
+      "name": "Delaware",
+      "abbreviation": "DE",
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -51186,11 +51120,8 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "name": "District of Columbia",
-        "abbreviation": "DC"
-      },
+      "name": "District of Columbia",
+      "abbreviation": "DC",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -51267,11 +51198,8 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "name": "Florida",
-        "abbreviation": "FL"
-      },
+      "name": "Florida",
+      "abbreviation": "FL",
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -53587,11 +53515,8 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "name": "Georgia",
-        "abbreviation": "GA"
-      },
+      "name": "Georgia",
+      "abbreviation": "GA",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -55624,11 +55549,8 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "name": "Hawaii",
-        "abbreviation": "HI"
-      },
+      "name": "Hawaii",
+      "abbreviation": "HI",
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -56649,11 +56571,8 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "name": "Idaho",
-        "abbreviation": "ID"
-      },
+      "name": "Idaho",
+      "abbreviation": "ID",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -58042,11 +57961,8 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "name": "Illinois",
-        "abbreviation": "IL"
-      },
+      "name": "Illinois",
+      "abbreviation": "IL",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -59708,11 +59624,8 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "name": "Indiana",
-        "abbreviation": "IN"
-      },
+      "name": "Indiana",
+      "abbreviation": "IN",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -60770,11 +60683,8 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "name": "Iowa",
-        "abbreviation": "IA"
-      },
+      "name": "Iowa",
+      "abbreviation": "IA",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -62723,11 +62633,8 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "name": "Kansas",
-        "abbreviation": "KS"
-      },
+      "name": "Kansas",
+      "abbreviation": "KS",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -63675,11 +63582,8 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "name": "Kentucky",
-        "abbreviation": "KY"
-      },
+      "name": "Kentucky",
+      "abbreviation": "KY",
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -66008,11 +65912,8 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "name": "Louisiana",
-        "abbreviation": "LA"
-      },
+      "name": "Louisiana",
+      "abbreviation": "LA",
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -68535,11 +68436,8 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "name": "Minnesota",
-        "abbreviation": "MN"
-      },
+      "name": "Minnesota",
+      "abbreviation": "MN",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -71965,11 +71863,8 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "name": "Mississippi",
-        "abbreviation": "MS"
-      },
+      "name": "Mississippi",
+      "abbreviation": "MS",
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -74091,11 +73986,8 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "name": "Missouri",
-        "abbreviation": "MO"
-      },
+      "name": "Missouri",
+      "abbreviation": "MO",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -76284,11 +76176,8 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "name": "Nebraska",
-        "abbreviation": "NE"
-      },
+      "name": "Nebraska",
+      "abbreviation": "NE",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -77751,11 +77640,8 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "name": "New Hampshire",
-        "abbreviation": "NH"
-      },
+      "name": "New Hampshire",
+      "abbreviation": "NH",
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -79137,11 +79023,8 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "name": "New Mexico",
-        "abbreviation": "NM"
-      },
+      "name": "New Mexico",
+      "abbreviation": "NM",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -79552,11 +79435,8 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "name": "North Dakota",
-        "abbreviation": "ND"
-      },
+      "name": "North Dakota",
+      "abbreviation": "ND",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -81259,11 +81139,8 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "name": "Oklahoma",
-        "abbreviation": "OK"
-      },
+      "name": "Oklahoma",
+      "abbreviation": "OK",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -82808,11 +82685,8 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "name": "Oregon",
-        "abbreviation": "OR"
-      },
+      "name": "Oregon",
+      "abbreviation": "OR",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -83782,11 +83656,8 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "name": "South Carolina",
-        "abbreviation": "SC"
-      },
+      "name": "South Carolina",
+      "abbreviation": "SC",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -85232,11 +85103,8 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "name": "South Dakota",
-        "abbreviation": "SD"
-      },
+      "name": "South Dakota",
+      "abbreviation": "SD",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -86550,11 +86418,8 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "name": "Vermont",
-        "abbreviation": "VT"
-      },
+      "name": "Vermont",
+      "abbreviation": "VT",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -87843,11 +87708,8 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "name": "Virginia",
-        "abbreviation": "VA"
-      },
+      "name": "Virginia",
+      "abbreviation": "VA",
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -90409,11 +90271,8 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "name": "West Virginia",
-        "abbreviation": "WV"
-      },
+      "name": "West Virginia",
+      "abbreviation": "WV",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -93241,11 +93100,8 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "name": "Wyoming",
-        "abbreviation": "WY"
-      },
+      "name": "Wyoming",
+      "abbreviation": "WY",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
