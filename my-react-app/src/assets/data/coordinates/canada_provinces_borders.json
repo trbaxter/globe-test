@@ -1,8 +1,8 @@
 {
-  "type": "FeatureCollection",
-  "features": [
+  "provinces": [
     {
-      "type": "Feature",
+      "name": "British Columbia",
+      "abbreviation": "BC",
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -1619,27 +1619,11 @@
             ]
           ]
         ]
-      },
-      "properties": {
-        "cartodb_id": 6,
-        "draworder": null,
-        "visibility": -1,
-        "extrude": -1,
-        "tessellate": -1,
-        "nom": "Colombie-Britannique",
-        "icon": null,
-        "altitudemode": "relativeToGround",
-        "description": null,
-        "name": "British Columbia",
-        "_end": null,
-        "begin": null,
-        "timestamp": null,
-        "show": "y",
-        "_2012_membership": 39859
       }
     },
     {
-      "type": "Feature",
+      "name": "Newfoundland and Labrador",
+      "abbreviation": "NL",
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -3525,27 +3509,11 @@
             ]
           ]
         ]
-      },
-      "properties": {
-        "cartodb_id": 5,
-        "draworder": null,
-        "visibility": -1,
-        "extrude": -1,
-        "tessellate": -1,
-        "nom": "Terre-Neuve-et-Labrador",
-        "icon": null,
-        "altitudemode": "relativeToGround",
-        "description": null,
-        "name": "Newfoundland and Labrador",
-        "_end": null,
-        "begin": null,
-        "timestamp": null,
-        "show": "n",
-        "_2012_membership": 974
       }
     },
     {
-      "type": "Feature",
+      "name": "Saskatchewan",
+      "abbreviation": "SK",
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -3627,27 +3595,11 @@
             ]
           ]
         ]
-      },
-      "properties": {
-        "cartodb_id": 3,
-        "draworder": null,
-        "visibility": -1,
-        "extrude": -1,
-        "tessellate": -1,
-        "nom": "Saskatchewan",
-        "icon": null,
-        "altitudemode": "relativeToGround",
-        "description": null,
-        "name": "Saskatchewan",
-        "_end": null,
-        "begin": null,
-        "timestamp": null,
-        "show": "y",
-        "_2012_membership": 11243
       }
     },
     {
-      "type": "Feature",
+      "name": "Quebec",
+      "abbreviation": "QC",
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -5198,26 +5150,11 @@
             ]
           ]
         ]
-      },
-      "properties": {
-        "cartodb_id": 1,
-        "draworder": null,
-        "visibility": -1,
-        "extrude": -1,
-        "tessellate": -1,
-        "nom": "Québec",
-        "icon": null,
-        "altitudemode": "relativeToGround",
-        "description": null,
-        "name": "Quebec",
-        "_end": null,
-        "begin": null,
-        "timestamp": null,
-        "show": "y",
-        "_2012_membership": 13987
       }
     },
     {
+      "name": "Alberta",
+      "abbreviation": "AB",
       "type": "Feature",
       "geometry": {
         "type": "MultiPolygon",
@@ -5352,26 +5289,11 @@
             ]
           ]
         ]
-      },
-      "properties": {
-        "cartodb_id": 4,
-        "draworder": null,
-        "visibility": -1,
-        "extrude": -1,
-        "tessellate": -1,
-        "nom": "Alberta",
-        "icon": null,
-        "altitudemode": "relativeToGround",
-        "description": null,
-        "name": "Alberta",
-        "_end": null,
-        "begin": null,
-        "timestamp": null,
-        "show": "y",
-        "_2012_membership": 9800
       }
     },
     {
+      "name": "Manitoba",
+      "abbreviation": "MB",
       "type": "Feature",
       "geometry": {
         "type": "MultiPolygon",
@@ -5516,26 +5438,11 @@
             ]
           ]
         ]
-      },
-      "properties": {
-        "cartodb_id": 10,
-        "draworder": null,
-        "visibility": -1,
-        "extrude": -1,
-        "tessellate": -1,
-        "nom": "Manitoba",
-        "icon": null,
-        "altitudemode": "relativeToGround",
-        "description": null,
-        "name": "Manitoba",
-        "_end": null,
-        "begin": null,
-        "timestamp": null,
-        "show": "y",
-        "_2012_membership": 11991
       }
     },
     {
+      "name": "Nova Scotia",
+      "abbreviation": "NS",
       "type": "Feature",
       "geometry": {
         "type": "MultiPolygon",
@@ -5962,26 +5869,11 @@
             ]
           ]
         ]
-      },
-      "properties": {
-        "cartodb_id": 2,
-        "draworder": null,
-        "visibility": -1,
-        "extrude": -1,
-        "tessellate": -1,
-        "nom": "Nouvelle-Écosse",
-        "icon": null,
-        "altitudemode": "relativeToGround",
-        "description": null,
-        "name": "Nova Scotia",
-        "_end": null,
-        "begin": null,
-        "timestamp": null,
-        "show": "n",
-        "_2012_membership": 3904
       }
     },
     {
+      "name": "Ontario",
+      "abbreviation": "ON",
       "type": "Feature",
       "geometry": {
         "type": "MultiPolygon",
@@ -6491,26 +6383,11 @@
             ]
           ]
         ]
-      },
-      "properties": {
-        "cartodb_id": 11,
-        "draworder": null,
-        "visibility": -1,
-        "extrude": -1,
-        "tessellate": -1,
-        "nom": "Ontario",
-        "icon": null,
-        "altitudemode": "relativeToGround",
-        "description": null,
-        "name": "Ontario",
-        "_end": null,
-        "begin": null,
-        "timestamp": null,
-        "show": "y",
-        "_2012_membership": 36965
       }
     },
     {
+      "name": "New Brunswick",
+      "abbreviation": "NB",
       "type": "Feature",
       "geometry": {
         "type": "MultiPolygon",
@@ -6711,26 +6588,11 @@
             ]
           ]
         ]
-      },
-      "properties": {
-        "cartodb_id": 7,
-        "draworder": null,
-        "visibility": -1,
-        "extrude": -1,
-        "tessellate": -1,
-        "nom": "Nouveau-Brunswick",
-        "icon": null,
-        "altitudemode": "relativeToGround",
-        "description": null,
-        "name": "New Brunswick",
-        "_end": null,
-        "begin": null,
-        "timestamp": null,
-        "show": "y",
-        "_2012_membership": 946
       }
     },
     {
+      "name": "Prince Edward Island",
+      "abbreviation": "PE",
       "type": "Feature",
       "geometry": {
         "type": "MultiPolygon",
@@ -6842,26 +6704,11 @@
             ]
           ]
         ]
-      },
-      "properties": {
-        "cartodb_id": 8,
-        "draworder": null,
-        "visibility": -1,
-        "extrude": -1,
-        "tessellate": -1,
-        "nom": "Île-du-Prince-Édouard",
-        "icon": null,
-        "altitudemode": "relativeToGround",
-        "description": null,
-        "name": "Prince Edward Island",
-        "_end": null,
-        "begin": null,
-        "timestamp": null,
-        "show": "y",
-        "_2012_membership": 262
       }
     },
     {
+      "name": "Yukon",
+      "abbreviation": "YT",
       "type": "Feature",
       "geometry": {
         "type": "MultiPolygon",
@@ -7117,23 +6964,6 @@
             ]
           ]
         ]
-      },
-      "properties": {
-        "cartodb_id": 9,
-        "draworder": null,
-        "visibility": -1,
-        "extrude": -1,
-        "tessellate": -1,
-        "nom": "Territoire du Yukon",
-        "icon": null,
-        "altitudemode": "relativeToGround",
-        "description": null,
-        "name": "Yukon",
-        "_end": null,
-        "begin": null,
-        "timestamp": null,
-        "show": "n",
-        "_2012_membership": 747
       }
     }
   ]
