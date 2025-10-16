@@ -99,7 +99,7 @@ export default function GlobeComponent({ onReady, onProgress }: GlobeProps) {
     if (!c) return;
 
     const R = globe.getGlobeRadius?.() ?? 100;
-    c.minDistance = R * 1.2;
+    c.minDistance = 1.01 * R;
     c.maxDistance = R * 3;
 
     globe.pointOfView?.({ lat: 38, lng: -95, altitude: 1.6 }, 0);
