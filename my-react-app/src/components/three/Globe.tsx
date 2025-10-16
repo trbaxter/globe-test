@@ -3,6 +3,7 @@ import RGGlobe, { type GlobeMethods } from 'react-globe.gl';
 import earthImg from '@/assets/img/earth.jpg';
 import { getUSStatePaths } from '@/components/three/StateBordersPaths.ts';
 import { getCanadaProvincePaths } from '@/components/three/ProvincesBordersPaths';
+import { getWorldCountryPaths } from '@/components/three/CountryBordersPaths';
 
 export type GlobeProps = {
   onReady?: () => void;
@@ -11,10 +12,13 @@ export type GlobeProps = {
 
 export default function GlobeComponent({ onReady, onProgress }: GlobeProps) {
   const globeRef = useRef<GlobeMethods | undefined>(undefined);
-
   const statePaths = useMemo(() => getUSStatePaths(), []);
   const provincePaths = useMemo(() => getCanadaProvincePaths(), []);
-  const borderPaths = useMemo(() => statePaths.concat(provincePaths), [statePaths, provincePaths]);
+  const countryPaths = useMemo(() => getWorldCountryPaths(), []);
+  const borderPaths = useMemo(
+    () => [...countryPaths, ...statePaths, ...provincePaths],
+    [countryPaths, statePaths, provincePaths]
+  );
 
   const [{ w, h }, setSize] = useState({
     w: typeof window !== 'undefined' ? window.innerWidth : 0,
