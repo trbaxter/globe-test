@@ -1,15 +1,12 @@
 {
-  "type": "FeatureCollection",
-  "features": [
+  "countries": [
     {
       "type": "Feature",
-      "properties": {
-        "continent": "North America",
-        "region_un": "Americas",
-        "subregion": "Central America",
-        "region_wb": "Latin America & Caribbean",
-        "name_en": "Costa Rica"
-      },
+      "continent": "North America",
+      "region": "Americas",
+      "subregion": "Central America",
+      "region2": "Latin America & Caribbean",
+      "name": "Costa Rica",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -55,14 +52,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "North America",
-        "region_un": "Americas",
-        "subregion": "Central America",
-        "region_wb": "Latin America & Caribbean",
-        "name_en": "Nicaragua"
-      },
+      "continent": "North America",
+      "region": "Americas",
+      "subregion": "Central America",
+      "region2": "Latin America & Caribbean",
+      "name": "Nicaragua",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -124,14 +118,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "North America",
-        "region_un": "Americas",
-        "subregion": "Caribbean",
-        "region_wb": "Latin America & Caribbean",
-        "name_en": "Haiti"
-      },
+      "continent": "North America",
+      "region": "Americas",
+      "subregion": "Caribbean",
+      "region2": "Latin America & Caribbean",
+      "name": "Haiti",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -162,14 +153,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "North America",
-        "region_un": "Americas",
-        "subregion": "Caribbean",
-        "region_wb": "Latin America & Caribbean",
-        "name_en": "Dominican Republic"
-      },
+      "continent": "North America",
+      "region": "Americas",
+      "subregion": "Caribbean",
+      "region2": "Latin America & Caribbean",
+      "name": "Dominican Republic",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -205,14 +193,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "North America",
-        "region_un": "Americas",
-        "subregion": "Central America",
-        "region_wb": "Latin America & Caribbean",
-        "name_en": "El Salvador"
-      },
+      "continent": "North America",
+      "region": "Americas",
+      "subregion": "Central America",
+      "region2": "Latin America & Caribbean",
+      "name": "El Salvador",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -242,14 +227,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "North America",
-        "region_un": "Americas",
-        "subregion": "Central America",
-        "region_wb": "Latin America & Caribbean",
-        "name_en": "Guatemala"
-      },
+      "continent": "North America",
+      "region": "Americas",
+      "subregion": "Central America",
+      "region2": "Latin America & Caribbean",
+      "name": "Guatemala",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -294,14 +276,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "North America",
-        "region_un": "Americas",
-        "subregion": "Caribbean",
-        "region_wb": "Latin America & Caribbean",
-        "name_en": "Cuba"
-      },
+      "continent": "North America",
+      "region": "Americas",
+      "subregion": "Caribbean",
+      "region2": "Latin America & Caribbean",
+      "name": "Cuba",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -353,14 +332,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "North America",
-        "region_un": "Americas",
-        "subregion": "Central America",
-        "region_wb": "Latin America & Caribbean",
-        "name_en": "Honduras"
-      },
+      "continent": "North America",
+      "region": "Americas",
+      "subregion": "Central America",
+      "region2": "Latin America & Caribbean",
+      "name": "Honduras",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -427,14 +403,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "North America",
-        "region_un": "Americas",
-        "subregion": "Northern America",
-        "region_wb": "North America",
-        "name_en": "United States of America"
-      },
+      "continent": "North America",
+      "region": "Americas",
+      "subregion": "Northern America",
+      "region2": "North America",
+      "name": "United States of America",
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -929,14 +902,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "North America",
-        "region_un": "Americas",
-        "subregion": "Northern America",
-        "region_wb": "North America",
-        "name_en": "Canada"
-      },
+      "continent": "North America",
+      "region": "Americas",
+      "subregion": "Northern America",
+      "region2": "North America",
+      "name": "Canada",
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -1858,14 +1828,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "North America",
-        "region_un": "Americas",
-        "subregion": "Central America",
-        "region_wb": "Latin America & Caribbean",
-        "name_en": "Mexico"
-      },
+      "continent": "North America",
+      "region": "Americas",
+      "subregion": "Central America",
+      "region2": "Latin America & Caribbean",
+      "name": "Mexico",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -2045,14 +2012,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "North America",
-        "region_un": "Americas",
-        "subregion": "Central America",
-        "region_wb": "Latin America & Caribbean",
-        "name_en": "Belize"
-      },
+      "continent": "North America",
+      "region": "Americas",
+      "subregion": "Central America",
+      "region2": "Latin America & Caribbean",
+      "name": "Belize",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -2082,14 +2046,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "North America",
-        "region_un": "Americas",
-        "subregion": "Central America",
-        "region_wb": "Latin America & Caribbean",
-        "name_en": "Panama"
-      },
+      "continent": "North America",
+      "region": "Americas",
+      "subregion": "Central America",
+      "region2": "Latin America & Caribbean",
+      "name": "Panama",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -2151,14 +2112,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "North America",
-        "region_un": "Americas",
-        "subregion": "Northern America",
-        "region_wb": "Europe & Central Asia",
-        "name_en": "Greenland"
-      },
+      "continent": "North America",
+      "region": "Americas",
+      "subregion": "Northern America",
+      "region2": "Europe & Central Asia",
+      "name": "Greenland",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -2300,14 +2258,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "North America",
-        "region_un": "Americas",
-        "subregion": "Caribbean",
-        "region_wb": "Latin America & Caribbean",
-        "name_en": "The Bahamas"
-      },
+      "continent": "North America",
+      "region": "Americas",
+      "subregion": "Caribbean",
+      "region2": "Latin America & Caribbean",
+      "name": "The Bahamas",
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -2348,14 +2303,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "North America",
-        "region_un": "Americas",
-        "subregion": "Caribbean",
-        "region_wb": "Latin America & Caribbean",
-        "name_en": "Trinidad and Tobago"
-      },
+      "continent": "North America",
+      "region": "Americas",
+      "subregion": "Caribbean",
+      "region2": "Latin America & Caribbean",
+      "name": "Trinidad and Tobago",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -2373,14 +2325,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "North America",
-        "region_un": "Americas",
-        "subregion": "Caribbean",
-        "region_wb": "Latin America & Caribbean",
-        "name_en": "Puerto Rico"
-      },
+      "continent": "North America",
+      "region": "Americas",
+      "subregion": "Caribbean",
+      "region2": "Latin America & Caribbean",
+      "name": "Puerto Rico",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -2399,14 +2348,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "North America",
-        "region_un": "Americas",
-        "subregion": "Caribbean",
-        "region_wb": "Latin America & Caribbean",
-        "name_en": "Jamaica"
-      },
+      "continent": "North America",
+      "region": "Americas",
+      "subregion": "Caribbean",
+      "region2": "Latin America & Caribbean",
+      "name": "Jamaica",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -2427,14 +2373,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Asia",
-        "region_un": "Asia",
-        "subregion": "South-Eastern Asia",
-        "region_wb": "East Asia & Pacific",
-        "name_en": "Indonesia"
-      },
+      "continent": "Asia",
+      "region": "Asia",
+      "subregion": "South-Eastern Asia",
+      "region2": "East Asia & Pacific",
+      "name": "Indonesia",
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -2744,14 +2687,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Asia",
-        "region_un": "Asia",
-        "subregion": "South-Eastern Asia",
-        "region_wb": "East Asia & Pacific",
-        "name_en": "Malaysia"
-      },
+      "continent": "Asia",
+      "region": "Asia",
+      "subregion": "South-Eastern Asia",
+      "region2": "East Asia & Pacific",
+      "name": "Malaysia",
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -2829,14 +2769,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Asia",
-        "region_un": "Asia",
-        "subregion": "Western Asia",
-        "region_wb": "Europe & Central Asia",
-        "name_en": "Cyprus"
-      },
+      "continent": "Asia",
+      "region": "Asia",
+      "subregion": "Western Asia",
+      "region2": "Europe & Central Asia",
+      "name": "Cyprus",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -2861,14 +2798,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Asia",
-        "region_un": "Asia",
-        "subregion": "Southern Asia",
-        "region_wb": "South Asia",
-        "name_en": "India"
-      },
+      "continent": "Asia",
+      "region": "Asia",
+      "subregion": "Southern Asia",
+      "region2": "South Asia",
+      "name": "India",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -3014,14 +2948,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Asia",
-        "region_un": "Asia",
-        "subregion": "Eastern Asia",
-        "region_wb": "East Asia & Pacific",
-        "name_en": "People's Republic of China"
-      },
+      "continent": "Asia",
+      "region": "Asia",
+      "subregion": "Eastern Asia",
+      "region2": "East Asia & Pacific",
+      "name": "People's Republic of China",
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -3277,14 +3208,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Asia",
-        "region_un": "Asia",
-        "subregion": "Western Asia",
-        "region_wb": "Middle East & North Africa",
-        "name_en": "Israel"
-      },
+      "continent": "Asia",
+      "region": "Asia",
+      "subregion": "Western Asia",
+      "region2": "Middle East & North Africa",
+      "name": "Israel",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -3320,14 +3248,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Asia",
-        "region_un": "Asia",
-        "subregion": "Western Asia",
-        "region_wb": "Middle East & North Africa",
-        "name_en": "Palestine"
-      },
+      "continent": "Asia",
+      "region": "Asia",
+      "subregion": "Western Asia",
+      "region2": "Middle East & North Africa",
+      "name": "Palestine",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -3346,14 +3271,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Asia",
-        "region_un": "Asia",
-        "subregion": "Western Asia",
-        "region_wb": "Middle East & North Africa",
-        "name_en": "Lebanon"
-      },
+      "continent": "Asia",
+      "region": "Asia",
+      "subregion": "Western Asia",
+      "region2": "Middle East & North Africa",
+      "name": "Lebanon",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -3374,14 +3296,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Asia",
-        "region_un": "Asia",
-        "subregion": "Western Asia",
-        "region_wb": "Middle East & North Africa",
-        "name_en": "Syria"
-      },
+      "continent": "Asia",
+      "region": "Asia",
+      "subregion": "Western Asia",
+      "region2": "Middle East & North Africa",
+      "name": "Syria",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -3418,14 +3337,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Asia",
-        "region_un": "Asia",
-        "subregion": "Eastern Asia",
-        "region_wb": "East Asia & Pacific",
-        "name_en": "South Korea"
-      },
+      "continent": "Asia",
+      "region": "Asia",
+      "subregion": "Eastern Asia",
+      "region2": "East Asia & Pacific",
+      "name": "South Korea",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -3454,14 +3370,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Asia",
-        "region_un": "Asia",
-        "subregion": "Eastern Asia",
-        "region_wb": "East Asia & Pacific",
-        "name_en": "North Korea"
-      },
+      "continent": "Asia",
+      "region": "Asia",
+      "subregion": "Eastern Asia",
+      "region2": "East Asia & Pacific",
+      "name": "North Korea",
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -3525,14 +3438,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Asia",
-        "region_un": "Asia",
-        "subregion": "Southern Asia",
-        "region_wb": "South Asia",
-        "name_en": "Bhutan"
-      },
+      "continent": "Asia",
+      "region": "Asia",
+      "subregion": "Southern Asia",
+      "region2": "South Asia",
+      "name": "Bhutan",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -3555,14 +3465,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Asia",
-        "region_un": "Asia",
-        "subregion": "Western Asia",
-        "region_wb": "Middle East & North Africa",
-        "name_en": "Oman"
-      },
+      "continent": "Asia",
+      "region": "Asia",
+      "subregion": "Western Asia",
+      "region2": "Middle East & North Africa",
+      "name": "Oman",
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -3625,14 +3532,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Asia",
-        "region_un": "Asia",
-        "subregion": "Central Asia",
-        "region_wb": "Europe & Central Asia",
-        "name_en": "Uzbekistan"
-      },
+      "continent": "Asia",
+      "region": "Asia",
+      "subregion": "Central Asia",
+      "region2": "Europe & Central Asia",
+      "name": "Uzbekistan",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -3696,14 +3600,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Asia",
-        "region_un": "Asia",
-        "subregion": "Central Asia",
-        "region_wb": "Europe & Central Asia",
-        "name_en": "Kazakhstan"
-      },
+      "continent": "Asia",
+      "region": "Asia",
+      "subregion": "Central Asia",
+      "region2": "Europe & Central Asia",
+      "name": "Kazakhstan",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -3825,14 +3726,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Asia",
-        "region_un": "Asia",
-        "subregion": "Central Asia",
-        "region_wb": "Europe & Central Asia",
-        "name_en": "Tajikistan"
-      },
+      "continent": "Asia",
+      "region": "Asia",
+      "subregion": "Central Asia",
+      "region2": "Europe & Central Asia",
+      "name": "Tajikistan",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -3883,14 +3781,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Asia",
-        "region_un": "Asia",
-        "subregion": "Eastern Asia",
-        "region_wb": "East Asia & Pacific",
-        "name_en": "Mongolia"
-      },
+      "continent": "Asia",
+      "region": "Asia",
+      "subregion": "Eastern Asia",
+      "region2": "East Asia & Pacific",
+      "name": "Mongolia",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -3975,14 +3870,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Asia",
-        "region_un": "Asia",
-        "subregion": "South-Eastern Asia",
-        "region_wb": "East Asia & Pacific",
-        "name_en": "Vietnam"
-      },
+      "continent": "Asia",
+      "region": "Asia",
+      "subregion": "South-Eastern Asia",
+      "region2": "East Asia & Pacific",
+      "name": "Vietnam",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -4036,14 +3928,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Asia",
-        "region_un": "Asia",
-        "subregion": "South-Eastern Asia",
-        "region_wb": "East Asia & Pacific",
-        "name_en": "Cambodia"
-      },
+      "continent": "Asia",
+      "region": "Asia",
+      "subregion": "South-Eastern Asia",
+      "region2": "East Asia & Pacific",
+      "name": "Cambodia",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -4070,14 +3959,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Asia",
-        "region_un": "Asia",
-        "subregion": "Western Asia",
-        "region_wb": "Middle East & North Africa",
-        "name_en": "United Arab Emirates"
-      },
+      "continent": "Asia",
+      "region": "Asia",
+      "subregion": "Western Asia",
+      "region2": "Middle East & North Africa",
+      "name": "United Arab Emirates",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -4109,14 +3995,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Asia",
-        "region_un": "Asia",
-        "subregion": "Western Asia",
-        "region_wb": "Europe & Central Asia",
-        "name_en": "Georgia"
-      },
+      "continent": "Asia",
+      "region": "Asia",
+      "subregion": "Western Asia",
+      "region2": "Europe & Central Asia",
+      "name": "Georgia",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -4150,14 +4033,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Asia",
-        "region_un": "Asia",
-        "subregion": "Western Asia",
-        "region_wb": "Europe & Central Asia",
-        "name_en": "Azerbaijan"
-      },
+      "continent": "Asia",
+      "region": "Asia",
+      "subregion": "Western Asia",
+      "region2": "Europe & Central Asia",
+      "name": "Azerbaijan",
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -4217,14 +4097,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Asia",
-        "region_un": "Asia",
-        "subregion": "Western Asia",
-        "region_wb": "Europe & Central Asia",
-        "name_en": "Turkey"
-      },
+      "continent": "Asia",
+      "region": "Asia",
+      "subregion": "Western Asia",
+      "region2": "Europe & Central Asia",
+      "name": "Turkey",
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -4308,14 +4185,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Asia",
-        "region_un": "Asia",
-        "subregion": "South-Eastern Asia",
-        "region_wb": "East Asia & Pacific",
-        "name_en": "Laos"
-      },
+      "continent": "Asia",
+      "region": "Asia",
+      "subregion": "South-Eastern Asia",
+      "region2": "East Asia & Pacific",
+      "name": "Laos",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -4362,14 +4236,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Asia",
-        "region_un": "Asia",
-        "subregion": "Central Asia",
-        "region_wb": "Europe & Central Asia",
-        "name_en": "Kyrgyzstan"
-      },
+      "continent": "Asia",
+      "region": "Asia",
+      "subregion": "Central Asia",
+      "region2": "Europe & Central Asia",
+      "name": "Kyrgyzstan",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -4414,14 +4285,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Asia",
-        "region_un": "Asia",
-        "subregion": "Western Asia",
-        "region_wb": "Europe & Central Asia",
-        "name_en": "Armenia"
-      },
+      "continent": "Asia",
+      "region": "Asia",
+      "subregion": "Western Asia",
+      "region2": "Europe & Central Asia",
+      "name": "Armenia",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -4451,14 +4319,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Asia",
-        "region_un": "Asia",
-        "subregion": "Western Asia",
-        "region_wb": "Middle East & North Africa",
-        "name_en": "Iraq"
-      },
+      "continent": "Asia",
+      "region": "Asia",
+      "subregion": "Western Asia",
+      "region2": "Middle East & North Africa",
+      "name": "Iraq",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -4498,14 +4363,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Asia",
-        "region_un": "Asia",
-        "subregion": "Southern Asia",
-        "region_wb": "Middle East & North Africa",
-        "name_en": "Iran"
-      },
+      "continent": "Asia",
+      "region": "Asia",
+      "subregion": "Southern Asia",
+      "region2": "Middle East & North Africa",
+      "name": "Iran",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -4591,14 +4453,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Asia",
-        "region_un": "Asia",
-        "subregion": "Western Asia",
-        "region_wb": "Middle East & North Africa",
-        "name_en": "Qatar"
-      },
+      "continent": "Asia",
+      "region": "Asia",
+      "subregion": "Western Asia",
+      "region2": "Middle East & North Africa",
+      "name": "Qatar",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -4617,14 +4476,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Asia",
-        "region_un": "Asia",
-        "subregion": "Western Asia",
-        "region_wb": "Middle East & North Africa",
-        "name_en": "Saudi Arabia"
-      },
+      "continent": "Asia",
+      "region": "Asia",
+      "subregion": "Western Asia",
+      "region2": "Middle East & North Africa",
+      "name": "Saudi Arabia",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -4710,14 +4566,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Asia",
-        "region_un": "Asia",
-        "subregion": "Southern Asia",
-        "region_wb": "South Asia",
-        "name_en": "Pakistan"
-      },
+      "continent": "Asia",
+      "region": "Asia",
+      "subregion": "Southern Asia",
+      "region2": "South Asia",
+      "name": "Pakistan",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -4793,14 +4646,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Asia",
-        "region_un": "Asia",
-        "subregion": "South-Eastern Asia",
-        "region_wb": "East Asia & Pacific",
-        "name_en": "Thailand"
-      },
+      "continent": "Asia",
+      "region": "Asia",
+      "subregion": "South-Eastern Asia",
+      "region2": "East Asia & Pacific",
+      "name": "Thailand",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -4874,14 +4724,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Asia",
-        "region_un": "Asia",
-        "subregion": "Western Asia",
-        "region_wb": "Middle East & North Africa",
-        "name_en": "Kuwait"
-      },
+      "continent": "Asia",
+      "region": "Asia",
+      "subregion": "Western Asia",
+      "region2": "Middle East & North Africa",
+      "name": "Kuwait",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -4900,14 +4747,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Asia",
-        "region_un": "Asia",
-        "subregion": "South-Eastern Asia",
-        "region_wb": "East Asia & Pacific",
-        "name_en": "East Timor"
-      },
+      "continent": "Asia",
+      "region": "Asia",
+      "subregion": "South-Eastern Asia",
+      "region2": "East Asia & Pacific",
+      "name": "East Timor",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -4928,14 +4772,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Asia",
-        "region_un": "Asia",
-        "subregion": "South-Eastern Asia",
-        "region_wb": "East Asia & Pacific",
-        "name_en": "Brunei"
-      },
+      "continent": "Asia",
+      "region": "Asia",
+      "subregion": "South-Eastern Asia",
+      "region2": "East Asia & Pacific",
+      "name": "Brunei",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -4953,14 +4794,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Asia",
-        "region_un": "Asia",
-        "subregion": "South-Eastern Asia",
-        "region_wb": "East Asia & Pacific",
-        "name_en": "Myanmar"
-      },
+      "continent": "Asia",
+      "region": "Asia",
+      "subregion": "South-Eastern Asia",
+      "region2": "East Asia & Pacific",
+      "name": "Myanmar",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -5040,14 +4878,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Asia",
-        "region_un": "Asia",
-        "subregion": "Southern Asia",
-        "region_wb": "South Asia",
-        "name_en": "Bangladesh"
-      },
+      "continent": "Asia",
+      "region": "Asia",
+      "subregion": "Southern Asia",
+      "region2": "South Asia",
+      "name": "Bangladesh",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -5093,14 +4928,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Asia",
-        "region_un": "Asia",
-        "subregion": "Southern Asia",
-        "region_wb": "South Asia",
-        "name_en": "Afghanistan"
-      },
+      "continent": "Asia",
+      "region": "Asia",
+      "subregion": "Southern Asia",
+      "region2": "South Asia",
+      "name": "Afghanistan",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -5179,14 +5011,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Asia",
-        "region_un": "Asia",
-        "subregion": "Central Asia",
-        "region_wb": "Europe & Central Asia",
-        "name_en": "Turkmenistan"
-      },
+      "continent": "Asia",
+      "region": "Asia",
+      "subregion": "Central Asia",
+      "region2": "Europe & Central Asia",
+      "name": "Turkmenistan",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -5250,14 +5079,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Asia",
-        "region_un": "Asia",
-        "subregion": "Western Asia",
-        "region_wb": "Middle East & North Africa",
-        "name_en": "Jordan"
-      },
+      "continent": "Asia",
+      "region": "Asia",
+      "subregion": "Western Asia",
+      "region2": "Middle East & North Africa",
+      "name": "Jordan",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -5286,14 +5112,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Asia",
-        "region_un": "Asia",
-        "subregion": "Southern Asia",
-        "region_wb": "South Asia",
-        "name_en": "Nepal"
-      },
+      "continent": "Asia",
+      "region": "Asia",
+      "subregion": "Southern Asia",
+      "region2": "South Asia",
+      "name": "Nepal",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -5326,14 +5149,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Asia",
-        "region_un": "Asia",
-        "subregion": "Western Asia",
-        "region_wb": "Middle East & North Africa",
-        "name_en": "Yemen"
-      },
+      "continent": "Asia",
+      "region": "Asia",
+      "subregion": "Western Asia",
+      "region2": "Middle East & North Africa",
+      "name": "Yemen",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -5387,14 +5207,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Asia",
-        "region_un": "Asia",
-        "subregion": "Western Asia",
-        "region_wb": "Europe & Central Asia",
-        "name_en": "Turkish Republic of Northern Cyprus"
-      },
+      "continent": "Asia",
+      "region": "Asia",
+      "subregion": "Western Asia",
+      "region2": "Europe & Central Asia",
+      "name": "Turkish Republic of Northern Cyprus",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -5420,14 +5237,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Asia",
-        "region_un": "Asia",
-        "subregion": "South-Eastern Asia",
-        "region_wb": "East Asia & Pacific",
-        "name_en": "Philippines"
-      },
+      "continent": "Asia",
+      "region": "Asia",
+      "subregion": "South-Eastern Asia",
+      "region2": "East Asia & Pacific",
+      "name": "Philippines",
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -5573,14 +5387,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Asia",
-        "region_un": "Asia",
-        "subregion": "Southern Asia",
-        "region_wb": "South Asia",
-        "name_en": "Sri Lanka"
-      },
+      "continent": "Asia",
+      "region": "Asia",
+      "subregion": "Southern Asia",
+      "region2": "South Asia",
+      "name": "Sri Lanka",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -5600,14 +5411,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Asia",
-        "region_un": "Asia",
-        "subregion": "Eastern Asia",
-        "region_wb": "East Asia & Pacific",
-        "name_en": "Taiwan"
-      },
+      "continent": "Asia",
+      "region": "Asia",
+      "subregion": "Eastern Asia",
+      "region2": "East Asia & Pacific",
+      "name": "Taiwan",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -5626,14 +5434,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Asia",
-        "region_un": "Asia",
-        "subregion": "Eastern Asia",
-        "region_wb": "East Asia & Pacific",
-        "name_en": "Japan"
-      },
+      "continent": "Asia",
+      "region": "Asia",
+      "subregion": "Eastern Asia",
+      "region2": "East Asia & Pacific",
+      "name": "Japan",
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -5718,14 +5523,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "South America",
-        "region_un": "Americas",
-        "subregion": "South America",
-        "region_wb": "Latin America & Caribbean",
-        "name_en": "Chile"
-      },
+      "continent": "South America",
+      "region": "Americas",
+      "subregion": "South America",
+      "region2": "Latin America & Caribbean",
+      "name": "Chile",
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -5855,14 +5657,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "South America",
-        "region_un": "Americas",
-        "subregion": "South America",
-        "region_wb": "Latin America & Caribbean",
-        "name_en": "Bolivia"
-      },
+      "continent": "South America",
+      "region": "Americas",
+      "subregion": "South America",
+      "region2": "Latin America & Caribbean",
+      "name": "Bolivia",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -5932,14 +5731,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "South America",
-        "region_un": "Americas",
-        "subregion": "South America",
-        "region_wb": "Latin America & Caribbean",
-        "name_en": "Peru"
-      },
+      "continent": "South America",
+      "region": "Americas",
+      "subregion": "South America",
+      "region2": "Latin America & Caribbean",
+      "name": "Peru",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -6025,14 +5821,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "South America",
-        "region_un": "Americas",
-        "subregion": "South America",
-        "region_wb": "Latin America & Caribbean",
-        "name_en": "Argentina"
-      },
+      "continent": "South America",
+      "region": "Americas",
+      "subregion": "South America",
+      "region2": "Latin America & Caribbean",
+      "name": "Argentina",
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -6169,14 +5962,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "South America",
-        "region_un": "Americas",
-        "subregion": "South America",
-        "region_wb": "Latin America & Caribbean",
-        "name_en": "Suriname"
-      },
+      "continent": "South America",
+      "region": "Americas",
+      "subregion": "South America",
+      "region2": "Latin America & Caribbean",
+      "name": "Suriname",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -6212,14 +6002,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "South America",
-        "region_un": "Americas",
-        "subregion": "South America",
-        "region_wb": "Latin America & Caribbean",
-        "name_en": "Guyana"
-      },
+      "continent": "South America",
+      "region": "Americas",
+      "subregion": "South America",
+      "region2": "Latin America & Caribbean",
+      "name": "Guyana",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -6269,14 +6056,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "South America",
-        "region_un": "Americas",
-        "subregion": "South America",
-        "region_wb": "Latin America & Caribbean",
-        "name_en": "Brazil"
-      },
+      "continent": "South America",
+      "region": "Americas",
+      "subregion": "South America",
+      "region2": "Latin America & Caribbean",
+      "name": "Brazil",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -6489,14 +6273,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "South America",
-        "region_un": "Americas",
-        "subregion": "South America",
-        "region_wb": "Latin America & Caribbean",
-        "name_en": "Uruguay"
-      },
+      "continent": "South America",
+      "region": "Americas",
+      "subregion": "South America",
+      "region2": "Latin America & Caribbean",
+      "name": "Uruguay",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -6527,14 +6308,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "South America",
-        "region_un": "Americas",
-        "subregion": "South America",
-        "region_wb": "Latin America & Caribbean",
-        "name_en": "Ecuador"
-      },
+      "continent": "South America",
+      "region": "Americas",
+      "subregion": "South America",
+      "region2": "Latin America & Caribbean",
+      "name": "Ecuador",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -6577,14 +6355,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "South America",
-        "region_un": "Americas",
-        "subregion": "South America",
-        "region_wb": "Latin America & Caribbean",
-        "name_en": "Colombia"
-      },
+      "continent": "South America",
+      "region": "Americas",
+      "subregion": "South America",
+      "region2": "Latin America & Caribbean",
+      "name": "Colombia",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -6694,14 +6469,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "South America",
-        "region_un": "Americas",
-        "subregion": "South America",
-        "region_wb": "Latin America & Caribbean",
-        "name_en": "Paraguay"
-      },
+      "continent": "South America",
+      "region": "Americas",
+      "subregion": "South America",
+      "region2": "Latin America & Caribbean",
+      "name": "Paraguay",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -6744,14 +6516,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "South America",
-        "region_un": "Americas",
-        "subregion": "South America",
-        "region_wb": "Latin America & Caribbean",
-        "name_en": "Venezuela"
-      },
+      "continent": "South America",
+      "region": "Americas",
+      "subregion": "South America",
+      "region2": "Latin America & Caribbean",
+      "name": "Venezuela",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -6853,14 +6622,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "South America",
-        "region_un": "Americas",
-        "subregion": "South America",
-        "region_wb": "Latin America & Caribbean",
-        "name_en": "Falkland Islands"
-      },
+      "continent": "South America",
+      "region": "Americas",
+      "subregion": "South America",
+      "region2": "Latin America & Caribbean",
+      "name": "Falkland Islands",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -6880,14 +6646,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Africa",
-        "region_un": "Africa",
-        "subregion": "Eastern Africa",
-        "region_wb": "Sub-Saharan Africa",
-        "name_en": "Ethiopia"
-      },
+      "continent": "Africa",
+      "region": "Africa",
+      "subregion": "Eastern Africa",
+      "region2": "Sub-Saharan Africa",
+      "name": "Ethiopia",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -6956,14 +6719,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Africa",
-        "region_un": "Africa",
-        "subregion": "Eastern Africa",
-        "region_wb": "Sub-Saharan Africa",
-        "name_en": "South Sudan"
-      },
+      "continent": "Africa",
+      "region": "Africa",
+      "subregion": "Eastern Africa",
+      "region2": "Sub-Saharan Africa",
+      "name": "South Sudan",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -7036,14 +6796,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Africa",
-        "region_un": "Africa",
-        "subregion": "Eastern Africa",
-        "region_wb": "Sub-Saharan Africa",
-        "name_en": "Somalia"
-      },
+      "continent": "Africa",
+      "region": "Africa",
+      "subregion": "Eastern Africa",
+      "region2": "Sub-Saharan Africa",
+      "name": "Somalia",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -7090,14 +6847,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Africa",
-        "region_un": "Africa",
-        "subregion": "Eastern Africa",
-        "region_wb": "Sub-Saharan Africa",
-        "name_en": "Kenya"
-      },
+      "continent": "Africa",
+      "region": "Africa",
+      "subregion": "Eastern Africa",
+      "region2": "Sub-Saharan Africa",
+      "name": "Kenya",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -7144,14 +6898,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Africa",
-        "region_un": "Africa",
-        "subregion": "Eastern Africa",
-        "region_wb": "Sub-Saharan Africa",
-        "name_en": "Malawi"
-      },
+      "continent": "Africa",
+      "region": "Africa",
+      "subregion": "Eastern Africa",
+      "region2": "Sub-Saharan Africa",
+      "name": "Malawi",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -7189,14 +6940,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Africa",
-        "region_un": "Africa",
-        "subregion": "Eastern Africa",
-        "region_wb": "Sub-Saharan Africa",
-        "name_en": "Tanzania"
-      },
+      "continent": "Africa",
+      "region": "Africa",
+      "subregion": "Eastern Africa",
+      "region2": "Sub-Saharan Africa",
+      "name": "Tanzania",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -7258,14 +7006,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Africa",
-        "region_un": "Africa",
-        "subregion": "Eastern Africa",
-        "region_wb": "Sub-Saharan Africa",
-        "name_en": "Somaliland"
-      },
+      "continent": "Africa",
+      "region": "Africa",
+      "subregion": "Eastern Africa",
+      "region2": "Sub-Saharan Africa",
+      "name": "Somaliland",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -7301,14 +7046,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Africa",
-        "region_un": "Africa",
-        "subregion": "Northern Africa",
-        "region_wb": "Middle East & North Africa",
-        "name_en": "Morocco"
-      },
+      "continent": "Africa",
+      "region": "Africa",
+      "subregion": "Northern Africa",
+      "region2": "Middle East & North Africa",
+      "name": "Morocco",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -7381,14 +7123,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Africa",
-        "region_un": "Africa",
-        "subregion": "Northern Africa",
-        "region_wb": "Middle East & North Africa",
-        "name_en": "Western Sahara"
-      },
+      "continent": "Africa",
+      "region": "Africa",
+      "subregion": "Northern Africa",
+      "region2": "Middle East & North Africa",
+      "name": "Western Sahara",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -7426,14 +7165,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Africa",
-        "region_un": "Africa",
-        "subregion": "Middle Africa",
-        "region_wb": "Sub-Saharan Africa",
-        "name_en": "Republic of the Congo"
-      },
+      "continent": "Africa",
+      "region": "Africa",
+      "subregion": "Middle Africa",
+      "region2": "Sub-Saharan Africa",
+      "name": "Republic of the Congo",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -7492,14 +7228,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Africa",
-        "region_un": "Africa",
-        "subregion": "Middle Africa",
-        "region_wb": "Sub-Saharan Africa",
-        "name_en": "Democratic Republic of the Congo"
-      },
+      "continent": "Africa",
+      "region": "Africa",
+      "subregion": "Middle Africa",
+      "region2": "Sub-Saharan Africa",
+      "name": "Democratic Republic of the Congo",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -7633,14 +7366,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Africa",
-        "region_un": "Africa",
-        "subregion": "Southern Africa",
-        "region_wb": "Sub-Saharan Africa",
-        "name_en": "Namibia"
-      },
+      "continent": "Africa",
+      "region": "Africa",
+      "subregion": "Southern Africa",
+      "region2": "Sub-Saharan Africa",
+      "name": "Namibia",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -7694,14 +7424,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Africa",
-        "region_un": "Africa",
-        "subregion": "Southern Africa",
-        "region_wb": "Sub-Saharan Africa",
-        "name_en": "South Africa"
-      },
+      "continent": "Africa",
+      "region": "Africa",
+      "subregion": "Southern Africa",
+      "region2": "Sub-Saharan Africa",
+      "name": "South Africa",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -7807,14 +7534,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Africa",
-        "region_un": "Africa",
-        "subregion": "Northern Africa",
-        "region_wb": "Middle East & North Africa",
-        "name_en": "Libya"
-      },
+      "continent": "Africa",
+      "region": "Africa",
+      "subregion": "Northern Africa",
+      "region2": "Middle East & North Africa",
+      "name": "Libya",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -7880,14 +7604,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Africa",
-        "region_un": "Africa",
-        "subregion": "Northern Africa",
-        "region_wb": "Middle East & North Africa",
-        "name_en": "Tunisia"
-      },
+      "continent": "Africa",
+      "region": "Africa",
+      "subregion": "Northern Africa",
+      "region2": "Middle East & North Africa",
+      "name": "Tunisia",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -7928,14 +7649,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Africa",
-        "region_un": "Africa",
-        "subregion": "Eastern Africa",
-        "region_wb": "Sub-Saharan Africa",
-        "name_en": "Zambia"
-      },
+      "continent": "Africa",
+      "region": "Africa",
+      "subregion": "Eastern Africa",
+      "region2": "Sub-Saharan Africa",
+      "name": "Zambia",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -8006,14 +7724,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Africa",
-        "region_un": "Africa",
-        "subregion": "Western Africa",
-        "region_wb": "Sub-Saharan Africa",
-        "name_en": "Sierra Leone"
-      },
+      "continent": "Africa",
+      "region": "Africa",
+      "subregion": "Western Africa",
+      "region2": "Sub-Saharan Africa",
+      "name": "Sierra Leone",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -8045,14 +7760,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Africa",
-        "region_un": "Africa",
-        "subregion": "Western Africa",
-        "region_wb": "Sub-Saharan Africa",
-        "name_en": "Guinea"
-      },
+      "continent": "Africa",
+      "region": "Africa",
+      "subregion": "Western Africa",
+      "region2": "Sub-Saharan Africa",
+      "name": "Guinea",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -8132,14 +7844,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Africa",
-        "region_un": "Africa",
-        "subregion": "Western Africa",
-        "region_wb": "Sub-Saharan Africa",
-        "name_en": "Liberia"
-      },
+      "continent": "Africa",
+      "region": "Africa",
+      "subregion": "Western Africa",
+      "region2": "Sub-Saharan Africa",
+      "name": "Liberia",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -8176,14 +7885,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Africa",
-        "region_un": "Africa",
-        "subregion": "Middle Africa",
-        "region_wb": "Sub-Saharan Africa",
-        "name_en": "Central African Republic"
-      },
+      "continent": "Africa",
+      "region": "Africa",
+      "subregion": "Middle Africa",
+      "region2": "Sub-Saharan Africa",
+      "name": "Central African Republic",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -8255,14 +7961,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Africa",
-        "region_un": "Africa",
-        "subregion": "Northern Africa",
-        "region_wb": "Sub-Saharan Africa",
-        "name_en": "Sudan"
-      },
+      "continent": "Africa",
+      "region": "Africa",
+      "subregion": "Northern Africa",
+      "region2": "Sub-Saharan Africa",
+      "name": "Sudan",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -8353,14 +8056,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Africa",
-        "region_un": "Africa",
-        "subregion": "Eastern Africa",
-        "region_wb": "Middle East & North Africa",
-        "name_en": "Djibouti"
-      },
+      "continent": "Africa",
+      "region": "Africa",
+      "subregion": "Eastern Africa",
+      "region2": "Middle East & North Africa",
+      "name": "Djibouti",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -8385,14 +8085,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Africa",
-        "region_un": "Africa",
-        "subregion": "Eastern Africa",
-        "region_wb": "Sub-Saharan Africa",
-        "name_en": "Eritrea"
-      },
+      "continent": "Africa",
+      "region": "Africa",
+      "subregion": "Eastern Africa",
+      "region2": "Sub-Saharan Africa",
+      "name": "Eritrea",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -8430,14 +8127,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Africa",
-        "region_un": "Africa",
-        "subregion": "Western Africa",
-        "region_wb": "Sub-Saharan Africa",
-        "name_en": "Ivory Coast"
-      },
+      "continent": "Africa",
+      "region": "Africa",
+      "subregion": "Western Africa",
+      "region2": "Sub-Saharan Africa",
+      "name": "Ivory Coast",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -8493,14 +8187,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Africa",
-        "region_un": "Africa",
-        "subregion": "Western Africa",
-        "region_wb": "Sub-Saharan Africa",
-        "name_en": "Mali"
-      },
+      "continent": "Africa",
+      "region": "Africa",
+      "subregion": "Western Africa",
+      "region2": "Sub-Saharan Africa",
+      "name": "Mali",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -8586,14 +8277,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Africa",
-        "region_un": "Africa",
-        "subregion": "Western Africa",
-        "region_wb": "Sub-Saharan Africa",
-        "name_en": "Senegal"
-      },
+      "continent": "Africa",
+      "region": "Africa",
+      "subregion": "Western Africa",
+      "region2": "Sub-Saharan Africa",
+      "name": "Senegal",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -8647,14 +8335,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Africa",
-        "region_un": "Africa",
-        "subregion": "Western Africa",
-        "region_wb": "Sub-Saharan Africa",
-        "name_en": "Nigeria"
-      },
+      "continent": "Africa",
+      "region": "Africa",
+      "subregion": "Western Africa",
+      "region2": "Sub-Saharan Africa",
+      "name": "Nigeria",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -8722,14 +8407,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Africa",
-        "region_un": "Africa",
-        "subregion": "Western Africa",
-        "region_wb": "Sub-Saharan Africa",
-        "name_en": "Benin"
-      },
+      "continent": "Africa",
+      "region": "Africa",
+      "subregion": "Western Africa",
+      "region2": "Sub-Saharan Africa",
+      "name": "Benin",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -8764,14 +8446,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Africa",
-        "region_un": "Africa",
-        "subregion": "Middle Africa",
-        "region_wb": "Sub-Saharan Africa",
-        "name_en": "Angola"
-      },
+      "continent": "Africa",
+      "region": "Africa",
+      "subregion": "Middle Africa",
+      "region2": "Sub-Saharan Africa",
+      "name": "Angola",
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -8862,14 +8541,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Africa",
-        "region_un": "Africa",
-        "subregion": "Southern Africa",
-        "region_wb": "Sub-Saharan Africa",
-        "name_en": "Botswana"
-      },
+      "continent": "Africa",
+      "region": "Africa",
+      "subregion": "Southern Africa",
+      "region2": "Sub-Saharan Africa",
+      "name": "Botswana",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -8919,14 +8595,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Africa",
-        "region_un": "Africa",
-        "subregion": "Eastern Africa",
-        "region_wb": "Sub-Saharan Africa",
-        "name_en": "Zimbabwe"
-      },
+      "continent": "Africa",
+      "region": "Africa",
+      "subregion": "Eastern Africa",
+      "region2": "Sub-Saharan Africa",
+      "name": "Zimbabwe",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -8973,14 +8646,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Africa",
-        "region_un": "Africa",
-        "subregion": "Middle Africa",
-        "region_wb": "Sub-Saharan Africa",
-        "name_en": "Chad"
-      },
+      "continent": "Africa",
+      "region": "Africa",
+      "subregion": "Middle Africa",
+      "region2": "Sub-Saharan Africa",
+      "name": "Chad",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -9048,14 +8718,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Africa",
-        "region_un": "Africa",
-        "subregion": "Northern Africa",
-        "region_wb": "Middle East & North Africa",
-        "name_en": "Algeria"
-      },
+      "continent": "Africa",
+      "region": "Africa",
+      "subregion": "Northern Africa",
+      "region2": "Middle East & North Africa",
+      "name": "Algeria",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -9127,14 +8794,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Africa",
-        "region_un": "Africa",
-        "subregion": "Eastern Africa",
-        "region_wb": "Sub-Saharan Africa",
-        "name_en": "Mozambique"
-      },
+      "continent": "Africa",
+      "region": "Africa",
+      "subregion": "Eastern Africa",
+      "region2": "Sub-Saharan Africa",
+      "name": "Mozambique",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -9223,14 +8887,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Africa",
-        "region_un": "Africa",
-        "subregion": "Southern Africa",
-        "region_wb": "Sub-Saharan Africa",
-        "name_en": "Eswatini"
-      },
+      "continent": "Africa",
+      "region": "Africa",
+      "subregion": "Southern Africa",
+      "region2": "Sub-Saharan Africa",
+      "name": "Eswatini",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -9251,14 +8912,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Africa",
-        "region_un": "Africa",
-        "subregion": "Eastern Africa",
-        "region_wb": "Sub-Saharan Africa",
-        "name_en": "Burundi"
-      },
+      "continent": "Africa",
+      "region": "Africa",
+      "subregion": "Eastern Africa",
+      "region2": "Sub-Saharan Africa",
+      "name": "Burundi",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -9281,14 +8939,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Africa",
-        "region_un": "Africa",
-        "subregion": "Eastern Africa",
-        "region_wb": "Sub-Saharan Africa",
-        "name_en": "Rwanda"
-      },
+      "continent": "Africa",
+      "region": "Africa",
+      "subregion": "Eastern Africa",
+      "region2": "Sub-Saharan Africa",
+      "name": "Rwanda",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -9312,14 +8967,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Africa",
-        "region_un": "Africa",
-        "subregion": "Eastern Africa",
-        "region_wb": "Sub-Saharan Africa",
-        "name_en": "Uganda"
-      },
+      "continent": "Africa",
+      "region": "Africa",
+      "subregion": "Eastern Africa",
+      "region2": "Sub-Saharan Africa",
+      "name": "Uganda",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -9357,14 +9009,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Africa",
-        "region_un": "Africa",
-        "subregion": "Southern Africa",
-        "region_wb": "Sub-Saharan Africa",
-        "name_en": "Lesotho"
-      },
+      "continent": "Africa",
+      "region": "Africa",
+      "subregion": "Southern Africa",
+      "region2": "Sub-Saharan Africa",
+      "name": "Lesotho",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -9386,14 +9035,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Africa",
-        "region_un": "Africa",
-        "subregion": "Middle Africa",
-        "region_wb": "Sub-Saharan Africa",
-        "name_en": "Cameroon"
-      },
+      "continent": "Africa",
+      "region": "Africa",
+      "subregion": "Middle Africa",
+      "region2": "Sub-Saharan Africa",
+      "name": "Cameroon",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -9464,14 +9110,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Africa",
-        "region_un": "Africa",
-        "subregion": "Middle Africa",
-        "region_wb": "Sub-Saharan Africa",
-        "name_en": "Gabon"
-      },
+      "continent": "Africa",
+      "region": "Africa",
+      "subregion": "Middle Africa",
+      "region2": "Sub-Saharan Africa",
+      "name": "Gabon",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -9512,14 +9155,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Africa",
-        "region_un": "Africa",
-        "subregion": "Western Africa",
-        "region_wb": "Sub-Saharan Africa",
-        "name_en": "Niger"
-      },
+      "continent": "Africa",
+      "region": "Africa",
+      "subregion": "Western Africa",
+      "region2": "Sub-Saharan Africa",
+      "name": "Niger",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -9587,14 +9227,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Africa",
-        "region_un": "Africa",
-        "subregion": "Western Africa",
-        "region_wb": "Sub-Saharan Africa",
-        "name_en": "Burkina Faso"
-      },
+      "continent": "Africa",
+      "region": "Africa",
+      "subregion": "Western Africa",
+      "region2": "Sub-Saharan Africa",
+      "name": "Burkina Faso",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -9643,14 +9280,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Africa",
-        "region_un": "Africa",
-        "subregion": "Western Africa",
-        "region_wb": "Sub-Saharan Africa",
-        "name_en": "Togo"
-      },
+      "continent": "Africa",
+      "region": "Africa",
+      "subregion": "Western Africa",
+      "region2": "Sub-Saharan Africa",
+      "name": "Togo",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -9679,14 +9313,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Africa",
-        "region_un": "Africa",
-        "subregion": "Western Africa",
-        "region_wb": "Sub-Saharan Africa",
-        "name_en": "Ghana"
-      },
+      "continent": "Africa",
+      "region": "Africa",
+      "subregion": "Western Africa",
+      "region2": "Sub-Saharan Africa",
+      "name": "Ghana",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -9721,14 +9352,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Africa",
-        "region_un": "Africa",
-        "subregion": "Western Africa",
-        "region_wb": "Sub-Saharan Africa",
-        "name_en": "Guinea-Bissau"
-      },
+      "continent": "Africa",
+      "region": "Africa",
+      "subregion": "Western Africa",
+      "region2": "Sub-Saharan Africa",
+      "name": "Guinea-Bissau",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -9757,14 +9385,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Africa",
-        "region_un": "Africa",
-        "subregion": "Northern Africa",
-        "region_wb": "Middle East & North Africa",
-        "name_en": "Egypt"
-      },
+      "continent": "Africa",
+      "region": "Africa",
+      "subregion": "Northern Africa",
+      "region2": "Middle East & North Africa",
+      "name": "Egypt",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -9818,14 +9443,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Africa",
-        "region_un": "Africa",
-        "subregion": "Western Africa",
-        "region_wb": "Sub-Saharan Africa",
-        "name_en": "Mauritania"
-      },
+      "continent": "Africa",
+      "region": "Africa",
+      "subregion": "Western Africa",
+      "region2": "Sub-Saharan Africa",
+      "name": "Mauritania",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -9874,14 +9496,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Africa",
-        "region_un": "Africa",
-        "subregion": "Middle Africa",
-        "region_wb": "Sub-Saharan Africa",
-        "name_en": "Equatorial Guinea"
-      },
+      "continent": "Africa",
+      "region": "Africa",
+      "subregion": "Middle Africa",
+      "region2": "Sub-Saharan Africa",
+      "name": "Equatorial Guinea",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -9898,14 +9517,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Africa",
-        "region_un": "Africa",
-        "subregion": "Western Africa",
-        "region_wb": "Sub-Saharan Africa",
-        "name_en": "The Gambia"
-      },
+      "continent": "Africa",
+      "region": "Africa",
+      "subregion": "Western Africa",
+      "region2": "Sub-Saharan Africa",
+      "name": "The Gambia",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -9931,14 +9547,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Africa",
-        "region_un": "Africa",
-        "subregion": "Eastern Africa",
-        "region_wb": "Sub-Saharan Africa",
-        "name_en": "Madagascar"
-      },
+      "continent": "Africa",
+      "region": "Africa",
+      "subregion": "Eastern Africa",
+      "region2": "Sub-Saharan Africa",
+      "name": "Madagascar",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -9997,14 +9610,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Europe",
-        "region_un": "Europe",
-        "subregion": "Western Europe",
-        "region_wb": "Europe & Central Asia",
-        "name_en": "France"
-      },
+      "continent": "Europe",
+      "region": "Europe",
+      "subregion": "Western Europe",
+      "region2": "Europe & Central Asia",
+      "name": "France",
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -10098,14 +9708,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Europe",
-        "region_un": "Europe",
-        "subregion": "Eastern Europe",
-        "region_wb": "Europe & Central Asia",
-        "name_en": "Ukraine"
-      },
+      "continent": "Europe",
+      "region": "Europe",
+      "subregion": "Eastern Europe",
+      "region2": "Europe & Central Asia",
+      "name": "Ukraine",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -10208,14 +9815,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Europe",
-        "region_un": "Europe",
-        "subregion": "Eastern Europe",
-        "region_wb": "Europe & Central Asia",
-        "name_en": "Belarus"
-      },
+      "continent": "Europe",
+      "region": "Europe",
+      "subregion": "Eastern Europe",
+      "region2": "Europe & Central Asia",
+      "name": "Belarus",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -10270,14 +9874,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Europe",
-        "region_un": "Europe",
-        "subregion": "Northern Europe",
-        "region_wb": "Europe & Central Asia",
-        "name_en": "Lithuania"
-      },
+      "continent": "Europe",
+      "region": "Europe",
+      "subregion": "Northern Europe",
+      "region2": "Europe & Central Asia",
+      "name": "Lithuania",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -10306,14 +9907,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Europe",
-        "region_un": "Europe",
-        "subregion": "Eastern Europe",
-        "region_wb": "Europe & Central Asia",
-        "name_en": "Russia"
-      },
+      "continent": "Europe",
+      "region": "Europe",
+      "subregion": "Eastern Europe",
+      "region2": "Europe & Central Asia",
+      "name": "Russia",
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -11002,14 +10600,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Europe",
-        "region_un": "Europe",
-        "subregion": "Eastern Europe",
-        "region_wb": "Europe & Central Asia",
-        "name_en": "Czech Republic"
-      },
+      "continent": "Europe",
+      "region": "Europe",
+      "subregion": "Eastern Europe",
+      "region2": "Europe & Central Asia",
+      "name": "Czech Republic",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -11054,14 +10649,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Europe",
-        "region_un": "Europe",
-        "subregion": "Western Europe",
-        "region_wb": "Europe & Central Asia",
-        "name_en": "Germany"
-      },
+      "continent": "Europe",
+      "region": "Europe",
+      "subregion": "Western Europe",
+      "region2": "Europe & Central Asia",
+      "name": "Germany",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -11129,14 +10721,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Europe",
-        "region_un": "Europe",
-        "subregion": "Northern Europe",
-        "region_wb": "Europe & Central Asia",
-        "name_en": "Estonia"
-      },
+      "continent": "Europe",
+      "region": "Europe",
+      "subregion": "Northern Europe",
+      "region2": "Europe & Central Asia",
+      "name": "Estonia",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -11165,14 +10754,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Europe",
-        "region_un": "Europe",
-        "subregion": "Northern Europe",
-        "region_wb": "Europe & Central Asia",
-        "name_en": "Latvia"
-      },
+      "continent": "Europe",
+      "region": "Europe",
+      "subregion": "Northern Europe",
+      "region2": "Europe & Central Asia",
+      "name": "Latvia",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -11204,14 +10790,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Europe",
-        "region_un": "Europe",
-        "subregion": "Northern Europe",
-        "region_wb": "Europe & Central Asia",
-        "name_en": "Norway"
-      },
+      "continent": "Europe",
+      "region": "Europe",
+      "subregion": "Northern Europe",
+      "region2": "Europe & Central Asia",
+      "name": "Norway",
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -11323,14 +10906,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Europe",
-        "region_un": "Europe",
-        "subregion": "Northern Europe",
-        "region_wb": "Europe & Central Asia",
-        "name_en": "Sweden"
-      },
+      "continent": "Europe",
+      "region": "Europe",
+      "subregion": "Northern Europe",
+      "region2": "Europe & Central Asia",
+      "name": "Sweden",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -11380,14 +10960,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Europe",
-        "region_un": "Europe",
-        "subregion": "Northern Europe",
-        "region_wb": "Europe & Central Asia",
-        "name_en": "Finland"
-      },
+      "continent": "Europe",
+      "region": "Europe",
+      "subregion": "Northern Europe",
+      "region2": "Europe & Central Asia",
+      "name": "Finland",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -11437,14 +11014,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Europe",
-        "region_un": "Europe",
-        "subregion": "Western Europe",
-        "region_wb": "Europe & Central Asia",
-        "name_en": "Luxembourg"
-      },
+      "continent": "Europe",
+      "region": "Europe",
+      "subregion": "Western Europe",
+      "region2": "Europe & Central Asia",
+      "name": "Luxembourg",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -11461,14 +11035,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Europe",
-        "region_un": "Europe",
-        "subregion": "Western Europe",
-        "region_wb": "Europe & Central Asia",
-        "name_en": "Belgium"
-      },
+      "continent": "Europe",
+      "region": "Europe",
+      "subregion": "Western Europe",
+      "region2": "Europe & Central Asia",
+      "name": "Belgium",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -11495,14 +11066,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Europe",
-        "region_un": "Europe",
-        "subregion": "Southern Europe",
-        "region_wb": "Europe & Central Asia",
-        "name_en": "North Macedonia"
-      },
+      "continent": "Europe",
+      "region": "Europe",
+      "subregion": "Southern Europe",
+      "region2": "Europe & Central Asia",
+      "name": "North Macedonia",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -11530,14 +11098,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Europe",
-        "region_un": "Europe",
-        "subregion": "Southern Europe",
-        "region_wb": "Europe & Central Asia",
-        "name_en": "Albania"
-      },
+      "continent": "Europe",
+      "region": "Europe",
+      "subregion": "Southern Europe",
+      "region2": "Europe & Central Asia",
+      "name": "Albania",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -11571,14 +11136,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Europe",
-        "region_un": "Europe",
-        "subregion": "Southern Europe",
-        "region_wb": "Europe & Central Asia",
-        "name_en": "Kosovo"
-      },
+      "continent": "Europe",
+      "region": "Europe",
+      "subregion": "Southern Europe",
+      "region2": "Europe & Central Asia",
+      "name": "Kosovo",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -11609,14 +11171,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Europe",
-        "region_un": "Europe",
-        "subregion": "Southern Europe",
-        "region_wb": "Europe & Central Asia",
-        "name_en": "Spain"
-      },
+      "continent": "Europe",
+      "region": "Europe",
+      "subregion": "Southern Europe",
+      "region2": "Europe & Central Asia",
+      "name": "Spain",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -11677,14 +11236,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Europe",
-        "region_un": "Europe",
-        "subregion": "Northern Europe",
-        "region_wb": "Europe & Central Asia",
-        "name_en": "Denmark"
-      },
+      "continent": "Europe",
+      "region": "Europe",
+      "subregion": "Northern Europe",
+      "region2": "Europe & Central Asia",
+      "name": "Denmark",
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -11724,14 +11280,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Europe",
-        "region_un": "Europe",
-        "subregion": "Eastern Europe",
-        "region_wb": "Europe & Central Asia",
-        "name_en": "Romania"
-      },
+      "continent": "Europe",
+      "region": "Europe",
+      "subregion": "Eastern Europe",
+      "region2": "Europe & Central Asia",
+      "name": "Romania",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -11785,14 +11338,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Europe",
-        "region_un": "Europe",
-        "subregion": "Eastern Europe",
-        "region_wb": "Europe & Central Asia",
-        "name_en": "Hungary"
-      },
+      "continent": "Europe",
+      "region": "Europe",
+      "subregion": "Eastern Europe",
+      "region2": "Europe & Central Asia",
+      "name": "Hungary",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -11834,14 +11384,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Europe",
-        "region_un": "Europe",
-        "subregion": "Eastern Europe",
-        "region_wb": "Europe & Central Asia",
-        "name_en": "Slovakia"
-      },
+      "continent": "Europe",
+      "region": "Europe",
+      "subregion": "Eastern Europe",
+      "region2": "Europe & Central Asia",
+      "name": "Slovakia",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -11884,14 +11431,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Europe",
-        "region_un": "Europe",
-        "subregion": "Eastern Europe",
-        "region_wb": "Europe & Central Asia",
-        "name_en": "Poland"
-      },
+      "continent": "Europe",
+      "region": "Europe",
+      "subregion": "Eastern Europe",
+      "region2": "Europe & Central Asia",
+      "name": "Poland",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -11946,14 +11490,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Europe",
-        "region_un": "Europe",
-        "subregion": "Northern Europe",
-        "region_wb": "Europe & Central Asia",
-        "name_en": "Ireland"
-      },
+      "continent": "Europe",
+      "region": "Europe",
+      "subregion": "Northern Europe",
+      "region2": "Europe & Central Asia",
+      "name": "Ireland",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -11976,14 +11517,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Europe",
-        "region_un": "Europe",
-        "subregion": "Northern Europe",
-        "region_wb": "Europe & Central Asia",
-        "name_en": "United Kingdom"
-      },
+      "continent": "Europe",
+      "region": "Europe",
+      "subregion": "Northern Europe",
+      "region2": "Europe & Central Asia",
+      "name": "United Kingdom",
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -12055,14 +11593,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Europe",
-        "region_un": "Europe",
-        "subregion": "Southern Europe",
-        "region_wb": "Europe & Central Asia",
-        "name_en": "Greece"
-      },
+      "continent": "Europe",
+      "region": "Europe",
+      "subregion": "Southern Europe",
+      "region2": "Europe & Central Asia",
+      "name": "Greece",
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -12132,14 +11667,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Europe",
-        "region_un": "Europe",
-        "subregion": "Western Europe",
-        "region_wb": "Europe & Central Asia",
-        "name_en": "Austria"
-      },
+      "continent": "Europe",
+      "region": "Europe",
+      "subregion": "Western Europe",
+      "region2": "Europe & Central Asia",
+      "name": "Austria",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -12186,14 +11718,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Europe",
-        "region_un": "Europe",
-        "subregion": "Southern Europe",
-        "region_wb": "Europe & Central Asia",
-        "name_en": "Italy"
-      },
+      "continent": "Europe",
+      "region": "Europe",
+      "subregion": "Southern Europe",
+      "region2": "Europe & Central Asia",
+      "name": "Italy",
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -12300,14 +11829,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Europe",
-        "region_un": "Europe",
-        "subregion": "Western Europe",
-        "region_wb": "Europe & Central Asia",
-        "name_en": "Switzerland"
-      },
+      "continent": "Europe",
+      "region": "Europe",
+      "subregion": "Western Europe",
+      "region2": "Europe & Central Asia",
+      "name": "Switzerland",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -12341,14 +11867,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Europe",
-        "region_un": "Europe",
-        "subregion": "Western Europe",
-        "region_wb": "Europe & Central Asia",
-        "name_en": "Netherlands"
-      },
+      "continent": "Europe",
+      "region": "Europe",
+      "subregion": "Western Europe",
+      "region2": "Europe & Central Asia",
+      "name": "Netherlands",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -12373,14 +11896,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Europe",
-        "region_un": "Europe",
-        "subregion": "Southern Europe",
-        "region_wb": "Europe & Central Asia",
-        "name_en": "Serbia"
-      },
+      "continent": "Europe",
+      "region": "Europe",
+      "subregion": "Southern Europe",
+      "region2": "Europe & Central Asia",
+      "name": "Serbia",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -12438,14 +11958,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Europe",
-        "region_un": "Europe",
-        "subregion": "Southern Europe",
-        "region_wb": "Europe & Central Asia",
-        "name_en": "Croatia"
-      },
+      "continent": "Europe",
+      "region": "Europe",
+      "subregion": "Southern Europe",
+      "region2": "Europe & Central Asia",
+      "name": "Croatia",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -12498,14 +12015,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Europe",
-        "region_un": "Europe",
-        "subregion": "Southern Europe",
-        "region_wb": "Europe & Central Asia",
-        "name_en": "Slovenia"
-      },
+      "continent": "Europe",
+      "region": "Europe",
+      "subregion": "Southern Europe",
+      "region2": "Europe & Central Asia",
+      "name": "Slovenia",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -12533,14 +12047,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Europe",
-        "region_un": "Europe",
-        "subregion": "Eastern Europe",
-        "region_wb": "Europe & Central Asia",
-        "name_en": "Bulgaria"
-      },
+      "continent": "Europe",
+      "region": "Europe",
+      "subregion": "Eastern Europe",
+      "region2": "Europe & Central Asia",
+      "name": "Bulgaria",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -12578,14 +12089,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Europe",
-        "region_un": "Europe",
-        "subregion": "Southern Europe",
-        "region_wb": "Europe & Central Asia",
-        "name_en": "Montenegro"
-      },
+      "continent": "Europe",
+      "region": "Europe",
+      "subregion": "Southern Europe",
+      "region2": "Europe & Central Asia",
+      "name": "Montenegro",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -12613,14 +12121,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Europe",
-        "region_un": "Europe",
-        "subregion": "Southern Europe",
-        "region_wb": "Europe & Central Asia",
-        "name_en": "Bosnia and Herzegovina"
-      },
+      "continent": "Europe",
+      "region": "Europe",
+      "subregion": "Southern Europe",
+      "region2": "Europe & Central Asia",
+      "name": "Bosnia and Herzegovina",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -12653,14 +12158,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Europe",
-        "region_un": "Europe",
-        "subregion": "Southern Europe",
-        "region_wb": "Europe & Central Asia",
-        "name_en": "Portugal"
-      },
+      "continent": "Europe",
+      "region": "Europe",
+      "subregion": "Southern Europe",
+      "region2": "Europe & Central Asia",
+      "name": "Portugal",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -12703,14 +12205,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Europe",
-        "region_un": "Europe",
-        "subregion": "Eastern Europe",
-        "region_wb": "Europe & Central Asia",
-        "name_en": "Moldova"
-      },
+      "continent": "Europe",
+      "region": "Europe",
+      "subregion": "Eastern Europe",
+      "region2": "Europe & Central Asia",
+      "name": "Moldova",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -12747,14 +12246,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Europe",
-        "region_un": "Europe",
-        "subregion": "Northern Europe",
-        "region_wb": "Europe & Central Asia",
-        "name_en": "Iceland"
-      },
+      "continent": "Europe",
+      "region": "Europe",
+      "subregion": "Northern Europe",
+      "region2": "Europe & Central Asia",
+      "name": "Iceland",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -12784,14 +12280,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Oceania",
-        "region_un": "Oceania",
-        "subregion": "Melanesia",
-        "region_wb": "East Asia & Pacific",
-        "name_en": "Papua New Guinea"
-      },
+      "continent": "Oceania",
+      "region": "Oceania",
+      "subregion": "Melanesia",
+      "region2": "East Asia & Pacific",
+      "name": "Papua New Guinea",
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -12896,14 +12389,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Oceania",
-        "region_un": "Oceania",
-        "subregion": "Australia and New Zealand",
-        "region_wb": "East Asia & Pacific",
-        "name_en": "Australia"
-      },
+      "continent": "Oceania",
+      "region": "Oceania",
+      "subregion": "Australia and New Zealand",
+      "region2": "East Asia & Pacific",
+      "name": "Australia",
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -13160,14 +12650,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Oceania",
-        "region_un": "Oceania",
-        "subregion": "Melanesia",
-        "region_wb": "East Asia & Pacific",
-        "name_en": "Fiji"
-      },
+      "continent": "Oceania",
+      "region": "Oceania",
+      "subregion": "Melanesia",
+      "region2": "East Asia & Pacific",
+      "name": "Fiji",
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -13209,14 +12696,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Oceania",
-        "region_un": "Oceania",
-        "subregion": "Australia and New Zealand",
-        "region_wb": "East Asia & Pacific",
-        "name_en": "New Zealand"
-      },
+      "continent": "Oceania",
+      "region": "Oceania",
+      "subregion": "Australia and New Zealand",
+      "region2": "East Asia & Pacific",
+      "name": "New Zealand",
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -13298,14 +12782,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Oceania",
-        "region_un": "Oceania",
-        "subregion": "Melanesia",
-        "region_wb": "East Asia & Pacific",
-        "name_en": "New Caledonia"
-      },
+      "continent": "Oceania",
+      "region": "Oceania",
+      "subregion": "Melanesia",
+      "region2": "East Asia & Pacific",
+      "name": "New Caledonia",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -13328,14 +12809,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Oceania",
-        "region_un": "Oceania",
-        "subregion": "Melanesia",
-        "region_wb": "East Asia & Pacific",
-        "name_en": "Solomon Islands"
-      },
+      "continent": "Oceania",
+      "region": "Oceania",
+      "subregion": "Melanesia",
+      "region2": "East Asia & Pacific",
+      "name": "Solomon Islands",
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -13400,14 +12878,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Oceania",
-        "region_un": "Oceania",
-        "subregion": "Melanesia",
-        "region_wb": "East Asia & Pacific",
-        "name_en": "Vanuatu"
-      },
+      "continent": "Oceania",
+      "region": "Oceania",
+      "subregion": "Melanesia",
+      "region2": "East Asia & Pacific",
+      "name": "Vanuatu",
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -13435,14 +12910,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Antarctica",
-        "region_un": "Antarctica",
-        "subregion": "Antarctica",
-        "region_wb": "Antarctica",
-        "name_en": "Antarctica"
-      },
+      "continent": "Antarctica",
+      "region": "Antarctica",
+      "subregion": "Antarctica",
+      "region2": "Antarctica",
+      "name": "Antarctica",
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -14143,14 +13615,11 @@
       }
     },
     {
-      "type": "Feature",
-      "properties": {
-        "continent": "Seven seas (open ocean)",
-        "region_un": "Africa",
-        "subregion": "Seven seas (open ocean)",
-        "region_wb": "Sub-Saharan Africa",
-        "name_en": "French Southern and Antarctic Lands"
-      },
+      "continent": "Seven seas (open ocean)",
+      "region": "Africa",
+      "subregion": "Seven seas (open ocean)",
+      "region2": "Sub-Saharan Africa",
+      "name": "French Southern and Antarctic Lands",
       "geometry": {
         "type": "Polygon",
         "coordinates": [
