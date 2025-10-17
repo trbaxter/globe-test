@@ -12,6 +12,7 @@ export default function App() {
   const targetRef = useRef(0);
   const firstProgressSeen = useRef(false);
   const [postFullDone, setPostFullDone] = useState(false);
+  const [ll, setLL] = useState<{ lat: number; lng: number } | null>(null);
 
   useEffect(() => {
     const t = setTimeout(() => setMinDone(true), MIN_LOADER_MS);
@@ -65,7 +66,24 @@ export default function App() {
   return (
     <>
       <LoadingScreen show={showLoader} progress={pct} />
-      <Globe onReady={handleReady} onProgress={handleProgress} />
+
+      <div
+        style={{
+          position: 'fixed',
+          left: 12,
+          bottom: 12,
+          padding: '6px 8px',
+          borderRadius: 8,
+          fontSize: 12,
+          background: 'rgba(15,21,43,0.85)',
+          color: '#fff',
+          pointerEvents: 'none',
+          zIndex: 10
+        }}
+      >
+        {ll ? `lat ${ll.lat.toFixed(4)}  lng ${ll.lng.toFixed(4)}` : 'lat ————  lng ————'}
+      </div>
+      <Globe onReady={handleReady} onProgress={handleProgress} onCursorLL={setLL} />
     </>
   );
 }

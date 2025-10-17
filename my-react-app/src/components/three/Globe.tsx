@@ -9,21 +9,18 @@ import { getWorldCountryPaths } from '@/components/three/CountryBordersPaths';
 export type GlobeProps = {
   onReady?: () => void;
   onProgress?: (loaded: number, total: number) => void;
+  onCursorLL?: (ll: { lat: number; lng: number } | null) => void;
 };
 
 type PathPoint = { lat: number; lng: number };
 type PathRec = { points: PathPoint[] };
 type PhaseKey = 'pNet' | 'pCompose' | 'pDecode' | 'pGpu';
 
-export default function GlobeComponent({ onReady, onProgress }: GlobeProps) {
+export default function GlobeComponent({ onReady, onProgress, onCursorLL }: GlobeProps) {
   const globeRef = useRef<GlobeMethods | undefined>(undefined);
   const statePaths = useMemo(() => getUSStatePaths() as unknown as PathRec[], []);
   const provincePaths = useMemo(() => getCanadaProvincePaths() as unknown as PathRec[], []);
   const countryPaths = useMemo(() => getWorldCountryPaths() as unknown as PathRec[], []);
-  const borderPaths = useMemo(
-    () => [...countryPaths, ...statePaths, ...provincePaths],
-    [countryPaths, statePaths, provincePaths]
-  );
 
   const [{ w, h }, setSize] = useState({
     w: typeof window !== 'undefined' ? window.innerWidth : 0,
@@ -82,37 +79,97 @@ export default function GlobeComponent({ onReady, onProgress }: GlobeProps) {
 
     capTo(0.35, 1200);
 
-    const toXY = (lat: number, lng: number, W: number, H: number) => {
-      const x = ((lng + 180) / 360) * W;
-      const y = ((90 - lat) / 180) * H;
-      return [x, y] as const;
-    };
-
     const drawBorders = (ctx: CanvasRenderingContext2D, W: number, H: number) => {
-      const lw = Math.max(1, Math.round((W / 8192) * 1.4));
+      const LW = Math.max(1, Math.round((W / 8192) * 1.4));
+      const TOL = 1e-4;
+      const SCALE = 1 / TOL;
+
+      const toKey = (p: PathPoint) => {
+        const ax = Math.round(p.lng * SCALE),
+          ay = Math.round(p.lat * SCALE);
+        return `${ax},${ay}`;
+      };
+      const fromKey = (k: string): PathPoint => {
+        const [x, y] = k.split(',').map(Number);
+        return { lng: x / SCALE, lat: y / SCALE };
+      };
+      const toXY = (lat: number, lng: number) =>
+        [((lng + 180) / 360) * W, ((90 - lat) / 180) * H] as const;
+
+      const G = new Map<string, Set<string>>();
+      const addEdge = (a: PathPoint, b: PathPoint) => {
+        const dLng = ((b.lng - a.lng + 540) % 360) - 180;
+        if (Math.abs(dLng) > 170) return;
+        const ka = toKey(a),
+          kb = toKey(b);
+        if (ka === kb) return;
+        if (!G.has(ka)) G.set(ka, new Set());
+        if (!G.has(kb)) G.set(kb, new Set());
+        G.get(ka)!.add(kb);
+        G.get(kb)!.add(ka);
+      };
+
+      const addSet = (recs: PathRec[]) => {
+        for (const rec of recs) {
+          const pts = rec?.points;
+          if (!pts || pts.length < 2) continue;
+          for (let i = 1; i < pts.length; i++) addEdge(pts[i - 1], pts[i]);
+        }
+      };
+      addSet(countryPaths);
+      addSet(statePaths);
+      addSet(provincePaths);
+
+      const edgeVisited = new Set<string>();
+      const edgeKey = (u: string, v: string) => (u < v ? `${u}|${v}` : `${v}|${u}`);
+
+      const walk = (start: string): string[] => {
+        const chain: string[] = [start];
+        let cur = start,
+          prev: string | null = null;
+
+        while (true) {
+          const nbrs = [...(G.get(cur) ?? [])].filter((n) => !edgeVisited.has(edgeKey(cur, n)));
+          if (nbrs.length === 0) break;
+          const next = prev && nbrs.length > 1 ? nbrs.find((n) => n !== prev)! : nbrs[0];
+          edgeVisited.add(edgeKey(cur, next));
+          chain.push(next);
+          prev = cur;
+          cur = next;
+        }
+        return chain;
+      };
+
+      const starts = [...[...G.keys()].filter((k) => (G.get(k)?.size ?? 0) !== 2), ...G.keys()];
+
       ctx.save();
       ctx.strokeStyle = '#fff';
       ctx.globalAlpha = 0.92;
-      ctx.lineWidth = lw;
+      ctx.lineWidth = LW;
       ctx.lineJoin = 'round';
       ctx.lineCap = 'round';
-      for (const rec of borderPaths) {
-        const pts = rec?.points;
-        if (!pts || pts.length === 0) continue;
-        ctx.beginPath();
-        let [x0, y0] = toXY(pts[0].lat, pts[0].lng, W, H);
+      ctx.beginPath();
+
+      const usedNode = new Set<string>();
+      for (const s of starts) {
+        const pending = [...(G.get(s) ?? [])].some((n) => !edgeVisited.has(edgeKey(s, n)));
+        if (!pending) continue;
+
+        const chain = walk(s);
+        if (chain.length < 2) continue;
+
+        const p0 = fromKey(chain[0]);
+        let [x0, y0] = toXY(p0.lat, p0.lng);
         ctx.moveTo(x0, y0);
-        for (let i = 1; i < pts.length; i++) {
-          const a = pts[i - 1];
-          const b = pts[i];
-          const dLng = ((b.lng - a.lng + 540) % 360) - 180;
-          const seam = Math.abs(dLng) > 170;
-          const [x, y] = toXY(b.lat, b.lng, W, H);
-          if (seam) ctx.moveTo(x, y);
-          else ctx.lineTo(x, y);
+        for (let i = 1; i < chain.length; i++) {
+          const pi = fromKey(chain[i]);
+          const [x, y] = toXY(pi.lat, pi.lng);
+          ctx.lineTo(x, y);
         }
-        ctx.stroke();
+        chain.forEach((k) => usedNode.add(k));
       }
+
+      ctx.stroke();
       ctx.restore();
     };
 
@@ -242,7 +299,7 @@ export default function GlobeComponent({ onReady, onProgress }: GlobeProps) {
       cancelled = true;
       if (objUrl) URL.revokeObjectURL(objUrl);
     };
-  }, [borderPaths, onProgress]);
+  }, [countryPaths, statePaths, provincePaths, onProgress]);
 
   useEffect(() => {
     const g = globeRef.current;
@@ -269,7 +326,7 @@ export default function GlobeComponent({ onReady, onProgress }: GlobeProps) {
     const dom = r?.domElement;
     if (!dom) return;
 
-    const ALT_MIN = 0.3,
+    const ALT_MIN = 0.01,
       ALT_MAX = 3.0,
       ZOOM_BASE = 1.9,
       DELTA_UNIT = 100,
@@ -359,18 +416,51 @@ export default function GlobeComponent({ onReady, onProgress }: GlobeProps) {
       c.enableZoom = false;
     }
 
+    // wheel + right-drag zoom
     dom.addEventListener('wheel', onWheel, { passive: false, capture: true });
     dom.addEventListener('contextmenu', onContextMenu);
     dom.addEventListener('mousedown', onMouseDown, { passive: false, capture: true });
+
+    // cursor → lat/lng (rAF-throttled, no React state)
+    let mmRaf = 0;
+    let mx = 0,
+      my = 0;
+    const onCursorMove = (e: MouseEvent) => {
+      mx = e.clientX;
+      my = e.clientY;
+      if (!mmRaf) {
+        mmRaf = requestAnimationFrame(() => {
+          mmRaf = 0;
+          const rect = dom.getBoundingClientRect();
+          const x = mx - rect.left;
+          const y = my - rect.top;
+          const ll = (g as any).toGlobeCoords?.(x, y) as
+            | { lat: number; lng: number }
+            | null
+            | undefined;
+          onCursorLL?.(ll ?? null);
+        });
+      }
+    };
+    const onLeave = () => onCursorLL?.(null);
+
+    dom.addEventListener('mousemove', onCursorMove, { passive: true });
+    dom.addEventListener('mouseleave', onLeave);
+
     return () => {
       dom.removeEventListener('wheel', onWheel, true);
       dom.removeEventListener('contextmenu', onContextMenu);
       dom.removeEventListener('mousedown', onMouseDown, true);
       dom.removeEventListener('mousemove', onMouseMove, true);
       window.removeEventListener('mouseup', onMouseUp, true);
+
+      dom.removeEventListener('mousemove', onCursorMove);
+      dom.removeEventListener('mouseleave', onLeave);
+      if (mmRaf) cancelAnimationFrame(mmRaf);
+
       if (raf) cancelAnimationFrame(raf);
     };
-  }, [imgUrl, w, h]);
+  }, [imgUrl, w, h, onCursorLL]);
 
   useEffect(() => {
     const g = globeRef.current;
