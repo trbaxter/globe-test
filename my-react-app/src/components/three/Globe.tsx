@@ -1,4 +1,4 @@
-// src/components/three/Globe.tsx
+import * as THREE from 'three';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import RGGlobe, { type GlobeMethods } from 'react-globe.gl';
 import earthImg from '@/assets/img/earth.jpg';
@@ -11,12 +11,15 @@ export type GlobeProps = {
   onProgress?: (loaded: number, total: number) => void;
 };
 
+type PathPoint = { lat: number; lng: number };
+type PathRec = { points: PathPoint[] };
+type PhaseKey = 'pNet' | 'pCompose' | 'pDecode' | 'pGpu';
+
 export default function GlobeComponent({ onReady, onProgress }: GlobeProps) {
   const globeRef = useRef<GlobeMethods | undefined>(undefined);
-
-  const statePaths = useMemo(() => getUSStatePaths(), []);
-  const provincePaths = useMemo(() => getCanadaProvincePaths(), []);
-  const countryPaths = useMemo(() => getWorldCountryPaths(), []);
+  const statePaths = useMemo(() => getUSStatePaths() as unknown as PathRec[], []);
+  const provincePaths = useMemo(() => getCanadaProvincePaths() as unknown as PathRec[], []);
+  const countryPaths = useMemo(() => getWorldCountryPaths() as unknown as PathRec[], []);
   const borderPaths = useMemo(
     () => [...countryPaths, ...statePaths, ...provincePaths],
     [countryPaths, statePaths, provincePaths]
@@ -26,7 +29,28 @@ export default function GlobeComponent({ onReady, onProgress }: GlobeProps) {
     w: typeof window !== 'undefined' ? window.innerWidth : 0,
     h: typeof window !== 'undefined' ? window.innerHeight : 0
   });
+
   const [imgUrl, setImgUrl] = useState<string | null>(null);
+  const progRef = useRef<Record<PhaseKey, number>>({ pNet: 0, pCompose: 0, pDecode: 0, pGpu: 0 });
+  const lastFracRef = useRef(0);
+  const capRef = useRef(0);
+  const weights = { net: 0.6, compose: 0.25, decode: 0.1, gpu: 0.05 };
+
+  const report = () => {
+    const p = progRef.current;
+    const raw =
+      weights.net * p.pNet +
+      weights.compose * p.pCompose +
+      weights.decode * p.pDecode +
+      weights.gpu * p.pGpu;
+
+    const frac = Math.min(0.995, Math.min(raw, capRef.current));
+
+    if (frac >= lastFracRef.current) {
+      lastFracRef.current = frac;
+      onProgress?.(frac, 1);
+    }
+  };
 
   useEffect(() => {
     const onResize = () => setSize({ w: window.innerWidth, h: window.innerHeight });
@@ -38,75 +62,220 @@ export default function GlobeComponent({ onReady, onProgress }: GlobeProps) {
     let cancelled = false;
     let objUrl: string | null = null;
 
-    async function run() {
-      try {
-        const res = await fetch(earthImg);
-        const total = Number(res.headers.get('content-length')) || 0;
+    progRef.current = { pNet: 0, pCompose: 0, pDecode: 0, pGpu: 0 };
+    lastFracRef.current = 0;
+    capRef.current = 0;
+    onProgress?.(0, 1);
 
-        if (!res.ok || !res.body) {
+    const capTo = (target: number, ms: number) => {
+      const start = performance.now();
+      const c0 = capRef.current;
+      const step = (t: number) => {
+        const k = Math.min(1, (t - start) / ms);
+        const eased = c0 + (target - c0) * (1 - Math.pow(1 - k, 3));
+        capRef.current = Math.max(c0, Math.min(target, eased));
+        report();
+        if (k < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    };
+
+    capTo(0.35, 1200);
+
+    const toXY = (lat: number, lng: number, W: number, H: number) => {
+      const x = ((lng + 180) / 360) * W;
+      const y = ((90 - lat) / 180) * H;
+      return [x, y] as const;
+    };
+
+    const drawBorders = (ctx: CanvasRenderingContext2D, W: number, H: number) => {
+      const lw = Math.max(1, Math.round((W / 8192) * 1.4));
+      ctx.save();
+      ctx.strokeStyle = '#fff';
+      ctx.globalAlpha = 0.92;
+      ctx.lineWidth = lw;
+      ctx.lineJoin = 'round';
+      ctx.lineCap = 'round';
+      for (const rec of borderPaths) {
+        const pts = rec?.points;
+        if (!pts || pts.length === 0) continue;
+        ctx.beginPath();
+        let [x0, y0] = toXY(pts[0].lat, pts[0].lng, W, H);
+        ctx.moveTo(x0, y0);
+        for (let i = 1; i < pts.length; i++) {
+          const a = pts[i - 1];
+          const b = pts[i];
+          const dLng = ((b.lng - a.lng + 540) % 360) - 180;
+          const seam = Math.abs(dLng) > 170;
+          const [x, y] = toXY(b.lat, b.lng, W, H);
+          if (seam) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+      }
+      ctx.restore();
+    };
+
+    const rampTo = (key: Extract<PhaseKey, 'pCompose' | 'pDecode'>, target = 1, ms = 500) => {
+      const start = performance.now();
+      const s0 = progRef.current[key];
+      const step = (t: number) => {
+        const k = Math.min(1, (t - start) / ms);
+        const eased = s0 + (target - s0) * (1 - Math.pow(1 - k, 3));
+        progRef.current[key] = Math.min(1, Math.max(s0, eased));
+        report();
+        if (k < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    };
+
+    const fetchAsBlob = async (url: string): Promise<Blob> => {
+      const res = await fetch(url);
+      const total = Number(res.headers.get('content-length')) || 0;
+
+      let rafId = 0;
+      if (!total) {
+        let p = 0;
+        const start = () => {
+          const tick = () => {
+            p = Math.min(0.3, p + 0.015);
+            progRef.current.pNet = p;
+            report();
+            rafId = requestAnimationFrame(tick);
+          };
+          rafId = requestAnimationFrame(tick);
+        };
+        rafId = requestAnimationFrame(() => requestAnimationFrame(start));
+      } else {
+        progRef.current.pNet = 0; // known size still starts at 0
+        report();
+      }
+
+      if (!res.ok || !res.body) {
+        if (rafId) cancelAnimationFrame(rafId);
+        progRef.current.pNet = 1;
+        report();
+        return await res.blob();
+      }
+
+      const reader = res.body.getReader();
+      const parts: BlobPart[] = [];
+      let loaded = 0;
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        if (value) {
+          parts.push(value.buffer.slice(value.byteOffset, value.byteOffset + value.byteLength));
+          loaded += value.byteLength;
+          if (total) {
+            // target can jump, but report() is capped by capRef so UI won’t jump
+            progRef.current.pNet = Math.min(1, loaded / total);
+            report();
+          }
+        }
+      }
+
+      if (rafId) cancelAnimationFrame(rafId);
+      progRef.current.pNet = 1;
+      report();
+
+      const type = res.headers.get('content-type') ?? 'application/octet-stream';
+      return new Blob(parts, { type });
+    };
+
+    async function compose() {
+      try {
+        const baseBlob = await fetchAsBlob(earthImg);
+        const baseBmp = await createImageBitmap(baseBlob);
+
+        const cw = baseBmp.width;
+        const ch = baseBmp.height;
+
+        const canvas = document.createElement('canvas');
+        canvas.width = cw;
+        canvas.height = ch;
+        const ctx = canvas.getContext('2d', { alpha: false });
+        if (!ctx) {
+          progRef.current.pCompose = 1;
+          report();
           setImgUrl(earthImg);
-          requestAnimationFrame(() => onReady?.());
           return;
         }
 
-        const reader = res.body.getReader();
-        const parts: BlobPart[] = [];
-        let loaded = 0;
+        (ctx as any).imageSmoothingEnabled = true;
+        (ctx as any).imageSmoothingQuality = 'high';
+        ctx.drawImage(baseBmp, 0, 0, cw, ch);
+        drawBorders(ctx, cw, ch);
 
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-          if (value) {
-            parts.push(value.buffer.slice(value.byteOffset, value.byteOffset + value.byteLength));
-            loaded += value.byteLength;
-            onProgress?.(loaded, total);
-          }
-          if (cancelled) return;
-        }
+        capTo(0.7, 700);
+        rampTo('pCompose', 1, 500);
 
-        const contentType = res.headers.get('content-type') || 'image/jpeg';
-        const blob = new Blob(parts, { type: contentType });
-        objUrl = URL.createObjectURL(blob);
-        setImgUrl(objUrl);
+        const composedBlob: Blob = await new Promise((resolve) =>
+          canvas.toBlob((b) => resolve((b as Blob) ?? new Blob()), 'image/jpeg', 0.96)
+        );
+        const blobUrl = URL.createObjectURL(composedBlob);
 
-        const img = new Image();
-        img.src = objUrl;
-        const anyImg = img as HTMLImageElement & { decode?: () => Promise<void> };
-        if (anyImg.decode) {
+        const im = new Image();
+        im.src = blobUrl;
+        if ((im as HTMLImageElement & { decode?: () => Promise<void> }).decode) {
           try {
-            await anyImg.decode();
+            await (im as any).decode();
           } catch {}
         }
-        if (!cancelled) requestAnimationFrame(() => onReady?.());
+        progRef.current.pDecode = 1;
+        capTo(0.92, 600);
+        report();
+
+        if (!cancelled) {
+          objUrl = blobUrl;
+          setImgUrl(blobUrl);
+        } else {
+          URL.revokeObjectURL(blobUrl);
+        }
       } catch {
         setImgUrl(earthImg);
-        requestAnimationFrame(() => onReady?.());
       }
     }
 
-    void run();
+    void compose();
     return () => {
       cancelled = true;
       if (objUrl) URL.revokeObjectURL(objUrl);
     };
-  }, [onReady, onProgress]);
+  }, [borderPaths, onProgress]);
 
   useEffect(() => {
     const g = globeRef.current;
     if (!g || !imgUrl) return;
 
-    g.renderer?.().setPixelRatio(2);
+    const r = g.renderer?.();
+    r?.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    if (r) {
+      r.outputColorSpace = THREE.SRGBColorSpace;
+      r.toneMapping = THREE.NoToneMapping;
+    }
     g.pointOfView?.({ lat: 38, lng: -95, altitude: 1.6 }, 0);
 
-    const dom = g.renderer?.()?.domElement;
+    const mat = (g as any).globeMaterial?.();
+    if (mat?.map && r) {
+      mat.map.anisotropy = r.capabilities.getMaxAnisotropy?.() ?? 1;
+      (mat.map as any).colorSpace = THREE.SRGBColorSpace;
+      mat.map.generateMipmaps = true;
+      mat.map.minFilter = THREE.LinearMipmapLinearFilter;
+      mat.map.magFilter = THREE.LinearFilter;
+      mat.needsUpdate = true;
+    }
+
+    const dom = r?.domElement;
     if (!dom) return;
 
-    const ALT_MIN = 0.3;
-    const ALT_MAX = 3.0;
-    const ZOOM_BASE = 1.9; // per notch multiplier
-    const DELTA_UNIT = 100; // px per notch
-    const TAU = 0.12; // inertia (s to ~63% toward target)
-    const EPS = 0.0015;
+    const ALT_MIN = 0.3,
+      ALT_MAX = 3.0,
+      ZOOM_BASE = 1.9,
+      DELTA_UNIT = 100,
+      TAU = 0.12,
+      EPS = 0.0015;
 
     const targetAlt = { v: 1.6 };
     let raf = 0;
@@ -115,20 +284,13 @@ export default function GlobeComponent({ onReady, onProgress }: GlobeProps) {
     const step = (tNow: number) => {
       const povNow = (g as any).pointOfView();
       const cur = typeof povNow?.altitude === 'number' ? povNow.altitude : 1.6;
-
       const dt = Math.min(0.05, (tNow - last) / 1000 || 0.016);
       last = tNow;
-
       const alpha = 1 - Math.exp(-dt / TAU);
       const nxt = cur + (targetAlt.v - cur) * alpha;
-
       (g as any).pointOfView({ ...povNow, altitude: nxt }, 0);
-
-      if (Math.abs(targetAlt.v - nxt) > EPS) {
-        raf = requestAnimationFrame(step);
-      } else {
-        raf = 0;
-      }
+      if (Math.abs(targetAlt.v - nxt) > EPS) raf = requestAnimationFrame(step);
+      else raf = 0;
     };
 
     const kick = (newTarget: number) => {
@@ -142,24 +304,23 @@ export default function GlobeComponent({ onReady, onProgress }: GlobeProps) {
     const onWheel = (e: WheelEvent) => {
       e.preventDefault();
       e.stopImmediatePropagation();
-
       const unit = e.deltaMode === 1 ? 35 : 1;
       const delta = e.deltaY * unit;
-
       const repeats = Math.max(1, Math.round(Math.abs(delta) / DELTA_UNIT));
       const factor = Math.pow(ZOOM_BASE, repeats);
-
       const pov = (g as any).pointOfView();
       const cur = typeof pov?.altitude === 'number' ? pov.altitude : 1.6;
-
       const next = delta < 0 ? cur / factor : cur * factor;
       kick(next);
     };
 
     const c = g.controls?.() as any;
-    c.enableDamping = true;
-    c.dampingFactor = 0.075;
-    if (c) c.enableZoom = false;
+    if (c) {
+      c.enableDamping = true;
+      c.dampingFactor = 0.09;
+      c.rotateSpeed = 0.55;
+      c.enableZoom = false;
+    }
 
     dom.addEventListener('wheel', onWheel, { passive: false, capture: true });
     return () => {
@@ -168,10 +329,59 @@ export default function GlobeComponent({ onReady, onProgress }: GlobeProps) {
     };
   }, [imgUrl, w, h]);
 
+  useEffect(() => {
+    const g = globeRef.current;
+    if (!g || !imgUrl) return;
+    let raf = 0;
+    let passes = 0;
+    let tries = 0;
+    let fired = false;
+    const MAX_TRIES = 900;
+    const fallback = window.setTimeout(() => {
+      if (!fired) onReady?.();
+    }, 15000);
+
+    const check = () => {
+      tries++;
+      progRef.current.pGpu = Math.min(1, Math.max(progRef.current.pGpu, tries / MAX_TRIES));
+      report();
+
+      const mat = (g as any).globeMaterial?.();
+      const tex = mat?.map as { image?: any } | undefined;
+      const img = tex?.image as HTMLImageElement | ImageBitmap | undefined;
+      const ready = !!img && ((img as any).naturalWidth > 0 || (img as any).width > 0);
+
+      if (ready) {
+        const arm = () => {
+          passes++;
+          if (passes < 2) raf = requestAnimationFrame(arm);
+          else {
+            clearTimeout(fallback);
+            progRef.current.pGpu = 1;
+            capRef.current = 1;
+            report();
+            fired = true;
+            onReady?.();
+          }
+        };
+        raf = requestAnimationFrame(arm);
+        return;
+      }
+      if (tries < MAX_TRIES) raf = requestAnimationFrame(check);
+    };
+
+    raf = requestAnimationFrame(check);
+    return () => {
+      cancelAnimationFrame(raf);
+      clearTimeout(fallback);
+    };
+  }, [imgUrl, onReady]);
+
   if (!imgUrl) return null;
 
   return (
     <RGGlobe
+      key={imgUrl || 'no-img'}
       ref={globeRef}
       width={w}
       height={h}
@@ -181,18 +391,6 @@ export default function GlobeComponent({ onReady, onProgress }: GlobeProps) {
       atmosphereColor="lightskyblue"
       atmosphereAltitude={0.12}
       rendererConfig={{ antialias: true, alpha: false, powerPreference: 'high-performance' }}
-      pathsData={borderPaths}
-      pathPoints="points"
-      pathPointLat="lat"
-      pathPointLng="lng"
-      pathColor={() => '#ffffff'}
-      pathStroke={0.85}
-      pathPointAlt={0.0015}
-      pathDashLength={0}
-      pathDashGap={0}
-      pathTransitionDuration={0}
-      pathLabel={() => ''}
-      polygonLabel={() => ''}
     />
   );
 }
