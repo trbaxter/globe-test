@@ -147,7 +147,7 @@ export default function GlobeComponent({ onReady, onProgress }: GlobeProps) {
         };
         rafId = requestAnimationFrame(() => requestAnimationFrame(start));
       } else {
-        progRef.current.pNet = 0; // known size still starts at 0
+        progRef.current.pNet = 0;
         report();
       }
 
@@ -169,7 +169,6 @@ export default function GlobeComponent({ onReady, onProgress }: GlobeProps) {
           parts.push(value.buffer.slice(value.byteOffset, value.byteOffset + value.byteLength));
           loaded += value.byteLength;
           if (total) {
-            // target can jump, but report() is capped by capRef so UI won’t jump
             progRef.current.pNet = Math.min(1, loaded / total);
             report();
           }
@@ -324,7 +323,7 @@ export default function GlobeComponent({ onReady, onProgress }: GlobeProps) {
     };
 
     const onMouseDown = (e: MouseEvent) => {
-      if (e.button !== 2) return; // right button only
+      if (e.button !== 2) return;
       e.preventDefault();
       e.stopImmediatePropagation();
       dragging = true;
@@ -339,7 +338,7 @@ export default function GlobeComponent({ onReady, onProgress }: GlobeProps) {
       if (!dragging) return;
       e.preventDefault();
       e.stopImmediatePropagation();
-      const dy = e.clientY - startY; // up = negative
+      const dy = e.clientY - startY;
       const f = Math.pow(ZOOM_BASE, Math.abs(dy) / DRAG_UNIT);
       const next = dy < 0 ? startAlt / f : startAlt * f;
       kick(next);
