@@ -275,7 +275,8 @@ export default function GlobeComponent({ onReady, onProgress }: GlobeProps) {
       ZOOM_BASE = 1.9,
       DELTA_UNIT = 100,
       TAU = 0.12,
-      EPS = 0.0015;
+      EPS = 0.0015,
+      DRAG_UNIT = 120;
 
     const targetAlt = { v: 1.6 };
     let raf = 0;
@@ -314,6 +315,43 @@ export default function GlobeComponent({ onReady, onProgress }: GlobeProps) {
       kick(next);
     };
 
+    let dragging = false;
+    let startY = 0;
+    let startAlt = 1.6;
+
+    const onContextMenu = (e: MouseEvent) => {
+      e.preventDefault();
+    };
+
+    const onMouseDown = (e: MouseEvent) => {
+      if (e.button !== 2) return; // right button only
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      dragging = true;
+      startY = e.clientY;
+      const pov = (g as any).pointOfView();
+      startAlt = typeof pov?.altitude === 'number' ? pov.altitude : 1.6;
+      dom.addEventListener('mousemove', onMouseMove, { passive: false, capture: true });
+      window.addEventListener('mouseup', onMouseUp, { passive: true, capture: true });
+    };
+
+    const onMouseMove = (e: MouseEvent) => {
+      if (!dragging) return;
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      const dy = e.clientY - startY; // up = negative
+      const f = Math.pow(ZOOM_BASE, Math.abs(dy) / DRAG_UNIT);
+      const next = dy < 0 ? startAlt / f : startAlt * f;
+      kick(next);
+    };
+
+    const onMouseUp = () => {
+      if (!dragging) return;
+      dragging = false;
+      dom.removeEventListener('mousemove', onMouseMove, true);
+      window.removeEventListener('mouseup', onMouseUp, true);
+    };
+
     const c = g.controls?.() as any;
     if (c) {
       c.enableDamping = true;
@@ -323,8 +361,14 @@ export default function GlobeComponent({ onReady, onProgress }: GlobeProps) {
     }
 
     dom.addEventListener('wheel', onWheel, { passive: false, capture: true });
+    dom.addEventListener('contextmenu', onContextMenu);
+    dom.addEventListener('mousedown', onMouseDown, { passive: false, capture: true });
     return () => {
       dom.removeEventListener('wheel', onWheel, true);
+      dom.removeEventListener('contextmenu', onContextMenu);
+      dom.removeEventListener('mousedown', onMouseDown, true);
+      dom.removeEventListener('mousemove', onMouseMove, true);
+      window.removeEventListener('mouseup', onMouseUp, true);
       if (raf) cancelAnimationFrame(raf);
     };
   }, [imgUrl, w, h]);
