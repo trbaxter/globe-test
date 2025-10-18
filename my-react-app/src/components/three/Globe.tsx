@@ -8,6 +8,7 @@ import { getCanadaProvincePaths } from '@/components/three/ProvincesBordersPaths
 import { getWorldCountryPaths } from '@/components/three/CountryBordersPaths';
 import { useWindowSize } from '@/hooks/dom/useWindowSize';
 import type { GlobeProps, PathRec, PhaseKey } from '@/types/globe.ts';
+import { fetchAsBlob } from '@/components/utils/fetchAsBlob.ts';
 
 export default function GlobeComponent({ onReady, onProgress, onCursorLL }: GlobeProps) {
   const globeRef = useRef<GlobeMethods | undefined>(undefined);
@@ -76,63 +77,12 @@ export default function GlobeComponent({ onReady, onProgress, onCursorLL }: Glob
       requestAnimationFrame(step);
     };
 
-    const fetchAsBlob = async (url: string): Promise<Blob> => {
-      const res = await fetch(url);
-      const total = Number(res.headers.get('content-length')) || 0;
-
-      let rafId = 0;
-      if (!total) {
-        let p = 0;
-        const start = () => {
-          const tick = () => {
-            p = Math.min(0.3, p + 0.015);
-            progRef.current.pNet = p;
-            report();
-            rafId = requestAnimationFrame(tick);
-          };
-          rafId = requestAnimationFrame(tick);
-        };
-        rafId = requestAnimationFrame(() => requestAnimationFrame(start));
-      } else {
-        progRef.current.pNet = 0;
-        report();
-      }
-
-      if (!res.ok || !res.body) {
-        if (rafId) cancelAnimationFrame(rafId);
-        progRef.current.pNet = 1;
-        report();
-        return await res.blob();
-      }
-
-      const reader = res.body.getReader();
-      const parts: BlobPart[] = [];
-      let loaded = 0;
-
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        if (value) {
-          parts.push(value.buffer.slice(value.byteOffset, value.byteOffset + value.byteLength));
-          loaded += value.byteLength;
-          if (total) {
-            progRef.current.pNet = Math.min(1, loaded / total);
-            report();
-          }
-        }
-      }
-
-      if (rafId) cancelAnimationFrame(rafId);
-      progRef.current.pNet = 1;
-      report();
-
-      const type = res.headers.get('content-type') ?? 'application/octet-stream';
-      return new Blob(parts, { type });
-    };
-
     async function compose() {
       try {
-        const baseBlob = await fetchAsBlob(earthImg);
+        const baseBlob = await fetchAsBlob(earthImg, (p) => {
+          progRef.current.pNet = p;
+          report();
+        });
         const baseBmp = await createImageBitmap(baseBlob);
 
         const cw = baseBmp.width;
