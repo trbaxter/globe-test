@@ -1,5 +1,5 @@
-import data from '@/assets/data/coordinates/world_country_borders.json';
-import { recordsToPaths, type Geometry, type PathRec } from '@/utils/geo/pathBuilder';
+import data from '@/assets/coordinates/world_country_borders.json';
+import { recordsToPaths, type Geometry, type PathRec } from '@/utils';
 
 type Rec = { name: string; abbreviation?: string; code?: string; geometry: Geometry };
 type Root = { countries?: Rec[]; states?: Rec[]; provinces?: Rec[] };

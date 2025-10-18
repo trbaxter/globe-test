@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { drawBorders } from '@/utils/canvas/drawBorders';
-import { fetchAsBlob } from '@/utils/net/fetchAsBlob';
-import type { PathRec } from '@/types/globe';
+import { drawBorders, fetchAsBlob } from '@/utils';
+import type { PathRec } from '@/types';
 
 type Cbs = {
   onNetProgress?: (p: number) => void;

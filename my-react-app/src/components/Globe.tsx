@@ -1,19 +1,19 @@
 import { useEffect, useMemo, useRef } from 'react';
 import RGGlobe, { type GlobeMethods } from 'react-globe.gl';
 import earthImg from '@/assets/img/earth.jpg';
-import { getUSStatePaths } from '@/assets/data/StateBordersPaths.ts';
-import { getCanadaProvincePaths } from '@/assets/data/ProvincesBordersPaths.ts';
-import { getWorldCountryPaths } from '@/assets/data/CountryBordersPaths.ts';
-import { useWindowSize } from '@/hooks/dom/useWindowSize.ts';
-import type { GlobeProps } from '@/types/globe.ts';
-import { ensurePathRecs } from '@/types/guards.ts';
-import { useComposedTexture } from '@/hooks/texture/useComposedTexture.ts';
-import { useGlobeSetup } from '@/hooks/setup/useGlobeSetup.ts';
-import { useGlobeZoom } from '@/hooks/zoom/useGlobeZoom.ts';
-import { useCursorLL } from '@/hooks/cursor/useCursorLL.ts';
-import { useGlobeReady } from '@/hooks/ready/useGlobeReady.ts';
-import { useGlobeControls } from '@/hooks/controls/useGlobeControls.ts';
-import { useLoadProgress } from '@/hooks/progress/useLoadProgress.ts';
+import { getUSStatePaths, getCanadaProvincePaths, getWorldCountryPaths } from '@/data';
+import { useWindowSize } from '@/hooks';
+import type { GlobeProps } from '@/types';
+import { ensurePathRecs } from '@/types';
+import {
+  useComposedTexture,
+  useCursorLL,
+  useGlobeControls,
+  useGlobeReady,
+  useGlobeSetup,
+  useGlobeZoom,
+  useLoadProgress
+} from '@/hooks';
 
 export default function GlobeComponent({ onReady, onProgress, onCursorLL }: GlobeProps) {
   const globeRef = useRef<GlobeMethods | undefined>(undefined);

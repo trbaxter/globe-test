@@ -1,5 +1,5 @@
 import { useCallback, useRef } from 'react';
-import type { PhaseKey } from '@/types/globe';
+import type { PhaseKey } from '@/types';
 
 type Weights = { net: number; compose: number; decode: number; gpu: number };
 
