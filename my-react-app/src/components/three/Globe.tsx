@@ -5,16 +5,8 @@ import earthImg from '@/assets/img/earth.jpg';
 import { getUSStatePaths } from '@/components/three/StateBordersPaths';
 import { getCanadaProvincePaths } from '@/components/three/ProvincesBordersPaths';
 import { getWorldCountryPaths } from '@/components/three/CountryBordersPaths';
-
-export type GlobeProps = {
-  onReady?: () => void;
-  onProgress?: (loaded: number, total: number) => void;
-  onCursorLL?: (ll: { lat: number; lng: number } | null) => void;
-};
-
-type PathPoint = { lat: number; lng: number };
-type PathRec = { points: PathPoint[] };
-type PhaseKey = 'pNet' | 'pCompose' | 'pDecode' | 'pGpu';
+import { useWindowSize } from '@/hooks/dom/useWindowSize';
+import type { GlobeProps, PathRec, PhaseKey, PathPoint } from '@/types/globe.ts';
 
 export default function GlobeComponent({ onReady, onProgress, onCursorLL }: GlobeProps) {
   const globeRef = useRef<GlobeMethods | undefined>(undefined);
@@ -22,10 +14,7 @@ export default function GlobeComponent({ onReady, onProgress, onCursorLL }: Glob
   const provincePaths = useMemo(() => getCanadaProvincePaths() as unknown as PathRec[], []);
   const countryPaths = useMemo(() => getWorldCountryPaths() as unknown as PathRec[], []);
 
-  const [{ w, h }, setSize] = useState({
-    w: typeof window !== 'undefined' ? window.innerWidth : 0,
-    h: typeof window !== 'undefined' ? window.innerHeight : 0
-  });
+  const { w, h } = useWindowSize();
 
   const [imgUrl, setImgUrl] = useState<string | null>(null);
   const progRef = useRef<Record<PhaseKey, number>>({ pNet: 0, pCompose: 0, pDecode: 0, pGpu: 0 });
@@ -48,12 +37,6 @@ export default function GlobeComponent({ onReady, onProgress, onCursorLL }: Glob
       onProgress?.(frac, 1);
     }
   };
-
-  useEffect(() => {
-    const onResize = () => setSize({ w: window.innerWidth, h: window.innerHeight });
-    window.addEventListener('resize', onResize);
-    return () => window.removeEventListener('resize', onResize);
-  }, []);
 
   useEffect(() => {
     let cancelled = false;
