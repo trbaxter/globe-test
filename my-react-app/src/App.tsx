@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import Globe from '@/components/three/Globe.tsx';
+import Globe from '@/components/Globe.tsx';
 import LoadingScreen from '@/components/ui/LoadingScreen.tsx';
 
 const MIN_LOADER_MS = 4000;
