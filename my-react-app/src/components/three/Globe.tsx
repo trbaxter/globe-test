@@ -12,6 +12,7 @@ import { useGlobeSetup } from '@/hooks/setup/useGlobeSetup';
 import { useGlobeZoom } from '@/hooks/zoom/useGlobeZoom';
 import { useCursorLL } from '@/hooks/cursor/useCursorLL';
 import { useGlobeReady } from '@/hooks/ready/useGlobeReady';
+import { useGlobeControls } from '@/hooks/controls/useGlobeControls';
 
 export default function GlobeComponent({ onReady, onProgress, onCursorLL }: GlobeProps) {
   const globeRef = useRef<GlobeMethods | undefined>(undefined);
@@ -93,23 +94,11 @@ export default function GlobeComponent({ onReady, onProgress, onCursorLL }: Glob
     []
   );
   useGlobeSetup(globeRef, imgUrl, setupOpts);
-
   const zoomOpts = useMemo(() => ({ min: 0.01, max: 3, base: 1.9, startAlt: 1.6 }), []);
+
   useGlobeZoom(globeRef, imgUrl, zoomOpts);
-
   useCursorLL(globeRef, imgUrl, onCursorLL);
-
-  useEffect(() => {
-    const g = globeRef.current;
-    if (!g || !imgUrl) return;
-    const c = g.controls?.() as any;
-    if (c) {
-      c.enableDamping = true;
-      c.dampingFactor = 0.09;
-      c.rotateSpeed = 0.55;
-      c.enableZoom = false;
-    }
-  }, [imgUrl]);
+  useGlobeControls(globeRef, imgUrl, { damping: 0.09, rotateSpeed: 0.55 });
 
   useGlobeReady(globeRef, imgUrl, {
     onProgress: (p) => {
