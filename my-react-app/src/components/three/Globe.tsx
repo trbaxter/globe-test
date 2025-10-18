@@ -5,7 +5,8 @@ import { getUSStatePaths } from '@/components/three/StateBordersPaths';
 import { getCanadaProvincePaths } from '@/components/three/ProvincesBordersPaths';
 import { getWorldCountryPaths } from '@/components/three/CountryBordersPaths';
 import { useWindowSize } from '@/hooks/dom/useWindowSize';
-import type { GlobeProps, PathRec, PhaseKey } from '@/types/globe';
+import type { GlobeProps, PhaseKey } from '@/types/globe';
+import { ensurePathRecs } from '@/types/guards';
 import { useComposedTexture } from '@/hooks/texture/useComposedTexture';
 import { useGlobeSetup } from '@/hooks/setup/useGlobeSetup';
 import { useGlobeZoom } from '@/hooks/zoom/useGlobeZoom';
@@ -15,9 +16,15 @@ import { useGlobeReady } from '@/hooks/ready/useGlobeReady';
 export default function GlobeComponent({ onReady, onProgress, onCursorLL }: GlobeProps) {
   const globeRef = useRef<GlobeMethods | undefined>(undefined);
 
-  const statePaths = useMemo(() => getUSStatePaths() as unknown as PathRec[], []);
-  const provincePaths = useMemo(() => getCanadaProvincePaths() as unknown as PathRec[], []);
-  const countryPaths = useMemo(() => getWorldCountryPaths() as unknown as PathRec[], []);
+  const statePaths = useMemo(() => ensurePathRecs(getUSStatePaths(), 'US state paths'), []);
+  const provincePaths = useMemo(
+    () => ensurePathRecs(getCanadaProvincePaths(), 'CA province paths'),
+    []
+  );
+  const countryPaths = useMemo(
+    () => ensurePathRecs(getWorldCountryPaths(), 'World country paths'),
+    []
+  );
 
   const { w, h } = useWindowSize();
 
