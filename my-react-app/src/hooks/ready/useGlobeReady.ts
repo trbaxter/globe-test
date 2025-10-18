@@ -1,13 +1,14 @@
 import { useEffect } from 'react';
 import type { RefObject } from 'react';
 import type { GlobeMethods } from 'react-globe.gl';
+import { useLatest } from '@/hooks/utils/useLatest';
 
 type Opts = {
-  onProgress?: (p01: number) => void; // update pGpu
-  onBeforeReady?: () => void; // e.g., capRef.current = 1
+  onProgress?: (p01: number) => void;
+  onBeforeReady?: () => void;
   onReady?: () => void;
-  timeoutMs?: number; // default 15000
-  maxTries?: number; // default 900
+  timeoutMs?: number;
+  maxTries?: number;
 };
 
 export function useGlobeReady(
@@ -15,6 +16,8 @@ export function useGlobeReady(
   imgUrl: string | null,
   opts: Opts = {}
 ): void {
+  const optsRef = useLatest(opts);
+
   useEffect(() => {
     const g = ref.current;
     if (!g || !imgUrl) return;
@@ -23,20 +26,20 @@ export function useGlobeReady(
     let passes = 0;
     let tries = 0;
     let fired = false;
-    const MAX_TRIES = opts.maxTries ?? 900;
+    const MAX_TRIES = optsRef.current.maxTries ?? 900;
 
     const fallback = window.setTimeout(() => {
       if (!fired) {
         fired = true;
-        opts.onBeforeReady?.();
-        opts.onProgress?.(1);
-        opts.onReady?.();
+        optsRef.current.onBeforeReady?.();
+        optsRef.current.onProgress?.(1);
+        optsRef.current.onReady?.();
       }
-    }, opts.timeoutMs ?? 15000);
+    }, optsRef.current.timeoutMs ?? 15000);
 
     const check = () => {
       tries++;
-      opts.onProgress?.(Math.min(1, tries / MAX_TRIES));
+      optsRef.current.onProgress?.(Math.min(1, tries / MAX_TRIES));
 
       const mat = (g as any).globeMaterial?.();
       const tex = mat?.map as { image?: any } | undefined;
@@ -46,15 +49,14 @@ export function useGlobeReady(
       if (ready) {
         const arm = () => {
           passes++;
-          if (passes < 2) {
-            raf = requestAnimationFrame(arm);
-          } else {
+          if (passes < 2) raf = requestAnimationFrame(arm);
+          else {
             clearTimeout(fallback);
-            opts.onProgress?.(1);
-            opts.onBeforeReady?.();
+            optsRef.current.onProgress?.(1);
+            optsRef.current.onBeforeReady?.();
             if (!fired) {
               fired = true;
-              opts.onReady?.();
+              optsRef.current.onReady?.();
             }
           }
         };
@@ -69,5 +71,5 @@ export function useGlobeReady(
       cancelAnimationFrame(raf);
       clearTimeout(fallback);
     };
-  }, [ref, imgUrl, opts.maxTries, opts.timeoutMs]);
+  }, [ref, imgUrl]);
 }

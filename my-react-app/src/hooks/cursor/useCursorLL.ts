@@ -1,12 +1,15 @@
 import { useEffect } from 'react';
 import type { RefObject } from 'react';
 import type { GlobeMethods } from 'react-globe.gl';
+import { useLatest } from '@/hooks/utils/useLatest';
 
 export function useCursorLL(
   ref: RefObject<GlobeMethods | undefined>,
   imgUrl: string | null,
   onCursorLL?: (ll: { lat: number; lng: number } | null) => void
 ): void {
+  const cbRef = useLatest(onCursorLL);
+
   useEffect(() => {
     const g = ref.current;
     if (!g || !imgUrl) return;
@@ -32,12 +35,12 @@ export function useCursorLL(
             | { lat: number; lng: number }
             | null
             | undefined;
-          onCursorLL?.(ll ?? null);
+          cbRef.current?.(ll ?? null);
         });
       }
     };
 
-    const onLeave = () => onCursorLL?.(null);
+    const onLeave = () => cbRef.current?.(null);
 
     dom.addEventListener('mousemove', onCursorMove, { passive: true });
     dom.addEventListener('mouseleave', onLeave);
@@ -47,5 +50,5 @@ export function useCursorLL(
       dom.removeEventListener('mouseleave', onLeave);
       if (mmRaf) cancelAnimationFrame(mmRaf);
     };
-  }, [ref, imgUrl, onCursorLL]);
+  }, [ref, imgUrl]);
 }
