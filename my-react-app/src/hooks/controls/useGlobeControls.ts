@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
+import type { RefObject } from 'react';
 import type { GlobeMethods } from 'react-globe.gl';
 
 export function useGlobeControls(
-  ref: React.RefObject<GlobeMethods | undefined>,
+  ref: RefObject<GlobeMethods | undefined>,
   imgUrl: string | null,
   opts: { damping?: number; rotateSpeed?: number } = {}
 ): void {
