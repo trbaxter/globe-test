@@ -1,5 +1,9 @@
-export async function fetchAsBlob(url: string, onProgress?: (p01: number) => void): Promise<Blob> {
-  const res = await fetch(url);
+export async function fetchAsBlob(
+  url: string,
+  onProgress?: (p01: number) => void,
+  signal?: AbortSignal
+): Promise<Blob> {
+  const res = await fetch(url, { signal });
   const total = Number(res.headers.get('content-length')) || 0;
 
   let rafId = 0;
