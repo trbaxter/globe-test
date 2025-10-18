@@ -1,24 +1,20 @@
 import * as THREE from 'three';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import RGGlobe, { type GlobeMethods } from 'react-globe.gl';
 import earthImg from '@/assets/img/earth.jpg';
-import { drawBorders } from '@/components/utils/drawBorders';
 import { getUSStatePaths } from '@/components/three/StateBordersPaths';
 import { getCanadaProvincePaths } from '@/components/three/ProvincesBordersPaths';
 import { getWorldCountryPaths } from '@/components/three/CountryBordersPaths';
 import { useWindowSize } from '@/hooks/dom/useWindowSize';
-import type { GlobeProps, PathRec, PhaseKey } from '@/types/globe.ts';
-import { fetchAsBlob } from '@/components/utils/fetchAsBlob.ts';
+import type { GlobeProps, PathRec, PhaseKey } from '@/types/globe';
+import { useComposedTexture } from '@/hooks/texture/useComposedTexture';
 
 export default function GlobeComponent({ onReady, onProgress, onCursorLL }: GlobeProps) {
   const globeRef = useRef<GlobeMethods | undefined>(undefined);
   const statePaths = useMemo(() => getUSStatePaths() as unknown as PathRec[], []);
   const provincePaths = useMemo(() => getCanadaProvincePaths() as unknown as PathRec[], []);
   const countryPaths = useMemo(() => getWorldCountryPaths() as unknown as PathRec[], []);
-
   const { w, h } = useWindowSize();
-
-  const [imgUrl, setImgUrl] = useState<string | null>(null);
   const progRef = useRef<Record<PhaseKey, number>>({ pNet: 0, pCompose: 0, pDecode: 0, pGpu: 0 });
   const lastFracRef = useRef(0);
   const capRef = useRef(0);
@@ -40,106 +36,46 @@ export default function GlobeComponent({ onReady, onProgress, onCursorLL }: Glob
     }
   };
 
-  useEffect(() => {
-    let cancelled = false;
-    let objUrl: string | null = null;
+  const capTo = (target: number, ms: number) => {
+    const start = performance.now();
+    const c0 = capRef.current;
+    const step = (t: number) => {
+      const k = Math.min(1, (t - start) / ms);
+      const eased = c0 + (target - c0) * (1 - Math.pow(1 - k, 3));
+      capRef.current = Math.max(c0, Math.min(target, eased));
+      report();
+      if (k < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  };
 
+  useEffect(() => {
     progRef.current = { pNet: 0, pCompose: 0, pDecode: 0, pGpu: 0 };
     lastFracRef.current = 0;
     capRef.current = 0;
     onProgress?.(0, 1);
-
-    const capTo = (target: number, ms: number) => {
-      const start = performance.now();
-      const c0 = capRef.current;
-      const step = (t: number) => {
-        const k = Math.min(1, (t - start) / ms);
-        const eased = c0 + (target - c0) * (1 - Math.pow(1 - k, 3));
-        capRef.current = Math.max(c0, Math.min(target, eased));
-        report();
-        if (k < 1) requestAnimationFrame(step);
-      };
-      requestAnimationFrame(step);
-    };
-
     capTo(0.35, 1200);
-
-    const rampTo = (key: Extract<PhaseKey, 'pCompose' | 'pDecode'>, target = 1, ms = 500) => {
-      const start = performance.now();
-      const s0 = progRef.current[key];
-      const step = (t: number) => {
-        const k = Math.min(1, (t - start) / ms);
-        const eased = s0 + (target - s0) * (1 - Math.pow(1 - k, 3));
-        progRef.current[key] = Math.min(1, Math.max(s0, eased));
-        report();
-        if (k < 1) requestAnimationFrame(step);
-      };
-      requestAnimationFrame(step);
-    };
-
-    async function compose() {
-      try {
-        const baseBlob = await fetchAsBlob(earthImg, (p) => {
-          progRef.current.pNet = p;
-          report();
-        });
-        const baseBmp = await createImageBitmap(baseBlob);
-
-        const cw = baseBmp.width;
-        const ch = baseBmp.height;
-
-        const canvas = document.createElement('canvas');
-        canvas.width = cw;
-        canvas.height = ch;
-        const ctx = canvas.getContext('2d', { alpha: false });
-        if (!ctx) {
-          progRef.current.pCompose = 1;
-          report();
-          setImgUrl(earthImg);
-          return;
-        }
-
-        (ctx as any).imageSmoothingEnabled = true;
-        (ctx as any).imageSmoothingQuality = 'high';
-        ctx.drawImage(baseBmp, 0, 0, cw, ch);
-        drawBorders(ctx, cw, ch, { countryPaths, statePaths, provincePaths });
-
-        capTo(0.7, 700);
-        rampTo('pCompose', 1, 500);
-
-        const composedBlob: Blob = await new Promise((resolve) =>
-          canvas.toBlob((b) => resolve((b as Blob) ?? new Blob()), 'image/jpeg', 0.96)
-        );
-        const blobUrl = URL.createObjectURL(composedBlob);
-
-        const im = new Image();
-        im.src = blobUrl;
-        if ((im as HTMLImageElement & { decode?: () => Promise<void> }).decode) {
-          try {
-            await (im as any).decode();
-          } catch {}
-        }
-        progRef.current.pDecode = 1;
-        capTo(0.92, 600);
-        report();
-
-        if (!cancelled) {
-          objUrl = blobUrl;
-          setImgUrl(blobUrl);
-        } else {
-          URL.revokeObjectURL(blobUrl);
-        }
-      } catch {
-        setImgUrl(earthImg);
-      }
-    }
-
-    void compose();
-    return () => {
-      cancelled = true;
-      if (objUrl) URL.revokeObjectURL(objUrl);
-    };
   }, [countryPaths, statePaths, provincePaths, onProgress]);
+
+  const imgUrl = useComposedTexture({
+    baseUrl: earthImg,
+    countryPaths,
+    statePaths,
+    provincePaths,
+    onNetProgress: (p) => {
+      progRef.current.pNet = p;
+      report();
+    },
+    onComposeProgress: (p) => {
+      progRef.current.pCompose = Math.max(progRef.current.pCompose, p);
+      report();
+    },
+    onDecodeProgress: (p) => {
+      progRef.current.pDecode = Math.max(progRef.current.pDecode, p);
+      report();
+    },
+    capTo
+  });
 
   useEffect(() => {
     const g = globeRef.current;
