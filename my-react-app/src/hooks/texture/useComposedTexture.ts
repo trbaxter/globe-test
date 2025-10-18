@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
-import { drawBorders } from '@/components/utils/drawBorders';
-import { fetchAsBlob } from '@/components/utils/fetchAsBlob';
-import type { PathRec } from '@/types/globe.ts';
+import { drawBorders } from '@/utils/canvas/drawBorders';
+import { fetchAsBlob } from '@/utils/net/fetchAsBlob';
+import type { PathRec } from '@/types/globe';
 
 type Cbs = {
   onNetProgress?: (p: number) => void;
@@ -19,6 +19,7 @@ export function useComposedTexture(
   } & Cbs
 ): string | null {
   const { baseUrl, countryPaths, statePaths, provincePaths } = params;
+
   const cbsRef = useRef<Cbs>({
     onNetProgress: params.onNetProgress,
     onComposeProgress: params.onComposeProgress,
@@ -38,6 +39,8 @@ export function useComposedTexture(
 
   useEffect(() => {
     let cancelled = false;
+    const abort = new AbortController();
+    let baseBmp: ImageBitmap | null = null;
     let objUrl: string | null = null;
 
     const rampCompose = (ms = 500) => {
@@ -46,15 +49,20 @@ export function useComposedTexture(
         const k = Math.min(1, (t - start) / ms);
         const eased = 1 - Math.pow(1 - k, 3);
         cbsRef.current.onComposeProgress?.(eased);
-        if (k < 1) requestAnimationFrame(step);
+        if (k < 1 && !cancelled) requestAnimationFrame(step);
       };
       requestAnimationFrame(step);
     };
 
     async function run() {
       try {
-        const baseBlob = await fetchAsBlob(baseUrl, (p) => cbsRef.current.onNetProgress?.(p));
-        const baseBmp = await createImageBitmap(baseBlob);
+        const baseBlob = await fetchAsBlob(
+          baseUrl,
+          (p) => cbsRef.current.onNetProgress?.(p),
+          abort.signal
+        );
+
+        baseBmp = await createImageBitmap(baseBlob, { colorSpaceConversion: 'none' });
 
         const cw = baseBmp.width;
         const ch = baseBmp.height;
@@ -79,6 +87,7 @@ export function useComposedTexture(
         const composedBlob: Blob = await new Promise((resolve) =>
           canvas.toBlob((b) => resolve((b as Blob) ?? new Blob()), 'image/jpeg', 0.96)
         );
+
         const blobUrl = URL.createObjectURL(composedBlob);
 
         const im = new Image();
@@ -86,7 +95,9 @@ export function useComposedTexture(
         if ((im as HTMLImageElement & { decode?: () => Promise<void> }).decode) {
           try {
             await (im as any).decode();
-          } catch {}
+          } catch {
+            /* ignore */
+          }
         }
         cbsRef.current.onDecodeProgress?.(1);
         cbsRef.current.capTo?.(0.92, 600);
@@ -97,14 +108,22 @@ export function useComposedTexture(
         } else {
           URL.revokeObjectURL(blobUrl);
         }
-      } catch {
+      } catch (e: any) {
+        if (e?.name === 'AbortError' || cancelled) return;
         setUrl(baseUrl);
       }
     }
 
-    run();
+    void run();
+
     return () => {
       cancelled = true;
+      abort.abort();
+      try {
+        (baseBmp as any)?.close?.();
+      } catch {
+        /* ignore */
+      }
       if (objUrl) URL.revokeObjectURL(objUrl);
     };
   }, [baseUrl, countryPaths, statePaths, provincePaths]);
