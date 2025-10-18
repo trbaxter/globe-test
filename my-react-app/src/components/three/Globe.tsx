@@ -8,6 +8,8 @@ import { useWindowSize } from '@/hooks/dom/useWindowSize';
 import type { GlobeProps, PathRec, PhaseKey } from '@/types/globe';
 import { useComposedTexture } from '@/hooks/texture/useComposedTexture';
 import { useGlobeSetup } from '@/hooks/setup/useGlobeSetup';
+import { useGlobeZoom } from '@/hooks/zoom/useGlobeZoom';
+import { useCursorLatLong } from '@/hooks/cursor/useCursorLatLong';
 
 export default function GlobeComponent({ onReady, onProgress, onCursorLL }: GlobeProps) {
   const globeRef = useRef<GlobeMethods | undefined>(undefined);
@@ -30,7 +32,6 @@ export default function GlobeComponent({ onReady, onProgress, onCursorLL }: Glob
       weights.compose * p.pCompose +
       weights.decode * p.pDecode +
       weights.gpu * p.pGpu;
-
     const frac = Math.min(0.995, Math.min(raw, capRef.current));
     if (frac >= lastFracRef.current) {
       lastFracRef.current = frac;
@@ -79,12 +80,15 @@ export default function GlobeComponent({ onReady, onProgress, onCursorLL }: Glob
     capTo
   });
 
-  // Memoize setup options so POV is not re-applied every render.
   const setupOpts = useMemo(
     () => ({ pixelRatioMax: 2, startPOV: { lat: 38, lng: -95, altitude: 1.6 } }),
     []
   );
   useGlobeSetup(globeRef, imgUrl, setupOpts);
+
+  const zoomOpts = useMemo(() => ({ min: 0.01, max: 3, base: 1.9, startAlt: 1.6 }), []);
+  useGlobeZoom(globeRef, imgUrl, zoomOpts);
+  useCursorLatLong(globeRef, imgUrl, onCursorLL);
 
   useEffect(() => {
     const g = globeRef.current;
@@ -94,88 +98,6 @@ export default function GlobeComponent({ onReady, onProgress, onCursorLL }: Glob
     const dom = r?.domElement;
     if (!dom) return;
 
-    const ALT_MIN = 0.01;
-    const ALT_MAX = 3.0;
-    const ZOOM_BASE = 1.9;
-    const DELTA_UNIT = 100;
-    const TAU = 0.12;
-    const EPS = 0.0015;
-    const DRAG_UNIT = 120;
-
-    const targetAlt = { v: 1.6 };
-    let raf = 0;
-    let last = 0;
-
-    const step = (tNow: number) => {
-      const povNow = (g as any).pointOfView();
-      const cur = typeof povNow?.altitude === 'number' ? povNow.altitude : 1.6;
-      const dt = Math.min(0.05, (tNow - last) / 1000 || 0.016);
-      last = tNow;
-      const alpha = 1 - Math.exp(-dt / TAU);
-      const nxt = cur + (targetAlt.v - cur) * alpha;
-      (g as any).pointOfView({ ...povNow, altitude: nxt }, 0);
-      if (Math.abs(targetAlt.v - nxt) > EPS) raf = requestAnimationFrame(step);
-      else raf = 0;
-    };
-
-    const kick = (newTarget: number) => {
-      targetAlt.v = Math.min(ALT_MAX, Math.max(ALT_MIN, newTarget));
-      if (!raf) {
-        last = performance.now();
-        raf = requestAnimationFrame(step);
-      }
-    };
-
-    const onWheel = (e: WheelEvent) => {
-      e.preventDefault();
-      e.stopImmediatePropagation();
-      const unit = e.deltaMode === 1 ? 35 : 1;
-      const delta = e.deltaY * unit;
-      const repeats = Math.max(1, Math.round(Math.abs(delta) / DELTA_UNIT));
-      const factor = Math.pow(ZOOM_BASE, repeats);
-      const pov = (g as any).pointOfView();
-      const cur = typeof pov?.altitude === 'number' ? pov.altitude : 1.6;
-      const next = delta < 0 ? cur / factor : cur * factor;
-      kick(next);
-    };
-
-    let dragging = false;
-    let startY = 0;
-    let startAlt = 1.6;
-
-    const onContextMenu = (e: MouseEvent) => {
-      e.preventDefault();
-    };
-
-    const onMouseDown = (e: MouseEvent) => {
-      if (e.button !== 2) return;
-      e.preventDefault();
-      e.stopImmediatePropagation();
-      dragging = true;
-      startY = e.clientY;
-      const pov = (g as any).pointOfView();
-      startAlt = typeof pov?.altitude === 'number' ? pov.altitude : 1.6;
-      dom.addEventListener('mousemove', onMouseMove, { passive: false, capture: true });
-      window.addEventListener('mouseup', onMouseUp, { passive: true, capture: true });
-    };
-
-    const onMouseMove = (e: MouseEvent) => {
-      if (!dragging) return;
-      e.preventDefault();
-      e.stopImmediatePropagation();
-      const dy = e.clientY - startY;
-      const f = Math.pow(ZOOM_BASE, Math.abs(dy) / DRAG_UNIT);
-      const next = dy < 0 ? startAlt / f : startAlt * f;
-      kick(next);
-    };
-
-    const onMouseUp = () => {
-      if (!dragging) return;
-      dragging = false;
-      dom.removeEventListener('mousemove', onMouseMove, true);
-      window.removeEventListener('mouseup', onMouseUp, true);
-    };
-
     const c = g.controls?.() as any;
     if (c) {
       c.enableDamping = true;
@@ -183,50 +105,7 @@ export default function GlobeComponent({ onReady, onProgress, onCursorLL }: Glob
       c.rotateSpeed = 0.55;
       c.enableZoom = false;
     }
-
-    dom.addEventListener('wheel', onWheel, { passive: false, capture: true });
-    dom.addEventListener('contextmenu', onContextMenu);
-    dom.addEventListener('mousedown', onMouseDown, { passive: false, capture: true });
-
-    // cursor → lat/lng
-    let mmRaf = 0;
-    let mx = 0,
-      my = 0;
-    const onCursorMove = (e: MouseEvent) => {
-      mx = e.clientX;
-      my = e.clientY;
-      if (!mmRaf) {
-        mmRaf = requestAnimationFrame(() => {
-          mmRaf = 0;
-          const rect = dom.getBoundingClientRect();
-          const x = mx - rect.left;
-          const y = my - rect.top;
-          const ll = (g as any).toGlobeCoords?.(x, y) as
-            | { lat: number; lng: number }
-            | null
-            | undefined;
-          onCursorLL?.(ll ?? null);
-        });
-      }
-    };
-    const onLeave = () => onCursorLL?.(null);
-
-    dom.addEventListener('mousemove', onCursorMove, { passive: true });
-    dom.addEventListener('mouseleave', onLeave);
-
-    return () => {
-      dom.removeEventListener('wheel', onWheel, true);
-      dom.removeEventListener('contextmenu', onContextMenu);
-      dom.removeEventListener('mousedown', onMouseDown, true);
-      dom.removeEventListener('mousemove', onMouseMove, true);
-      window.removeEventListener('mouseup', onMouseUp, true);
-
-      dom.removeEventListener('mousemove', onCursorMove);
-      dom.removeEventListener('mouseleave', onLeave);
-      if (mmRaf) cancelAnimationFrame(mmRaf);
-      if (raf) cancelAnimationFrame(raf);
-    };
-  }, [imgUrl, w, h, onCursorLL]);
+  }, [imgUrl]);
 
   useEffect(() => {
     const g = globeRef.current;
