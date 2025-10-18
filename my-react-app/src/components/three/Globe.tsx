@@ -1,4 +1,3 @@
-import * as THREE from 'three';
 import { useEffect, useMemo, useRef } from 'react';
 import RGGlobe, { type GlobeMethods } from 'react-globe.gl';
 import earthImg from '@/assets/img/earth.jpg';
@@ -8,13 +7,17 @@ import { getWorldCountryPaths } from '@/components/three/CountryBordersPaths';
 import { useWindowSize } from '@/hooks/dom/useWindowSize';
 import type { GlobeProps, PathRec, PhaseKey } from '@/types/globe';
 import { useComposedTexture } from '@/hooks/texture/useComposedTexture';
+import { useGlobeSetup } from '@/hooks/setup/useGlobeSetup';
 
 export default function GlobeComponent({ onReady, onProgress, onCursorLL }: GlobeProps) {
   const globeRef = useRef<GlobeMethods | undefined>(undefined);
+
   const statePaths = useMemo(() => getUSStatePaths() as unknown as PathRec[], []);
   const provincePaths = useMemo(() => getCanadaProvincePaths() as unknown as PathRec[], []);
   const countryPaths = useMemo(() => getWorldCountryPaths() as unknown as PathRec[], []);
+
   const { w, h } = useWindowSize();
+
   const progRef = useRef<Record<PhaseKey, number>>({ pNet: 0, pCompose: 0, pDecode: 0, pGpu: 0 });
   const lastFracRef = useRef(0);
   const capRef = useRef(0);
@@ -29,7 +32,6 @@ export default function GlobeComponent({ onReady, onProgress, onCursorLL }: Glob
       weights.gpu * p.pGpu;
 
     const frac = Math.min(0.995, Math.min(raw, capRef.current));
-
     if (frac >= lastFracRef.current) {
       lastFracRef.current = frac;
       onProgress?.(frac, 1);
@@ -77,38 +79,28 @@ export default function GlobeComponent({ onReady, onProgress, onCursorLL }: Glob
     capTo
   });
 
+  // Memoize setup options so POV is not re-applied every render.
+  const setupOpts = useMemo(
+    () => ({ pixelRatioMax: 2, startPOV: { lat: 38, lng: -95, altitude: 1.6 } }),
+    []
+  );
+  useGlobeSetup(globeRef, imgUrl, setupOpts);
+
   useEffect(() => {
     const g = globeRef.current;
     if (!g || !imgUrl) return;
 
     const r = g.renderer?.();
-    r?.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-    if (r) {
-      r.outputColorSpace = THREE.SRGBColorSpace;
-      r.toneMapping = THREE.NoToneMapping;
-    }
-    g.pointOfView?.({ lat: 38, lng: -95, altitude: 1.6 }, 0);
-
-    const mat = (g as any).globeMaterial?.();
-    if (mat?.map && r) {
-      mat.map.anisotropy = r.capabilities.getMaxAnisotropy?.() ?? 1;
-      (mat.map as any).colorSpace = THREE.SRGBColorSpace;
-      mat.map.generateMipmaps = true;
-      mat.map.minFilter = THREE.LinearMipmapLinearFilter;
-      mat.map.magFilter = THREE.LinearFilter;
-      mat.needsUpdate = true;
-    }
-
     const dom = r?.domElement;
     if (!dom) return;
 
-    const ALT_MIN = 0.01,
-      ALT_MAX = 3.0,
-      ZOOM_BASE = 1.9,
-      DELTA_UNIT = 100,
-      TAU = 0.12,
-      EPS = 0.0015,
-      DRAG_UNIT = 120;
+    const ALT_MIN = 0.01;
+    const ALT_MAX = 3.0;
+    const ZOOM_BASE = 1.9;
+    const DELTA_UNIT = 100;
+    const TAU = 0.12;
+    const EPS = 0.0015;
+    const DRAG_UNIT = 120;
 
     const targetAlt = { v: 1.6 };
     let raf = 0;
@@ -192,12 +184,11 @@ export default function GlobeComponent({ onReady, onProgress, onCursorLL }: Glob
       c.enableZoom = false;
     }
 
-    // wheel + right-drag zoom
     dom.addEventListener('wheel', onWheel, { passive: false, capture: true });
     dom.addEventListener('contextmenu', onContextMenu);
     dom.addEventListener('mousedown', onMouseDown, { passive: false, capture: true });
 
-    // cursor → lat/lng (rAF-throttled, no React state)
+    // cursor → lat/lng
     let mmRaf = 0;
     let mx = 0,
       my = 0;
@@ -233,7 +224,6 @@ export default function GlobeComponent({ onReady, onProgress, onCursorLL }: Glob
       dom.removeEventListener('mousemove', onCursorMove);
       dom.removeEventListener('mouseleave', onLeave);
       if (mmRaf) cancelAnimationFrame(mmRaf);
-
       if (raf) cancelAnimationFrame(raf);
     };
   }, [imgUrl, w, h, onCursorLL]);
