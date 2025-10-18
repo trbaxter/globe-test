@@ -1,11 +1,13 @@
 import { useEffect } from 'react';
+import type { RefObject } from 'react';
 import * as THREE from 'three';
 import type { GlobeMethods } from 'react-globe.gl';
+import { useLatest } from '@/hooks/utils/useLatest';
 
 type POV = { lat: number; lng: number; altitude: number };
 
 export function useGlobeSetup(
-  ref: React.RefObject<GlobeMethods | undefined>,
+  ref: RefObject<GlobeMethods | undefined>,
   imgUrl: string | null,
   opts?: {
     pixelRatioMax?: number;
@@ -13,13 +15,17 @@ export function useGlobeSetup(
     colorSpace?: THREE.ColorSpace;
   }
 ): void {
+  const optsRef = useLatest(opts);
+
   useEffect(() => {
     const g = ref.current;
     if (!g || !imgUrl) return;
 
-    const pixelRatioMax = opts?.pixelRatioMax ?? 2;
-    const startPOV = opts?.startPOV ?? { lat: 38, lng: -95, altitude: 1.6 };
-    const colorSpace = opts?.colorSpace ?? THREE.SRGBColorSpace;
+    const {
+      pixelRatioMax = 2,
+      startPOV = { lat: 38, lng: -95, altitude: 1.6 },
+      colorSpace = THREE.SRGBColorSpace
+    } = optsRef.current ?? {};
 
     const r = g.renderer?.();
     r?.setPixelRatio(Math.min(window.devicePixelRatio || 1, pixelRatioMax));
@@ -39,5 +45,5 @@ export function useGlobeSetup(
       mat.map.magFilter = THREE.LinearFilter;
       mat.needsUpdate = true;
     }
-  }, [ref, imgUrl, opts?.pixelRatioMax, opts?.startPOV, opts?.colorSpace]);
+  }, [ref, imgUrl]); // opts read via ref
 }
