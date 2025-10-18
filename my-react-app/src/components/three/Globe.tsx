@@ -9,7 +9,8 @@ import type { GlobeProps, PathRec, PhaseKey } from '@/types/globe';
 import { useComposedTexture } from '@/hooks/texture/useComposedTexture';
 import { useGlobeSetup } from '@/hooks/setup/useGlobeSetup';
 import { useGlobeZoom } from '@/hooks/zoom/useGlobeZoom';
-import { useCursorLatLong } from '@/hooks/cursor/useCursorLatLong';
+import { useCursorLL } from '@/hooks/cursor/useCursorLL';
+import { useGlobeReady } from '@/hooks/ready/useGlobeReady';
 
 export default function GlobeComponent({ onReady, onProgress, onCursorLL }: GlobeProps) {
   const globeRef = useRef<GlobeMethods | undefined>(undefined);
@@ -88,16 +89,12 @@ export default function GlobeComponent({ onReady, onProgress, onCursorLL }: Glob
 
   const zoomOpts = useMemo(() => ({ min: 0.01, max: 3, base: 1.9, startAlt: 1.6 }), []);
   useGlobeZoom(globeRef, imgUrl, zoomOpts);
-  useCursorLatLong(globeRef, imgUrl, onCursorLL);
+
+  useCursorLL(globeRef, imgUrl, onCursorLL);
 
   useEffect(() => {
     const g = globeRef.current;
     if (!g || !imgUrl) return;
-
-    const r = g.renderer?.();
-    const dom = r?.domElement;
-    if (!dom) return;
-
     const c = g.controls?.() as any;
     if (c) {
       c.enableDamping = true;
@@ -107,53 +104,16 @@ export default function GlobeComponent({ onReady, onProgress, onCursorLL }: Glob
     }
   }, [imgUrl]);
 
-  useEffect(() => {
-    const g = globeRef.current;
-    if (!g || !imgUrl) return;
-    let raf = 0;
-    let passes = 0;
-    let tries = 0;
-    let fired = false;
-    const MAX_TRIES = 900;
-    const fallback = window.setTimeout(() => {
-      if (!fired) onReady?.();
-    }, 15000);
-
-    const check = () => {
-      tries++;
-      progRef.current.pGpu = Math.min(1, Math.max(progRef.current.pGpu, tries / MAX_TRIES));
+  useGlobeReady(globeRef, imgUrl, {
+    onProgress: (p) => {
+      progRef.current.pGpu = Math.max(progRef.current.pGpu, p);
       report();
-
-      const mat = (g as any).globeMaterial?.();
-      const tex = mat?.map as { image?: any } | undefined;
-      const img = tex?.image as HTMLImageElement | ImageBitmap | undefined;
-      const ready = !!img && ((img as any).naturalWidth > 0 || (img as any).width > 0);
-
-      if (ready) {
-        const arm = () => {
-          passes++;
-          if (passes < 2) raf = requestAnimationFrame(arm);
-          else {
-            clearTimeout(fallback);
-            progRef.current.pGpu = 1;
-            capRef.current = 1;
-            report();
-            fired = true;
-            onReady?.();
-          }
-        };
-        raf = requestAnimationFrame(arm);
-        return;
-      }
-      if (tries < MAX_TRIES) raf = requestAnimationFrame(check);
-    };
-
-    raf = requestAnimationFrame(check);
-    return () => {
-      cancelAnimationFrame(raf);
-      clearTimeout(fallback);
-    };
-  }, [imgUrl, onReady]);
+    },
+    onBeforeReady: () => {
+      capRef.current = 1;
+    },
+    onReady
+  });
 
   if (!imgUrl) return null;
 
