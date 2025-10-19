@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import RGGlobe, { type GlobeMethods } from 'react-globe.gl';
 import { KTX2Loader } from 'three/examples/jsm/loaders/KTX2Loader.js';
 
-import earthImg from '@/assets/img/earth.png';
+import earthImg from '@/assets/img/earth.jpg';
 import { getUSStatePaths, getCanadaProvincePaths, getWorldCountryPaths } from '@/data';
 import { useWindowSize } from '@/hooks';
 import type { GlobeProps } from '@/types';
