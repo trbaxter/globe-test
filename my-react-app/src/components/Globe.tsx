@@ -1,15 +1,25 @@
-import * as THREE from 'three';
-import { useEffect, useMemo, useRef, useState } from 'react';
-import RGGlobe, { type GlobeMethods } from 'react-globe.gl';
-import { KTX2Loader } from 'three/examples/jsm/loaders/KTX2Loader.js';
-
 import earthImg from '@/assets/img/earth.jpg';
+import { useEffect, useMemo, useRef, useState, type RefObject } from 'react';
+import RGGlobe, { type GlobeMethods } from 'react-globe.gl';
+import {
+  AdditiveBlending,
+  AmbientLight,
+  Color,
+  LinearFilter,
+  LinearMipmapLinearFilter,
+  Mesh,
+  NormalBlending,
+  Scene,
+  ShaderMaterial,
+  SphereGeometry,
+  SRGBColorSpace,
+  Texture,
+  Vector3,
+  WebGLRenderer,
+  type CompressedTexture
+} from 'three';
+import { KTX2Loader } from 'three/examples/jsm/loaders/KTX2Loader.js';
 import { getUSStatePaths, getCanadaProvincePaths, getWorldCountryPaths } from '@/data';
-import { useWindowSize } from '@/hooks';
-import type { GlobeProps } from '@/types';
-import type { RefObject } from 'react';
-import type { CompressedTexture } from 'three';
-import { ensurePathRecs } from '@/types';
 import {
   useComposedTexture,
   useCursorLL,
@@ -17,8 +27,10 @@ import {
   useGlobeReady,
   useGlobeSetup,
   useGlobeZoom,
-  useLoadProgress
+  useLoadProgress,
+  useWindowSize
 } from '@/hooks';
+import { ensurePathRecs, type GlobeProps } from '@/types';
 
 /* helpers */
 function sceneOf(ref: RefObject<GlobeMethods | undefined>) {
@@ -28,10 +40,10 @@ function sceneOf(ref: RefObject<GlobeMethods | undefined>) {
 }
 function rendererOf(ref: RefObject<GlobeMethods | undefined>) {
   const g = ref.current;
-  const r = g?.renderer?.() as THREE.WebGLRenderer | undefined;
+  const r = g?.renderer?.() as WebGLRenderer | undefined;
   return r ?? null;
 }
-function globeRadius(scene: THREE.Scene, fallback = 100) {
+function globeRadius(scene: Scene, fallback = 100) {
   let radius = fallback;
   scene.traverse((o: any) => {
     if (o?.geometry?.type === 'SphereGeometry') {
@@ -43,11 +55,11 @@ function globeRadius(scene: THREE.Scene, fallback = 100) {
 }
 
 /* shared view-space light */
-const VIEW_LIGHT_DIR = new THREE.Vector3(-0.9, 0.9, 0.6).normalize();
+const VIEW_LIGHT_DIR = new Vector3(-0.9, 0.9, 0.6).normalize();
 
 /* night overlay */
 function makeTerminatorMaterial(strength = 0.92, softness = 0.22) {
-  return new THREE.ShaderMaterial({
+  return new ShaderMaterial({
     uniforms: {
       uLightDirVS: { value: VIEW_LIGHT_DIR.clone() },
       uStrength: { value: strength },
@@ -74,19 +86,19 @@ function makeTerminatorMaterial(strength = 0.92, softness = 0.22) {
     transparent: true,
     depthTest: false,
     depthWrite: false,
-    blending: THREE.NormalBlending,
+    blending: NormalBlending,
     name: 'TerminatorMaterial'
   });
 }
 
 /* day-side rim */
 function makeDayAtmosphereMaterial(
-  color = new THREE.Color('lightskyblue'),
+  color = new Color('lightskyblue'),
   strength = 1.15,
   softness = 0.22,
   rimPower = 4.0
 ) {
-  return new THREE.ShaderMaterial({
+  return new ShaderMaterial({
     uniforms: {
       uColor: { value: color },
       uLightDirVS: { value: VIEW_LIGHT_DIR.clone() },
@@ -124,7 +136,7 @@ function makeDayAtmosphereMaterial(
     transparent: true,
     depthWrite: false,
     depthTest: false,
-    blending: THREE.AdditiveBlending,
+    blending: AdditiveBlending,
     name: 'DayAtmosphereMaterial'
   });
 }
@@ -167,7 +179,7 @@ export default function GlobeComponent({ onReady, onProgress, onCursorLL }: Glob
   const [ktxTex, setKtxTex] = useState<CompressedTexture | null>(null);
   useEffect(() => {
     let disposed = false;
-    const tmp = new THREE.WebGLRenderer({ antialias: true });
+    const tmp = new WebGLRenderer({ antialias: true });
     const loader = new KTX2Loader()
       .setTranscoderPath(`${import.meta.env.BASE_URL}basis/`)
       .detectSupport(tmp);
@@ -176,11 +188,10 @@ export default function GlobeComponent({ onReady, onProgress, onCursorLL }: Glob
       `${import.meta.env.BASE_URL}textures/earth_16k_uastc.ktx2`,
       (t: CompressedTexture) => {
         if (disposed) return;
-        if ('SRGBColorSpace' in THREE) (t as any).colorSpace = (THREE as any).SRGBColorSpace;
-        else (t as any).encoding = (THREE as any).sRGBEncoding;
+        (t as any).colorSpace = SRGBColorSpace;
         t.generateMipmaps = false;
-        t.minFilter = THREE.LinearFilter;
-        t.magFilter = THREE.LinearFilter;
+        t.minFilter = LinearFilter;
+        t.magFilter = LinearFilter;
         t.anisotropy = Math.min(16, tmp.capabilities.getMaxAnisotropy());
         t.needsUpdate = true;
         setKtxTex(t);
@@ -233,11 +244,10 @@ export default function GlobeComponent({ onReady, onProgress, onCursorLL }: Glob
       const r = rendererOf(globeRef);
       if (r) ktxTex.anisotropy = Math.min(16, r.capabilities.getMaxAnisotropy());
       ktxTex.generateMipmaps = false;
-      ktxTex.minFilter = THREE.LinearMipmapLinearFilter;
-      ktxTex.magFilter = THREE.LinearFilter;
-      if ('SRGBColorSpace' in THREE) (ktxTex as any).colorSpace = (THREE as any).SRGBColorSpace;
-      else (ktxTex as any).encoding = (THREE as any).sRGBEncoding;
-      const prev = mat.map as THREE.Texture | null;
+      ktxTex.minFilter = LinearMipmapLinearFilter;
+      ktxTex.magFilter = LinearFilter;
+      (ktxTex as any).colorSpace = SRGBColorSpace;
+      const prev = mat.map as Texture | null;
       mat.map = ktxTex;
       mat.needsUpdate = true;
       prev?.dispose?.();
@@ -271,7 +281,7 @@ export default function GlobeComponent({ onReady, onProgress, onCursorLL }: Glob
     const scene = sceneOf(globeRef);
     if (!scene) return;
     scene.children.filter((o: any) => o.isLight).forEach((l) => scene.remove(l));
-    const amb = new THREE.AmbientLight(0xffffff, 0.04);
+    const amb = new AmbientLight(0xffffff, 0.04);
     scene.add(amb);
     return () => {
       scene.remove(amb);
@@ -284,16 +294,16 @@ export default function GlobeComponent({ onReady, onProgress, onCursorLL }: Glob
     if (!scene) return;
     const radius = globeRadius(scene, 100);
 
-    const nightGeo = new THREE.SphereGeometry(radius * 1.003, 128, 128);
+    const nightGeo = new SphereGeometry(radius * 1.003, 128, 128);
     const nightMat = makeTerminatorMaterial(0.92, 0.22);
-    const nightMesh = new THREE.Mesh(nightGeo, nightMat);
+    const nightMesh = new Mesh(nightGeo, nightMat);
     nightMesh.name = 'TerminatorOverlay';
     nightMesh.renderOrder = 5;
     scene.add(nightMesh);
 
-    const atmGeo = new THREE.SphereGeometry(radius * 1.006, 128, 128);
-    const atmMat = makeDayAtmosphereMaterial(new THREE.Color('lightskyblue'), 1.2, 0.25, 3.0);
-    const atmMesh = new THREE.Mesh(atmGeo, atmMat);
+    const atmGeo = new SphereGeometry(radius * 1.006, 128, 128);
+    const atmMat = makeDayAtmosphereMaterial(new Color('lightskyblue'), 1.2, 0.25, 3.0);
+    const atmMesh = new Mesh(atmGeo, atmMat);
     atmMesh.name = 'DayAtmosphere';
     atmMesh.renderOrder = 9;
     scene.add(atmMesh);
@@ -315,7 +325,7 @@ export default function GlobeComponent({ onReady, onProgress, onCursorLL }: Glob
   );
   useGlobeSetup(globeRef, imgUrl, setupOpts);
 
-  const zoomOpts = useMemo(() => ({ min: 0.01, max: 3, base: 1.9, startAlt: 1.6 }), []);
+  const zoomOpts = useMemo(() => ({ min: 0.9, max: 3, base: 1.9, startAlt: 1.6 }), []);
   useGlobeZoom(globeRef, imgUrl, zoomOpts);
   useCursorLL(globeRef, imgUrl, onCursorLL);
   useGlobeControls(globeRef, imgUrl, { damping: 0.09, rotateSpeed: 0.55 });
