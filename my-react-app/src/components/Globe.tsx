@@ -18,7 +18,6 @@ import {
   useLoadProgress
 } from '@/hooks';
 
-/* ---------- helpers to avoid duplicated boilerplate ---------- */
 function sceneOf(ref: RefObject<GlobeMethods | undefined>) {
   const g = ref.current;
   const scene = g?.scene();
@@ -77,7 +76,6 @@ function makeTerminatorMaterial(strength = 0.92, softness = 0.22) {
   });
 }
 
-/* ---------- day-only atmosphere glow (masked by same view-space light) ---------- */
 function makeDayAtmosphereMaterial(
   color = new THREE.Color('lightskyblue'),
   strength = 1.15,
@@ -243,7 +241,7 @@ export default function GlobeComponent({ onReady, onProgress, onCursorLL }: Glob
       height={h}
       globeImageUrl={imgUrl}
       backgroundColor="#000"
-      showAtmosphere={false} // custom day-only glow replaces stock
+      showAtmosphere={false}
       rendererConfig={{ antialias: true, alpha: false, powerPreference: 'high-performance' }}
     />
   );
