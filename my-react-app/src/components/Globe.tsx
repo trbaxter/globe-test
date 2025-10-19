@@ -32,6 +32,9 @@ import {
 } from '@/hooks';
 import { ensurePathRecs, type GlobeProps } from '@/types';
 
+const earthUrl =
+  import.meta.env.VITE_EARTH_KTX_URL ?? `${import.meta.env.BASE_URL}textures/earth_16k_uastc.ktx2`;
+
 /* helpers */
 function sceneOf(ref: RefObject<GlobeMethods | undefined>) {
   const g = ref.current;
@@ -143,7 +146,6 @@ function makeDayAtmosphereMaterial(
 
 export default function GlobeComponent({ onReady, onProgress, onCursorLL }: GlobeProps) {
   const globeRef = useRef<GlobeMethods | undefined>(undefined);
-
   const statePaths = useMemo(() => ensurePathRecs(getUSStatePaths(), 'US state paths'), []);
   const provincePaths = useMemo(
     () => ensurePathRecs(getCanadaProvincePaths(), 'CA province paths'),
@@ -185,7 +187,7 @@ export default function GlobeComponent({ onReady, onProgress, onCursorLL }: Glob
       .detectSupport(tmp);
 
     loader.load(
-      `${import.meta.env.BASE_URL}textures/earth_16k_uastc.ktx2`,
+      earthUrl,
       (t: CompressedTexture) => {
         if (disposed) return;
         (t as any).colorSpace = SRGBColorSpace;
