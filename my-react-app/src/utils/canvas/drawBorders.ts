@@ -1,102 +1,141 @@
-import type { PathPoint, PathRec } from '@/types/globe.ts';
+import type { PathPoint, PathRec } from '@/types/globe';
+
+type Sets = Readonly<{
+  countryPaths: ReadonlyArray<PathRec>;
+  statePaths: ReadonlyArray<PathRec>;
+  provincePaths: ReadonlyArray<PathRec>;
+}>;
+
+export type BorderStyle = Readonly<{
+  color?: string;
+  alpha?: number;
+  lineWidthScale?: number;
+  tolerancePx?: number;
+  dash?: number[];
+  halo?: number;
+  signal?: AbortSignal;
+}>;
 
 export function drawBorders(
   ctx: CanvasRenderingContext2D,
   W: number,
   H: number,
-  sets: { countryPaths: PathRec[]; statePaths: PathRec[]; provincePaths: PathRec[] }
+  sets: Sets,
+  style: BorderStyle = {}
 ): void {
-  const { countryPaths, statePaths, provincePaths } = sets;
+  if (!ctx || W <= 0 || H <= 0) return;
 
-  const LW = Math.max(1, Math.round((W / 8192) * 1.4));
-  const TOL = 1e-4;
-  const SCALE = 1 / TOL;
+  const tolPx = style.tolerancePx ?? 0.5;
+  const tolLng = (360 / Math.max(1, W)) * tolPx;
+  const tolLat = (180 / Math.max(1, H)) * tolPx;
+  const SLNG = 1 / tolLng;
+  const SLAT = 1 / tolLat;
 
-  const toKey = (p: PathPoint) => {
-    const ax = Math.round(p.lng * SCALE);
-    const ay = Math.round(p.lat * SCALE);
-    return `${ax},${ay}`;
-  };
-  const fromKey = (k: string): PathPoint => {
-    const [x, y] = k.split(',').map(Number);
-    return { lng: x / SCALE, lat: y / SCALE };
-  };
-  const toXY = (lat: number, lng: number) =>
-    [((lng + 180) / 360) * W, ((90 - lat) / 180) * H] as const;
+  const isFiniteLL = (p: PathPoint) => Number.isFinite(p.lat) && Number.isFinite(p.lng);
 
-  const G = new Map<string, Set<string>>();
-  const addEdge = (a: PathPoint, b: PathPoint) => {
-    const dLng = ((b.lng - a.lng + 540) % 360) - 180;
-    if (Math.abs(dLng) > 170) return;
-    const ka = toKey(a);
-    const kb = toKey(b);
-    if (ka === kb) return;
-    if (!G.has(ka)) G.set(ka, new Set());
-    if (!G.has(kb)) G.set(kb, new Set());
-    G.get(ka)!.add(kb);
-    G.get(kb)!.add(ka);
+  const toXY = (lat: number, lng: number) => {
+    const clat = Math.max(-90, Math.min(90, lat));
+    return [((lng + 180) / 360) * W, ((90 - clat) / 180) * H] as const;
   };
 
-  const addSet = (recs: PathRec[]) => {
-    for (const rec of recs) {
-      const pts = rec?.points;
-      if (!pts || pts.length < 2) continue;
-      for (let i = 1; i < pts.length; i++) addEdge(pts[i - 1], pts[i]);
+  const keyPt = (p: PathPoint) => `${Math.round(p.lng * SLNG)},${Math.round(p.lat * SLAT)}`;
+  const segKey = (a: PathPoint, b: PathPoint) => {
+    const ka = keyPt(a),
+      kb = keyPt(b);
+    return ka < kb ? `${ka}|${kb}` : `${kb}|${ka}`;
+  };
+
+  const unwrap = (bLng: number, aLng: number) => {
+    let x = bLng;
+    while (x - aLng > 180) x -= 360;
+    while (aLng - x > 180) x += 360;
+    return x;
+  };
+
+  const nearSeam = (lng: number) => Math.abs(Math.abs(lng) - 180) <= tolLng * 1.5;
+
+  function segmentize(a: PathPoint, b: PathPoint): Array<[PathPoint, PathPoint]> {
+    if (!isFiniteLL(a) || !isFiniteLL(b)) return [];
+    const l1 = a.lng;
+    const l2u = unwrap(b.lng, l1);
+    const d = l2u - l1;
+    if (Math.abs(d) <= 180 - tolLng) {
+      return [[a, { lat: b.lat, lng: l2u }]];
     }
-  };
-  addSet(countryPaths);
-  addSet(statePaths);
-  addSet(provincePaths);
-
-  const edgeVisited = new Set<string>();
-  const edgeKey = (u: string, v: string) => (u < v ? `${u}|${v}` : `${v}|${u}`);
-
-  const walk = (start: string): string[] => {
-    const chain: string[] = [start];
-    let cur = start;
-    let prev: string | null = null;
-
-    while (true) {
-      const nbrs = [...(G.get(cur) ?? [])].filter((n) => !edgeVisited.has(edgeKey(cur, n)));
-      if (nbrs.length === 0) break;
-      const next = prev && nbrs.length > 1 ? nbrs.find((n) => n !== prev)! : nbrs[0];
-      edgeVisited.add(edgeKey(cur, next));
-      chain.push(next);
-      prev = cur;
-      cur = next;
-    }
-    return chain;
-  };
-
-  const starts = [...[...G.keys()].filter((k) => (G.get(k)?.size ?? 0) !== 2), ...G.keys()];
-
-  ctx.save();
-  ctx.strokeStyle = '#fff';
-  ctx.globalAlpha = 0.92;
-  ctx.lineWidth = LW;
-  ctx.lineJoin = 'round';
-  ctx.lineCap = 'round';
-  ctx.beginPath();
-
-  const usedNode = new Set<string>();
-  for (const s of starts) {
-    const pending = [...(G.get(s) ?? [])].some((n) => !edgeVisited.has(edgeKey(s, n)));
-    if (!pending) continue;
-
-    const chain = walk(s);
-    if (chain.length < 2) continue;
-
-    const p0 = fromKey(chain[0]);
-    let [x0, y0] = toXY(p0.lat, p0.lng);
-    ctx.moveTo(x0, y0);
-    for (let i = 1; i < chain.length; i++) {
-      const pi = fromKey(chain[i]);
-      const [x, y] = toXY(pi.lat, pi.lng);
-      ctx.lineTo(x, y);
-    }
-    chain.forEach((k) => usedNode.add(k));
+    const boundary = d > 0 ? 180 : -180;
+    const t = (boundary - l1) / d;
+    const lat = a.lat + t * (b.lat - a.lat);
+    const mid1: PathPoint = { lat, lng: boundary };
+    const mid2: PathPoint = { lat, lng: -boundary };
+    return [
+      [a, mid1],
+      [mid2, { lat: b.lat, lng: l2u }]
+    ];
   }
 
-  ctx.stroke();
+  const seen = new Set<string>();
+  const path = new Path2D();
+
+  const samePx = (p: PathPoint, q: PathPoint) => {
+    const [x1, y1] = toXY(p.lat, p.lng);
+    const [x2, y2] = toXY(q.lat, q.lng);
+    return Math.abs(x1 - x2) < 0.1 && Math.abs(y1 - y2) < 0.1;
+  };
+
+  const drawRecord = (rec: PathRec) => {
+    const pts = rec?.points as ReadonlyArray<PathPoint> | undefined;
+    if (!pts || pts.length < 2) return;
+
+    let penAt: PathPoint | null = null;
+
+    for (let i = 1; i < pts.length; i++) {
+      if (style.signal?.aborted) return;
+
+      const a = pts[i - 1],
+        b = pts[i];
+      const pieces = segmentize(a, b);
+
+      for (const [u, v] of pieces) {
+        if (nearSeam(u.lng) && nearSeam(v.lng) && Math.sign(u.lng) === Math.sign(v.lng)) {
+          continue;
+        }
+
+        const key = segKey(u, v);
+        if (seen.has(key)) continue;
+        seen.add(key);
+
+        const [x1, y1] = toXY(u.lat, u.lng);
+        const [x2, y2] = toXY(v.lat, v.lng);
+        if (!Number.isFinite(x1 + y1 + x2 + y2)) continue;
+
+        if (!penAt || !samePx(penAt, u)) path.moveTo(x1, y1);
+        path.lineTo(x2, y2);
+        penAt = v;
+      }
+    }
+  };
+
+  for (const rec of sets.countryPaths) drawRecord(rec);
+  for (const rec of sets.statePaths) drawRecord(rec);
+  for (const rec of sets.provincePaths) drawRecord(rec);
+
+  const lineWidth = Math.max(1, Math.round((W / 8192) * (style.lineWidthScale ?? 1.4)));
+
+  ctx.save();
+  if ((style.halo ?? 0) > 0) {
+    ctx.strokeStyle = 'rgba(0,0,0,0.65)';
+    ctx.lineWidth = lineWidth + 2 * (style.halo as number);
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
+    ctx.stroke(path);
+  }
+  ctx.strokeStyle = style.color ?? '#fff';
+  ctx.globalAlpha = style.alpha ?? 0.92;
+  ctx.lineWidth = lineWidth;
+  ctx.lineJoin = 'round';
+  ctx.lineCap = 'round';
+  if (style.dash) ctx.setLineDash(style.dash);
+  ctx.stroke(path);
+  if (style.dash) ctx.setLineDash([]);
   ctx.restore();
 }
