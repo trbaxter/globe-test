@@ -163,7 +163,7 @@ export default function GlobeComponent({ onReady, onProgress, onCursorLL }: Glob
     capTo
   });
 
-  /* KTX2-first; PNG is lazy fallback loaded only if KTX2 fails */
+  /* KTX2-first; earthImg is lazy fallback loaded only if KTX2 fails */
   const [ktxTex, setKtxTex] = useState<CompressedTexture | null>(null);
   useEffect(() => {
     let disposed = false;
