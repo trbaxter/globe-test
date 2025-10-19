@@ -327,7 +327,7 @@ export default function GlobeComponent({ onReady, onProgress, onCursorLL }: Glob
   );
   useGlobeSetup(globeRef, imgUrl, setupOpts);
 
-  const zoomOpts = useMemo(() => ({ min: 0.9, max: 3, base: 1.9, startAlt: 1.6 }), []);
+  const zoomOpts = useMemo(() => ({ min: 0.6, max: 3, base: 1.9, startAlt: 1.6 }), []);
   useGlobeZoom(globeRef, imgUrl, zoomOpts);
   useCursorLL(globeRef, imgUrl, onCursorLL);
   useGlobeControls(globeRef, imgUrl, { damping: 0.09, rotateSpeed: 0.55 });
