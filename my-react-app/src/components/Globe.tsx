@@ -1,4 +1,3 @@
-import earthImg from '@/assets/img/earth.jpg';
 import { useEffect, useMemo, useRef, useState, type RefObject } from 'react';
 import RGGlobe, { type GlobeMethods } from 'react-globe.gl';
 import {
@@ -32,8 +31,10 @@ import {
 } from '@/hooks';
 import { ensurePathRecs, type GlobeProps } from '@/types';
 
+const earthUrl_Jpg = 'https://pub-221ed7e76f9147fda70d952c90a59f1f.r2.dev/earth.jpg';
 const earthUrl = 'https://pub-221ed7e76f9147fda70d952c90a59f1f.r2.dev/earth_16k_uastc.ktx2';
 const basisUrl = 'https://pub-221ed7e76f9147fda70d952c90a59f1f.r2.dev/basis/';
+const bootImgUrl = earthUrl_Jpg;
 
 /* helpers */
 function sceneOf(ref: RefObject<GlobeMethods | undefined>) {
@@ -167,7 +168,7 @@ export default function GlobeComponent({ onReady, onProgress, onCursorLL }: Glob
   }, [countryPaths, statePaths, provincePaths, reset, capTo]);
 
   const imgUrl = useComposedTexture({
-    baseUrl: earthImg,
+    baseUrl: bootImgUrl,
     countryPaths,
     statePaths,
     provincePaths,
