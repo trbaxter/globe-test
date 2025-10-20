@@ -4,15 +4,12 @@ import {
   AdditiveBlending,
   AmbientLight,
   Color,
-  LinearFilter,
-  LinearMipmapLinearFilter,
   Mesh,
   NormalBlending,
   Scene,
   ShaderMaterial,
   SphereGeometry,
   SRGBColorSpace,
-  Texture,
   Vector3,
   WebGLRenderer,
   type CompressedTexture
@@ -36,8 +33,6 @@ const earthUrl = 'https://pub-221ed7e76f9147fda70d952c90a59f1f.r2.dev/earth_16k_
 const basisUrl = 'https://pub-221ed7e76f9147fda70d952c90a59f1f.r2.dev/basis/';
 const bootImgUrl = earthUrl_Jpg;
 const USE_KTX_FIRST = false;
-const BOOT_PIXEL =
-  'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNgYAAAAAMAASsJTYQAAAAASUVORK5CYII=';
 
 /* helpers */
 function sceneOf(ref: RefObject<GlobeMethods | undefined>) {
@@ -184,45 +179,39 @@ export default function GlobeComponent({ onReady, onProgress, onCursorLL }: Glob
   /* KTX2-first; earthImg is lazy fallback loaded only if KTX2 fails */
   const [ktxTex, setKtxTex] = useState<CompressedTexture | null>(null);
   useEffect(() => {
-    let disposed = false;
     const tmp = new WebGLRenderer({ antialias: true });
     const loader = new KTX2Loader().setTranscoderPath(basisUrl).detectSupport(tmp);
 
     loader.load(
       earthUrl,
-      (t: CompressedTexture) => {
-        if (disposed) return;
+      (t) => {
         (t as any).colorSpace = SRGBColorSpace;
-        t.generateMipmaps = false;
-        t.minFilter = LinearFilter;
-        t.magFilter = LinearFilter;
         t.anisotropy = Math.min(16, tmp.capabilities.getMaxAnisotropy());
         t.needsUpdate = true;
         setKtxTex(t);
-        setGpuMax?.(1);
         loader.dispose();
         tmp.forceContextLoss?.();
         tmp.dispose();
       },
       undefined,
-      () => {
+      (e) => {
         loader.dispose();
         tmp.forceContextLoss?.();
         tmp.dispose();
+        console.error('KTX2 error', e);
       }
     );
 
     return () => {
-      disposed = true;
       loader.dispose();
       tmp.forceContextLoss?.();
       tmp.dispose();
     };
-  }, [setGpuMax]);
+  }, []);
 
   /* swap to KTX2 texture when available */
   useEffect(() => {
-    if (!ktxTex || !imgUrl) return;
+    if (!ktxTex) return;
     let cancelled = false;
     let tries = 0;
     const findMaterial = () => {
@@ -247,20 +236,12 @@ export default function GlobeComponent({ onReady, onProgress, onCursorLL }: Glob
       }
       const r = rendererOf(globeRef);
       if (r) ktxTex.anisotropy = Math.min(16, r.capabilities.getMaxAnisotropy());
-      ktxTex.generateMipmaps = false;
-      ktxTex.minFilter = LinearMipmapLinearFilter;
-      ktxTex.magFilter = LinearFilter;
       (ktxTex as any).colorSpace = SRGBColorSpace;
-      const prev = mat.map as Texture | null;
       mat.map = ktxTex;
       mat.needsUpdate = true;
-      prev?.dispose?.();
     };
     apply();
-    return () => {
-      cancelled = true;
-    };
-  }, [ktxTex, imgUrl]);
+  }, [ktxTex]);
 
   // Dispose KTX texture on unmount
   useEffect(
@@ -270,6 +251,8 @@ export default function GlobeComponent({ onReady, onProgress, onCursorLL }: Glob
     [ktxTex]
   );
 
+  const readyToken: string | null = USE_KTX_FIRST ? (ktxTex ? 'ktx-ready' : null) : imgUrl;
+
   /* renderer sizing */
   useEffect(() => {
     const r = rendererOf(globeRef);
@@ -278,7 +261,7 @@ export default function GlobeComponent({ onReady, onProgress, onCursorLL }: Glob
     const dpr = window.devicePixelRatio || 1;
     r.setPixelRatio(Math.min(dpr, 2));
     r.setSize(rect.width, rect.height, false);
-  }, [w, h, imgUrl]);
+  }, [w, h, readyToken]);
 
   /* lights */
   useEffect(() => {
@@ -290,7 +273,7 @@ export default function GlobeComponent({ onReady, onProgress, onCursorLL }: Glob
     return () => {
       scene.remove(amb);
     };
-  }, [imgUrl]);
+  }, [readyToken]);
 
   /* overlays */
   useEffect(() => {
@@ -320,35 +303,35 @@ export default function GlobeComponent({ onReady, onProgress, onCursorLL }: Glob
       atmGeo.dispose();
       atmMat.dispose();
     };
-  }, [imgUrl]);
+  }, [readyToken]);
 
   /* setup and controls */
   const setupOpts = useMemo(
     () => ({ pixelRatioMax: 2, startPOV: { lat: 38, lng: -95, altitude: 1.6 } }),
     []
   );
-  useGlobeSetup(globeRef, imgUrl, setupOpts);
+  useGlobeSetup(globeRef, readyToken, setupOpts);
 
   const zoomOpts = useMemo(() => ({ min: 0.6, max: 3, base: 1.9, startAlt: 1.6 }), []);
-  useGlobeZoom(globeRef, imgUrl, zoomOpts);
-  useCursorLL(globeRef, imgUrl, onCursorLL);
-  useGlobeControls(globeRef, imgUrl, { damping: 0.09, rotateSpeed: 0.55 });
+  useGlobeZoom(globeRef, readyToken, zoomOpts);
+  useCursorLL(globeRef, readyToken, onCursorLL);
+  useGlobeControls(globeRef, readyToken, { damping: 0.09, rotateSpeed: 0.55 });
 
-  useGlobeReady(globeRef, imgUrl, {
+  useGlobeReady(globeRef, readyToken, {
     onProgress: setGpuMax,
     onBeforeReady: () => setCap(1),
     onReady
   });
 
-  if (!imgUrl) return null;
+  if (!USE_KTX_FIRST && !imgUrl) return null;
 
   return (
     <RGGlobe
-      key={imgUrl || 'no-img'}
+      key={'ktx-boot'}
       ref={globeRef}
       width={w}
       height={h}
-      globeImageUrl={USE_KTX_FIRST ? BOOT_PIXEL : imgUrl}
+      globeImageUrl={imgUrl}
       backgroundColor="#000"
       showAtmosphere={false}
       rendererConfig={{ antialias: true, alpha: false, powerPreference: 'high-performance' }}

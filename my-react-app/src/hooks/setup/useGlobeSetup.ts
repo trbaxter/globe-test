@@ -1,10 +1,12 @@
 import { useEffect, type RefObject } from 'react';
 import {
   type ColorSpace,
+  CompressedTexture,
   LinearFilter,
   LinearMipmapLinearFilter,
   NoToneMapping,
-  SRGBColorSpace
+  SRGBColorSpace,
+  Texture
 } from 'three';
 import type { GlobeMethods } from 'react-globe.gl';
 import { useLatest } from '@/hooks/utils/useLatest';
@@ -43,11 +45,20 @@ export function useGlobeSetup(
 
     const mat = (g as any).globeMaterial?.();
     if (mat?.map && r) {
-      mat.map.anisotropy = r.capabilities.getMaxAnisotropy?.() ?? 1;
-      (mat.map as any).colorSpace = SRGBColorSpace;
-      mat.map.generateMipmaps = true;
-      mat.map.minFilter = LinearMipmapLinearFilter;
-      mat.map.magFilter = LinearFilter;
+      const tex = mat.map as Texture & Partial<CompressedTexture>;
+      const hasMips = Array.isArray((tex as any).mipmaps) && (tex as any).mipmaps.length > 1;
+      tex.anisotropy = r.capabilities.getMaxAnisotropy?.() ?? 1;
+      (tex as any).colorSpace = SRGBColorSpace;
+
+      if ((tex as any).isCompressedTexture) {
+        tex.generateMipmaps = false; // keep KTX2 mip chain
+        tex.minFilter = hasMips ? LinearMipmapLinearFilter : LinearFilter; // KTX2 includes mips
+        tex.magFilter = LinearFilter;
+      } else {
+        tex.generateMipmaps = true;
+        tex.minFilter = LinearMipmapLinearFilter;
+        tex.magFilter = LinearFilter;
+      }
       mat.needsUpdate = true;
     }
   }, [ref, imgUrl]);
