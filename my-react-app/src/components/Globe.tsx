@@ -35,6 +35,9 @@ const earthUrl_Jpg = 'https://pub-221ed7e76f9147fda70d952c90a59f1f.r2.dev/earth.
 const earthUrl = 'https://pub-221ed7e76f9147fda70d952c90a59f1f.r2.dev/earth_16k_uastc.ktx2';
 const basisUrl = 'https://pub-221ed7e76f9147fda70d952c90a59f1f.r2.dev/basis/';
 const bootImgUrl = earthUrl_Jpg;
+const USE_KTX_FIRST = false;
+const BOOT_PIXEL =
+  'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNgYAAAAAMAASsJTYQAAAAASUVORK5CYII=';
 
 /* helpers */
 function sceneOf(ref: RefObject<GlobeMethods | undefined>) {
@@ -345,7 +348,7 @@ export default function GlobeComponent({ onReady, onProgress, onCursorLL }: Glob
       ref={globeRef}
       width={w}
       height={h}
-      globeImageUrl={imgUrl}
+      globeImageUrl={USE_KTX_FIRST ? BOOT_PIXEL : imgUrl}
       backgroundColor="#000"
       showAtmosphere={false}
       rendererConfig={{ antialias: true, alpha: false, powerPreference: 'high-performance' }}
