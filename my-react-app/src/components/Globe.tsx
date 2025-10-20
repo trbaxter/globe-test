@@ -32,8 +32,7 @@ import {
 } from '@/hooks';
 import { ensurePathRecs, type GlobeProps } from '@/types';
 
-const earthUrl =
-  import.meta.env.VITE_EARTH_KTX_URL ?? `${import.meta.env.BASE_URL}textures/earth_16k_uastc.ktx2`;
+const earthUrl = import.meta.env.VITE_EARTH_KTX_URL;
 
 /* helpers */
 function sceneOf(ref: RefObject<GlobeMethods | undefined>) {
