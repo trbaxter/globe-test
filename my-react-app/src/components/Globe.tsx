@@ -33,6 +33,7 @@ import {
 import { ensurePathRecs, type GlobeProps } from '@/types';
 
 const earthUrl = import.meta.env.VITE_EARTH_KTX_URL;
+const basisPath = new URL('.', earthUrl).toString();
 
 /* helpers */
 function sceneOf(ref: RefObject<GlobeMethods | undefined>) {
@@ -181,9 +182,7 @@ export default function GlobeComponent({ onReady, onProgress, onCursorLL }: Glob
   useEffect(() => {
     let disposed = false;
     const tmp = new WebGLRenderer({ antialias: true });
-    const loader = new KTX2Loader()
-      .setTranscoderPath(`${import.meta.env.BASE_URL}basis/`)
-      .detectSupport(tmp);
+    const loader = new KTX2Loader().setTranscoderPath(basisPath).detectSupport(tmp);
 
     loader.load(
       earthUrl,
