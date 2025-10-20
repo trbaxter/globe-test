@@ -25,9 +25,7 @@ export default function LoadingScreen({
       });
       document.body.style.overflow = 'hidden';
     } else {
-      // Ensure the browser has committed current styles, then toggle opacity
       raf1 = requestAnimationFrame(() => {
-        // force a layout flush on the element we transition
         void rootRef.current?.offsetHeight;
         raf2 = requestAnimationFrame(() => setVisible(false));
       });
@@ -38,7 +36,6 @@ export default function LoadingScreen({
     };
   }, [show]);
 
-  // Fallback: if transitionend doesn't fire, unmount after the expected duration
   useEffect(() => {
     if (show) return;
     const t = window.setTimeout(
@@ -65,7 +62,7 @@ export default function LoadingScreen({
       aria-live="polite"
       className="fade"
       onTransitionEnd={(e) => {
-        if (e.target !== rootRef.current) return; // ignore bubbled events
+        if (e.target !== rootRef.current) return;
         if (!visible) setPresent(false);
       }}
       style={{
