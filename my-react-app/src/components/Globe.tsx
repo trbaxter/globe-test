@@ -3,9 +3,14 @@ import RGGlobe, { type GlobeMethods } from 'react-globe.gl';
 import {
   AdditiveBlending,
   AmbientLight,
+  CanvasTexture,
   Color,
+  DirectionalLight,
   Mesh,
+  MeshBasicMaterial,
+  MeshPhongMaterial,
   NormalBlending,
+  RepeatWrapping,
   Scene,
   ShaderMaterial,
   SphereGeometry,
@@ -26,13 +31,13 @@ import {
   useLoadProgress,
   useWindowSize
 } from '@/hooks';
+import { drawBorders } from '@/utils';
 import { ensurePathRecs, type GlobeProps } from '@/types';
 
 const earthUrl_Jpg = 'https://pub-221ed7e76f9147fda70d952c90a59f1f.r2.dev/earth.jpg';
 const earthUrl = 'https://pub-221ed7e76f9147fda70d952c90a59f1f.r2.dev/earth_16k_uastc.ktx2';
 const basisUrl = 'https://pub-221ed7e76f9147fda70d952c90a59f1f.r2.dev/basis/';
 const bootImgUrl = earthUrl_Jpg;
-const USE_KTX_FIRST = false;
 
 /* helpers */
 function sceneOf(ref: RefObject<GlobeMethods | undefined>) {
@@ -176,8 +181,9 @@ export default function GlobeComponent({ onReady, onProgress, onCursorLL }: Glob
     capTo
   });
 
-  /* KTX2-first; earthImg is lazy fallback loaded only if KTX2 fails */
+  /* KTX2 */
   const [ktxTex, setKtxTex] = useState<CompressedTexture | null>(null);
+  const [globeMat, setGlobeMat] = useState<MeshPhongMaterial | null>(null);
   useEffect(() => {
     const tmp = new WebGLRenderer({ antialias: true });
     const loader = new KTX2Loader().setTranscoderPath(basisUrl).detectSupport(tmp);
@@ -185,10 +191,21 @@ export default function GlobeComponent({ onReady, onProgress, onCursorLL }: Glob
     loader.load(
       earthUrl,
       (t) => {
+        // deterministic orientation
+        (t as any).flipY = false;
+        t.wrapT = RepeatWrapping;
+        t.repeat.set(1, -1);
+        t.offset.set(0, 1);
+
         (t as any).colorSpace = SRGBColorSpace;
         t.anisotropy = Math.min(16, tmp.capabilities.getMaxAnisotropy());
         t.needsUpdate = true;
         setKtxTex(t);
+
+        const m = new MeshPhongMaterial({ map: t });
+        (m as any).shininess = 0;
+        setGlobeMat(m);
+
         loader.dispose();
         tmp.forceContextLoss?.();
         tmp.dispose();
@@ -209,41 +226,7 @@ export default function GlobeComponent({ onReady, onProgress, onCursorLL }: Glob
     };
   }, []);
 
-  /* swap to KTX2 texture when available */
-  useEffect(() => {
-    if (!ktxTex) return;
-    let cancelled = false;
-    let tries = 0;
-    const findMaterial = () => {
-      const g = globeRef.current as any;
-      const apiMat = g?.globeMaterial?.();
-      if (apiMat) return apiMat;
-      let found: any;
-      const scn = g?.scene?.();
-      scn?.traverse((o: any) => {
-        if (found) return;
-        if (o?.isMesh && o?.geometry?.type === 'SphereGeometry' && o?.material?.map !== undefined) {
-          found = o.material;
-        }
-      });
-      return found;
-    };
-    const apply = () => {
-      const mat: any = findMaterial();
-      if (!mat) {
-        if (!cancelled && ++tries < 200) setTimeout(apply, 30);
-        return;
-      }
-      const r = rendererOf(globeRef);
-      if (r) ktxTex.anisotropy = Math.min(16, r.capabilities.getMaxAnisotropy());
-      (ktxTex as any).colorSpace = SRGBColorSpace;
-      mat.map = ktxTex;
-      mat.needsUpdate = true;
-    };
-    apply();
-  }, [ktxTex]);
-
-  // Dispose KTX texture on unmount
+  /* Dispose KTX texture on unmount */
   useEffect(
     () => () => {
       ktxTex?.dispose();
@@ -251,7 +234,7 @@ export default function GlobeComponent({ onReady, onProgress, onCursorLL }: Glob
     [ktxTex]
   );
 
-  const readyToken: string | null = USE_KTX_FIRST ? (ktxTex ? 'ktx-ready' : null) : imgUrl;
+  const readyToken = globeMat ? 'ktx-ready' : null;
 
   /* renderer sizing */
   useEffect(() => {
@@ -269,6 +252,11 @@ export default function GlobeComponent({ onReady, onProgress, onCursorLL }: Glob
     if (!scene) return;
     scene.children.filter((o: any) => o.isLight).forEach((l) => scene.remove(l));
     const amb = new AmbientLight(0xffffff, 0.04);
+    const sun = new DirectionalLight(0xffffff, 1.0);
+    sun.position.copy(VIEW_LIGHT_DIR).multiplyScalar(1000);
+    sun.target.position.set(0, 0, 0);
+    scene.add(sun);
+    scene.add(sun.target);
     scene.add(amb);
     return () => {
       scene.remove(amb);
@@ -295,15 +283,71 @@ export default function GlobeComponent({ onReady, onProgress, onCursorLL }: Glob
     atmMesh.renderOrder = 9;
     scene.add(atmMesh);
 
+    // borders overlay (computed once)
+    const BW = 16384,
+      BH = 8192;
+    const borderCanvas = document.createElement('canvas');
+    borderCanvas.width = BW;
+    borderCanvas.height = BH;
+    const bctx = borderCanvas.getContext('2d', { alpha: true });
+    if (bctx) {
+      drawBorders(
+        bctx,
+        BW,
+        BH,
+        { countryPaths, statePaths, provincePaths },
+        { color: '#ffffff', alpha: 0.95, halo: 1.0, lineWidthScale: 1.4 }
+      );
+    }
+
+    const r = rendererOf(globeRef);
+    const bordersTex = new CanvasTexture(borderCanvas);
+
+    // copy UV transform from the base globe map so seams match exactly
+    const baseMap = globeMat?.map as any;
+    if (baseMap) {
+      bordersTex.flipY = !!baseMap.flipY;
+      bordersTex.wrapS = baseMap.wrapS;
+      bordersTex.wrapT = baseMap.wrapT;
+      bordersTex.repeat.copy(baseMap.repeat);
+      bordersTex.offset.copy(baseMap.offset);
+    } else {
+      bordersTex.flipY = false;
+      bordersTex.wrapT = RepeatWrapping;
+      bordersTex.repeat.set(1, -1);
+      bordersTex.offset.set(0, 1);
+    }
+
+    bordersTex.wrapS = RepeatWrapping;
+    bordersTex.offset.x = (bordersTex.offset.x + 0.25) % 1;
+
+    (bordersTex as any).colorSpace = SRGBColorSpace;
+    bordersTex.anisotropy = Math.min(16, r?.capabilities.getMaxAnisotropy() ?? 1);
+    bordersTex.needsUpdate = true;
+
+    const bordersMat = new MeshBasicMaterial({ map: bordersTex, transparent: true });
+    bordersMat.depthWrite = false;
+    bordersMat.depthTest = false;
+
+    const bordersGeo = new SphereGeometry(radius * 1.0015, 128, 128);
+    const bordersMesh = new Mesh(bordersGeo, bordersMat);
+    bordersMesh.name = 'BordersOverlay';
+    bordersMesh.renderOrder = 8;
+    scene.add(bordersMesh);
+
     return () => {
       scene.remove(nightMesh);
       scene.remove(atmMesh);
+      scene.remove(bordersMesh);
       nightGeo.dispose();
       nightMat.dispose();
       atmGeo.dispose();
       atmMat.dispose();
+      bordersGeo.dispose();
+      bordersTex.dispose();
+      bordersMat.dispose();
     };
-  }, [readyToken]);
+  }, [readyToken, countryPaths, statePaths, provincePaths, globeMat]);
 
   /* setup and controls */
   const setupOpts = useMemo(
@@ -323,7 +367,17 @@ export default function GlobeComponent({ onReady, onProgress, onCursorLL }: Glob
     onReady
   });
 
-  if (!USE_KTX_FIRST && !imgUrl) return null;
+  /* close progress when KTX2 mat is ready */
+  useEffect(() => {
+    if (!globeMat) return;
+    setNet(1);
+    setComposeMax(1);
+    setDecodeMax(1);
+    setGpuMax(1);
+    setCap(1);
+  }, [globeMat, setNet, setComposeMax, setDecodeMax, setGpuMax, setCap]);
+
+  if (!globeMat && !imgUrl) return null;
 
   return (
     <RGGlobe
@@ -331,7 +385,8 @@ export default function GlobeComponent({ onReady, onProgress, onCursorLL }: Glob
       ref={globeRef}
       width={w}
       height={h}
-      globeImageUrl={imgUrl}
+      globeMaterial={globeMat ?? undefined}
+      globeImageUrl={globeMat ? undefined : imgUrl}
       backgroundColor="#000"
       showAtmosphere={false}
       rendererConfig={{ antialias: true, alpha: false, powerPreference: 'high-performance' }}
