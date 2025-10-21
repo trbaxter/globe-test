@@ -8,9 +8,11 @@ import {
   DirectionalLight,
   LinearFilter,
   LinearMipmapLinearFilter,
+  Matrix3,
   Mesh,
   MeshBasicMaterial,
   MeshPhongMaterial,
+  NoToneMapping,
   NormalBlending,
   RepeatWrapping,
   Scene,
@@ -247,12 +249,20 @@ export default function GlobeComponent({ onReady, onProgress, onCursorLL }: Glob
     r.setSize(rect.width, rect.height, false);
   }, [w, h, readyToken]);
 
+  /* renderer output to avoid tone surprises */
+  useEffect(() => {
+    const r = rendererOf(globeRef);
+    if (!r) return;
+    (r as any).outputColorSpace = SRGBColorSpace;
+    r.toneMapping = NoToneMapping;
+    r.toneMappingExposure = 1;
+  }, [readyToken]);
+
   /* lights */
   useEffect(() => {
     const scene = sceneOf(globeRef);
     if (!scene) return;
 
-    // remove prior lights and any named targets (HMR-safe)
     scene.children.filter((o: any) => o.isLight).forEach((l) => scene.remove(l));
     scene.getObjectByName('SunTarget')?.parent?.remove(scene.getObjectByName('SunTarget')!);
 
@@ -278,6 +288,23 @@ export default function GlobeComponent({ onReady, onProgress, onCursorLL }: Glob
   useEffect(() => {
     const scene = sceneOf(globeRef);
     if (!scene) return;
+
+    // ensure lights exist even if the lights effect hasn't run yet
+    let sun = scene.getObjectByName('SunLight') as DirectionalLight | null;
+    let amb = scene.getObjectByName('AmbientLight') as AmbientLight | null;
+    if (!sun) {
+      sun = new DirectionalLight(0xffffff, 1.0);
+      sun.name = 'SunLight';
+      sun.position.copy(VIEW_LIGHT_DIR).multiplyScalar(1000);
+      sun.target.position.set(0, 0, 0);
+      sun.target.name = 'SunTarget';
+      scene.add(sun, sun.target);
+    }
+    if (!amb) {
+      amb = new AmbientLight(0xffffff, 0.04);
+      amb.name = 'AmbientLight';
+      scene.add(amb);
+    }
 
     // hard reset overlays that might survive HMR
     ['TerminatorOverlay', 'DayAtmosphere', 'BordersOverlay'].forEach((n) => {
@@ -309,7 +336,7 @@ export default function GlobeComponent({ onReady, onProgress, onCursorLL }: Glob
     atmMesh.renderOrder = 9;
     scene.add(atmMesh);
 
-    // borders overlay (high-res, once)
+    // borders overlay
     const BW = 16384,
       BH = 8192;
     const borderCanvas = document.createElement('canvas');
@@ -329,7 +356,6 @@ export default function GlobeComponent({ onReady, onProgress, onCursorLL }: Glob
     const r = rendererOf(globeRef);
     const bordersTex = new CanvasTexture(borderCanvas);
 
-    // copy UVs from globe map to align seam/orientation
     const baseMap = globeMat?.map as any;
     if (baseMap) {
       bordersTex.flipY = !!baseMap.flipY;
@@ -343,7 +369,6 @@ export default function GlobeComponent({ onReady, onProgress, onCursorLL }: Glob
       bordersTex.repeat.set(1, -1);
       bordersTex.offset.set(0, 1);
     }
-    // +90° longitude shift
     bordersTex.wrapS = RepeatWrapping;
     bordersTex.offset.x = (bordersTex.offset.x + 0.25) % 1;
 
@@ -378,6 +403,33 @@ export default function GlobeComponent({ onReady, onProgress, onCursorLL }: Glob
     };
   }, [readyToken, countryPaths, statePaths, provincePaths, globeMat]);
 
+  /* keep terminator bound to the actual sun in view space */
+  useEffect(() => {
+    const g = globeRef.current as any;
+    const scene = sceneOf(globeRef);
+    if (!g || !scene) return;
+
+    const night = scene.getObjectByName('TerminatorOverlay') as Mesh | null;
+    const sun = scene.getObjectByName('SunLight') as DirectionalLight | null;
+    const cam = g.camera?.();
+    if (!night || !sun || !cam) return;
+
+    const dir = new Vector3();
+    const toView = new Matrix3();
+    let raf = 0;
+
+    const tick = () => {
+      toView.setFromMatrix4(cam.matrixWorldInverse);
+      dir.copy(sun.position).sub(sun.target.position).normalize();
+      dir.applyMatrix3(toView).normalize();
+      const uni = (night.material as any).uniforms?.uLightDirVS;
+      if (uni?.value) uni.value.copy(dir);
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [readyToken]);
+
   /* setup and controls */
   const setupOpts = useMemo(
     () => ({ pixelRatioMax: 2, startPOV: { lat: 38, lng: -95, altitude: 1.6 } }),
@@ -385,7 +437,7 @@ export default function GlobeComponent({ onReady, onProgress, onCursorLL }: Glob
   );
   useGlobeSetup(globeRef, readyToken, setupOpts);
 
-  const zoomOpts = useMemo(() => ({ min: 0.6, max: 3, base: 1.9, startAlt: 1.6 }), []);
+  const zoomOpts = useMemo(() => ({ min: 0.1, max: 3, base: 1.9, startAlt: 1.6 }), []);
   useGlobeZoom(globeRef, readyToken, zoomOpts);
   useCursorLL(globeRef, readyToken, onCursorLL);
   useGlobeControls(globeRef, readyToken, { damping: 0.09, rotateSpeed: 0.55 });
