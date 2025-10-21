@@ -6,6 +6,8 @@ import {
   CanvasTexture,
   Color,
   DirectionalLight,
+  LinearFilter,
+  LinearMipmapLinearFilter,
   Mesh,
   MeshBasicMaterial,
   MeshPhongMaterial,
@@ -191,7 +193,6 @@ export default function GlobeComponent({ onReady, onProgress, onCursorLL }: Glob
     loader.load(
       earthUrl,
       (t) => {
-        // deterministic orientation
         (t as any).flipY = false;
         t.wrapT = RepeatWrapping;
         t.repeat.set(1, -1);
@@ -250,16 +251,26 @@ export default function GlobeComponent({ onReady, onProgress, onCursorLL }: Glob
   useEffect(() => {
     const scene = sceneOf(globeRef);
     if (!scene) return;
+
+    // remove prior lights and any named targets (HMR-safe)
     scene.children.filter((o: any) => o.isLight).forEach((l) => scene.remove(l));
+    scene.getObjectByName('SunTarget')?.parent?.remove(scene.getObjectByName('SunTarget')!);
+
     const amb = new AmbientLight(0xffffff, 0.04);
+    amb.name = 'AmbientLight';
+
     const sun = new DirectionalLight(0xffffff, 1.0);
+    sun.name = 'SunLight';
     sun.position.copy(VIEW_LIGHT_DIR).multiplyScalar(1000);
     sun.target.position.set(0, 0, 0);
-    scene.add(sun);
-    scene.add(sun.target);
-    scene.add(amb);
+    sun.target.name = 'SunTarget';
+
+    scene.add(sun, sun.target, amb);
+
     return () => {
       scene.remove(amb);
+      scene.remove(sun);
+      scene.remove(sun.target);
     };
   }, [readyToken]);
 
@@ -267,8 +278,22 @@ export default function GlobeComponent({ onReady, onProgress, onCursorLL }: Glob
   useEffect(() => {
     const scene = sceneOf(globeRef);
     if (!scene) return;
+
+    // hard reset overlays that might survive HMR
+    ['TerminatorOverlay', 'DayAtmosphere', 'BordersOverlay'].forEach((n) => {
+      const o = scene.getObjectByName(n);
+      if (o) {
+        scene.remove(o);
+        o.traverse((c: any) => {
+          c.geometry?.dispose?.();
+          c.material?.dispose?.();
+        });
+      }
+    });
+
     const radius = globeRadius(scene, 100);
 
+    // night
     const nightGeo = new SphereGeometry(radius * 1.003, 128, 128);
     const nightMat = makeTerminatorMaterial(0.92, 0.22);
     const nightMesh = new Mesh(nightGeo, nightMat);
@@ -276,6 +301,7 @@ export default function GlobeComponent({ onReady, onProgress, onCursorLL }: Glob
     nightMesh.renderOrder = 5;
     scene.add(nightMesh);
 
+    // day rim
     const atmGeo = new SphereGeometry(radius * 1.006, 128, 128);
     const atmMat = makeDayAtmosphereMaterial(new Color('lightskyblue'), 1.2, 0.25, 3.0);
     const atmMesh = new Mesh(atmGeo, atmMat);
@@ -283,7 +309,7 @@ export default function GlobeComponent({ onReady, onProgress, onCursorLL }: Glob
     atmMesh.renderOrder = 9;
     scene.add(atmMesh);
 
-    // borders overlay (computed once)
+    // borders overlay (high-res, once)
     const BW = 16384,
       BH = 8192;
     const borderCanvas = document.createElement('canvas');
@@ -303,7 +329,7 @@ export default function GlobeComponent({ onReady, onProgress, onCursorLL }: Glob
     const r = rendererOf(globeRef);
     const bordersTex = new CanvasTexture(borderCanvas);
 
-    // copy UV transform from the base globe map so seams match exactly
+    // copy UVs from globe map to align seam/orientation
     const baseMap = globeMat?.map as any;
     if (baseMap) {
       bordersTex.flipY = !!baseMap.flipY;
@@ -317,11 +343,14 @@ export default function GlobeComponent({ onReady, onProgress, onCursorLL }: Glob
       bordersTex.repeat.set(1, -1);
       bordersTex.offset.set(0, 1);
     }
-
+    // +90° longitude shift
     bordersTex.wrapS = RepeatWrapping;
     bordersTex.offset.x = (bordersTex.offset.x + 0.25) % 1;
 
     (bordersTex as any).colorSpace = SRGBColorSpace;
+    bordersTex.generateMipmaps = true;
+    bordersTex.minFilter = LinearMipmapLinearFilter;
+    bordersTex.magFilter = LinearFilter;
     bordersTex.anisotropy = Math.min(16, r?.capabilities.getMaxAnisotropy() ?? 1);
     bordersTex.needsUpdate = true;
 
@@ -381,7 +410,7 @@ export default function GlobeComponent({ onReady, onProgress, onCursorLL }: Glob
 
   return (
     <RGGlobe
-      key={'ktx-boot'}
+      key="ktx-boot"
       ref={globeRef}
       width={w}
       height={h}
